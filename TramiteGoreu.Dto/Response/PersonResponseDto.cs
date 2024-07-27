@@ -11,7 +11,7 @@ namespace TramiteGoreu.Dto.Response
         public int Id { get; set; }
         public string nombres { get; set; } = default!;
         public string apellidos { get; set; } = default!;
-        public DateTime fechaNac { get; set; }
+        public DateOnly fechaNac { get; set; }
         public string direccion { get; set; } = default!;
         public string referencia { get; set; } = default!;
         public string email { get; set; } = default!;

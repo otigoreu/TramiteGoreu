@@ -13,7 +13,7 @@ namespace TramiteGoreu.Services.profiles
             CreateMap<PersonInfo, PersonResponseDto>();
             CreateMap<Person, PersonResponseDto>();
             CreateMap<PersonRequestDto, Person>()
-                .ForMember(d => d.fechaNac, o => o.MapFrom(x => Convert.ToDateTime($"{x.fechaNaci}")));
+                .ForMember(d => d.fechaNac, o => o.MapFrom(x => DateOnly.Parse($"{x.fechaNaci}")));
         }
     }
 }

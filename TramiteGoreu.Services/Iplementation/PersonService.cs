@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using TramiteGoreu.Dto.Request;
 using TramiteGoreu.Dto.Response;
 using TramiteGoreu.Entities;
+using TramiteGoreu.Entities.info;
 using TramiteGoreu.Repositories;
 using TramiteGoreu.Services.Interface;
 
@@ -11,23 +12,23 @@ namespace TramiteGoreu.Services.Iplementation
 {
     public class PersonService : IPersonService
     {
-        private readonly PersonRepository repository;
+        private readonly IPersonRepository repository;
         private readonly ILogger<PersonService> logger;
         private readonly IMapper mapper;
 
-        public PersonService(PersonRepository repository, ILogger<PersonService> logger, IMapper mapper)
+        public PersonService(IPersonRepository repository, ILogger<PersonService> logger, IMapper mapper)
         {
             this.repository = repository;
             this.logger = logger;
             this.mapper = mapper;
         }
-        public async Task<BaseResponseGeneric<ICollection<PersonResponseDto>>> GetAsync(string? nombres)
+        public async Task<BaseResponseGeneric<ICollection<PersonInfo>>> GetAsync(string? nombres)
         {
-            var response= new BaseResponseGeneric<ICollection<PersonResponseDto>>();
+            var response= new BaseResponseGeneric<ICollection<PersonInfo>>();
             try
             {
-                var data = await repository.GetAsync(nombres);
-                response.Data=mapper.Map<ICollection<PersonResponseDto>>(data);
+                
+                response.Data= await repository.GetAsync(nombres);
                 response.Success=true;
             }
             catch (Exception ex)
@@ -125,8 +126,6 @@ namespace TramiteGoreu.Services.Iplementation
             }
             return response;
         }
-        
 
-       
     }
 }
