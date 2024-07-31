@@ -24,7 +24,7 @@ namespace TramiteGoreu.Persistence.Configurations
             builder.Property(x => x.tipoDoc).HasMaxLength(3);
             builder.Property(x => x.nroDoc).HasMaxLength(9);
             builder.ToTable(nameof(Person), "Administrador");
-
+            builder.HasQueryFilter(x=>x.Status);
 
         }
     }

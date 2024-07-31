@@ -14,6 +14,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"));
 });
+//Settings context
+builder.Services.AddHttpContextAccessor();
 
 //2. registering y services
 //builder.Services.AddSingleton<PersonRepository>();
@@ -26,6 +28,17 @@ builder.Services.AddAutoMapper(config =>
     //configuring the mapping perfiles
     config.AddProfile<PersonProfile>();
 
+});
+//CORS
+var corsConfiguration = "TramiteGoreuCors";
+builder.Services.AddCors(setup =>
+{
+    setup.AddPolicy(corsConfiguration, policy =>
+    {
+        policy.AllowAnyOrigin();
+        policy.AllowAnyHeader().WithExposedHeaders(new string[] { "TotalRecordsQuantity" });
+        policy.AllowAnyMethod();
+    });
 });
 
 builder.Services.AddControllers();

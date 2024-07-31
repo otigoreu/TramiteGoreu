@@ -22,9 +22,9 @@ namespace TramiteGoreu.Api.Controllers
         }
 
         [HttpGet("nombre")]
-        public async Task<IActionResult> Get(string? nombres)
+        public async Task<IActionResult> Get(string? nombres, [FromQuery]PaginationDto pagination)
         {
-            var response=await service.GetAsync(nombres);
+            var response=await service.GetAsync(nombres,pagination);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 

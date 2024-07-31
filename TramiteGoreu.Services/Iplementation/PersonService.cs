@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Microsoft.Extensions.Logging;
 using TramiteGoreu.Dto.Request;
 using TramiteGoreu.Dto.Response;
@@ -22,13 +21,13 @@ namespace TramiteGoreu.Services.Iplementation
             this.logger = logger;
             this.mapper = mapper;
         }
-        public async Task<BaseResponseGeneric<ICollection<PersonInfo>>> GetAsync(string? nombres)
+        public async Task<BaseResponseGeneric<ICollection<PersonInfo>>> GetAsync(string? nombres, PaginationDto pagination)
         {
             var response= new BaseResponseGeneric<ICollection<PersonInfo>>();
             try
             {
                 
-                response.Data= await repository.GetAsync(nombres);
+                response.Data= await repository.GetAsync(nombres, pagination);
                 response.Success=true;
             }
             catch (Exception ex)

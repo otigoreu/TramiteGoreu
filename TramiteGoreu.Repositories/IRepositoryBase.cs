@@ -9,7 +9,7 @@ namespace TramiteGoreu.Repositories
 
         Task<ICollection<TEntity>> GetAsync(Expression<Func<TEntity,bool>> predicate);
         Task<ICollection<TEntity>> GetAsync<Tkey>(Expression<Func<TEntity,bool>> predicate, Expression<Func<TEntity,Tkey>> orderBy);
-        Task<TEntity> GetAsync (int id);
+        Task<TEntity?> GetAsync (int id);
         Task <int> AddAsync (TEntity entity);
         Task UpdateAsync();
         Task DeleteAsync(int id);
