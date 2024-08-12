@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TramiteGoreu.Entities.info
 {
-    public class PersonInfo
+    public class PersonaInfo
     {
         public int Id { get; set; }
         public string nombres { get; set; } = default!;
@@ -14,6 +14,8 @@ namespace TramiteGoreu.Entities.info
         public string fechaNac { get; set; } = default!;
         public string direccion { get; set; } = default!;
         public string referencia { get; set; } = default!;
+        public string celular { get; set; } = default!;
+        public string edad { get; set; } = default!;
         public string email { get; set; } = default!;
         public string tipoDoc { get; set; } = default!;
         public string nroDoc { get; set; } = default!;

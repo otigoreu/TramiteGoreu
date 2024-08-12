@@ -4,9 +4,9 @@ using TramiteGoreu.Entities.info;
 
 namespace TramiteGoreu.Repositories
 {
-    public interface IPersonRepository : IRepositoryBase<Person>
+    public interface IPersonRepository : IRepositoryBase<Persona>
     {
-        Task<ICollection<PersonInfo>> GetAsync(string? nombres, PaginationDto pagination);
+        Task<ICollection<PersonaInfo>> GetAsync(string? nombres, PaginationDto pagination);
         Task FinalizedAsync (int id);
     }
 }

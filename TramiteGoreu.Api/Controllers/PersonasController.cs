@@ -1,27 +1,22 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net;
+﻿using Microsoft.AspNetCore.Mvc;
 using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
-using TramiteGoreu.Entities;
-using TramiteGoreu.Repositories;
 using TramiteGoreu.Services.Interface;
 
 namespace TramiteGoreu.Api.Controllers
 {
     [ApiController]
-    [Route("api/persons")]
-    public class PersonsController : ControllerBase
+    [Route("api/personas")]
+    public class PersonasController : ControllerBase
     {
-        private readonly IPersonService service;
+        private readonly IPersonaService service;
 
-        public PersonsController(IPersonService service)
+        public PersonasController(IPersonaService service)
         {
             this.service = service;
         }
 
         [HttpGet("nombre")]
+       // [Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(string? nombres, [FromQuery]PaginationDto pagination)
         {
             var response=await service.GetAsync(nombres,pagination);
@@ -36,14 +31,14 @@ namespace TramiteGoreu.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(PersonRequestDto personRequestDto) 
+        public async Task<IActionResult> Post(PersonaRequestDto personRequestDto) 
         {
             var response = await service.AddAsync(personRequestDto);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id,PersonRequestDto personRequestDto) 
+        public async Task<IActionResult> Put(int id,PersonaRequestDto personRequestDto) 
         {
             var response = await service.UpdateAsync(id,personRequestDto);
             return response.Success ? Ok(response) : BadRequest(response);

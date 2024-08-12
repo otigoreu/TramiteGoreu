@@ -8,21 +8,21 @@ using TramiteGoreu.Repositories.Utils;
 
 namespace TramiteGoreu.Repositories
 {
-    public class PersonRepository : RepositoryBase<Person>, IPersonRepository
+    public class PersonaRepository : RepositoryBase<Persona>, IPersonRepository
     {
         private readonly IHttpContextAccessor httpContext;
 
-        public PersonRepository(ApplicationDbContext context, IHttpContextAccessor httpContext): base (context)
+        public PersonaRepository(ApplicationDbContext context, IHttpContextAccessor httpContext): base (context)
         {
             this.httpContext = httpContext;
         }
-        public async Task<ICollection<PersonInfo>> GetAsync(string? nombres, PaginationDto pagination)
+        public async Task<ICollection<PersonaInfo>> GetAsync(string? nombres, PaginationDto pagination)
         {
             //eager loading optimizado
-            var queryable = context.Set<Person>()
+            var queryable = context.Set<Persona>()
                 .Where(x => x.nombres.Contains(nombres ?? string.Empty))
                 .AsNoTracking()
-                .Select(x => new PersonInfo
+                .Select(x => new PersonaInfo
                 {
                     Id = x.Id,
                     nombres = x.nombres,
@@ -30,6 +30,8 @@ namespace TramiteGoreu.Repositories
                     fechaNac = x.fechaNac.ToShortDateString(),
                     direccion = x.direccion,
                     referencia = x.referencia,
+                    celular=x.celular,
+                    edad=x.edad,
                     email = x.email,
                     tipoDoc = x.tipoDoc,
                     nroDoc = x.nroDoc,

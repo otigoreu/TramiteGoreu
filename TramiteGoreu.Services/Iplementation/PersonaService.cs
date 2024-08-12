@@ -9,21 +9,21 @@ using TramiteGoreu.Services.Interface;
 
 namespace TramiteGoreu.Services.Iplementation
 {
-    public class PersonService : IPersonService
+    public class PersonaService : IPersonaService
     {
         private readonly IPersonRepository repository;
-        private readonly ILogger<PersonService> logger;
+        private readonly ILogger<PersonaService> logger;
         private readonly IMapper mapper;
 
-        public PersonService(IPersonRepository repository, ILogger<PersonService> logger, IMapper mapper)
+        public PersonaService(IPersonRepository repository, ILogger<PersonaService> logger, IMapper mapper)
         {
             this.repository = repository;
             this.logger = logger;
             this.mapper = mapper;
         }
-        public async Task<BaseResponseGeneric<ICollection<PersonInfo>>> GetAsync(string? nombres, PaginationDto pagination)
+        public async Task<BaseResponseGeneric<ICollection<PersonaInfo>>> GetAsync(string? nombres, PaginationDto pagination)
         {
-            var response= new BaseResponseGeneric<ICollection<PersonInfo>>();
+            var response= new BaseResponseGeneric<ICollection<PersonaInfo>>();
             try
             {
                 
@@ -37,13 +37,13 @@ namespace TramiteGoreu.Services.Iplementation
             }
             return response;
         }
-        public async Task<BaseResponseGeneric<PersonResponseDto>> GetAsync(int id)
+        public async Task<BaseResponseGeneric<PersonaResponseDto>> GetAsync(int id)
         {
-            var response = new BaseResponseGeneric<PersonResponseDto>();
+            var response = new BaseResponseGeneric<PersonaResponseDto>();
             try
             {
                 var data = await repository.GetAsync(id);
-                response.Data = mapper.Map<PersonResponseDto>(data);
+                response.Data = mapper.Map<PersonaResponseDto>(data);
                 response.Success = true;
             }
             catch (Exception ex)
@@ -53,12 +53,12 @@ namespace TramiteGoreu.Services.Iplementation
             }
             return response;
         }
-        public async Task<BaseResponseGeneric<int>> AddAsync(PersonRequestDto request)
+        public async Task<BaseResponseGeneric<int>> AddAsync(PersonaRequestDto request)
         {
             var response = new BaseResponseGeneric<int>();
             try
             {
-                response.Data = await repository.AddAsync(mapper.Map<Person>(request));
+                response.Data = await repository.AddAsync(mapper.Map<Persona>(request));
                 response.Success = true;
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace TramiteGoreu.Services.Iplementation
             }
             return response;
         }
-        public async Task<BaseResponse> UpdateAsync(int id, PersonRequestDto request)
+        public async Task<BaseResponse> UpdateAsync(int id, PersonaRequestDto request)
         {
             var response = new BaseResponse();
             try

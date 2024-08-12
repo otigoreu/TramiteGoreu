@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TramiteGoreu.Entities;
 
 namespace TramiteGoreu.Persistence
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<TramiteGoreuUserIdentity>
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -18,6 +20,10 @@ namespace TramiteGoreu.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             //modelBuilder.Entity<Person>().Property(x => x.nombres).HasMaxLength(50);
             //modelBuilder.Entity<Person>().Property(x => x.apellidos).HasMaxLength(50);
+
+            modelBuilder.Entity<TramiteGoreuUserIdentity>(x => x.ToTable("User","General"));
+            modelBuilder.Entity<IdentityRole>(x => x.ToTable("Role","General"));
+            modelBuilder.Entity<IdentityUserRole<string>>(x => x.ToTable("UserRole","General"));
         }
 
         //Entity to tables
