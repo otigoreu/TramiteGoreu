@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
+using TramiteGoreu.Entities;
 using TramiteGoreu.Persistence;
 using TramiteGoreu.Repositories;
 using TramiteGoreu.Services.Interface;
@@ -22,8 +23,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //5.Settings context
 builder.Services.AddHttpContextAccessor();
 
+//9. patron deopciones
+builder.Services.Configure<AppSettings>(builder.Configuration);
+
+
 //6.identity
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+////builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 builder.Services.AddIdentity<TramiteGoreuUserIdentity, IdentityRole>(polices =>
 {
     polices.Password.RequireDigit = true;
@@ -40,11 +45,11 @@ builder.Services.AddAuthentication(x =>
 }).AddJwtBearer(x =>
 {
     var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT:JWTKey"] ??
-    throw new InvalidOperationException("JWT key not configured"));
+        throw new InvalidOperationException("JWT key not configured"));
     x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
+        ValidateIssuer = false,
+        ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key)
@@ -52,11 +57,13 @@ builder.Services.AddAuthentication(x =>
 });
 builder.Services.AddAuthorization();
 
-
 //2. registering y services
 //builder.Services.AddSingleton<PersonRepository>();
-builder.Services.AddTransient<IPersonRepository, PersonaRepository>();
+builder.Services.AddTransient<IPersonaRepository, PersonaRepository>();
+
 builder.Services.AddTransient<IPersonaService, PersonaService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 //3.register mapper
 builder.Services.AddAutoMapper(config =>
@@ -96,7 +103,6 @@ builder.Services.AddSwaggerGen(config =>
     config.IncludeXmlComments(xmlPath);
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -116,15 +122,15 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseCors(corsConfiguration );
+app.UseCors(corsConfiguration);
 
 app.MapControllers();
-
+//automigration
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await db.Database.MigrateAsync();
+
     await UserDataSeeder.Seed(scope.ServiceProvider);
 }
-
 app.Run();

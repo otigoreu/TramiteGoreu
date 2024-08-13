@@ -12,5 +12,6 @@ namespace TramiteGoreu.Services.Interface
     {
         Task<BaseResponseGeneric<RegisterResponseDto>> RegisterAsync(RegisterRequestDto request);
         Task<BaseResponseGeneric<LoginResponseDto>> LoginAsync(LoginRequestDto request);
+        Task<BaseResponse> RequestTokenToResetPasswordAsync(ResetPasswordRequestDto request);
     }
 }

@@ -17,10 +17,6 @@ namespace TramiteGoreu.Dto.Request
         public string LastName { get; set; } = default!;
         [EmailAddress]
         public string Email { get; set; } = default!;
-        public int DocumentType { get; set; }
-        public string DocumentNumber { get; set; } = default!;
-        public int Age { get; set; } = default!;
-        [Required]
         public string Password { get; set; } = default!;
         [Compare(nameof(Password), ErrorMessage = "Las contraseñas no coinciden")]
         public string ConfirmPassword { get; set; } = default!;

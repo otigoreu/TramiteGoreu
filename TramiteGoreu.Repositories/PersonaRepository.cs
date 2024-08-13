@@ -8,7 +8,7 @@ using TramiteGoreu.Repositories.Utils;
 
 namespace TramiteGoreu.Repositories
 {
-    public class PersonaRepository : RepositoryBase<Persona>, IPersonRepository
+    public class PersonaRepository : RepositoryBase<Persona>, IPersonaRepository
     {
         private readonly IHttpContextAccessor httpContext;
 

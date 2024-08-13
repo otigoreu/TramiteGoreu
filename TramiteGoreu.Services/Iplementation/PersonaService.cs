@@ -11,11 +11,11 @@ namespace TramiteGoreu.Services.Iplementation
 {
     public class PersonaService : IPersonaService
     {
-        private readonly IPersonRepository repository;
+        private readonly IPersonaRepository repository;
         private readonly ILogger<PersonaService> logger;
         private readonly IMapper mapper;
 
-        public PersonaService(IPersonRepository repository, ILogger<PersonaService> logger, IMapper mapper)
+        public PersonaService(IPersonaRepository repository, ILogger<PersonaService> logger, IMapper mapper)
         {
             this.repository = repository;
             this.logger = logger;
