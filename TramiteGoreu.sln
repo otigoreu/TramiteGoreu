@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TramiteGoreu.Persistence", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TramiteGoreu.Dto", "TramiteGoreu.Dto\TramiteGoreu.Dto.csproj", "{D7972191-FAE9-4E4F-AB84-722A6688CF0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TramiteGoreu.Services", "TramiteGoreu.Services\TramiteGoreu.Services.csproj", "{F443DE61-8C73-4D9D-99DB-70DDBBDFFB3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TramiteGoreu.Services", "TramiteGoreu.Services\TramiteGoreu.Services.csproj", "{F443DE61-8C73-4D9D-99DB-70DDBBDFFB3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

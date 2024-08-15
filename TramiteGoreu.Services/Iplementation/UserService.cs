@@ -180,7 +180,7 @@ namespace TramiteGoreu.Services.Iplementation
                     <p> <strong> {token} </strong> </p>
                     <hr />
                     Atte. <br />
-                    Music Store © 2024
+                    Tramite Goreu © 2024
                 ");
 
                 response.Success = true;
@@ -190,6 +190,92 @@ namespace TramiteGoreu.Services.Iplementation
                 response.ErrorMessage = "Ocurrió un error al solicitar el token para resetear la clave";
                 logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
+            return response;
+        }
+
+
+        public async Task<BaseResponse> ResetPasswordAsync(NewPasswordRequestDto request)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var userIdentity = await userManager.FindByEmailAsync(request.Email);
+
+                if (userIdentity is null)
+                {
+                    throw new ApplicationException("Usuario no existe");
+                }
+
+                var result = await userManager.ResetPasswordAsync(userIdentity, request.Token, request.ConfirmNewPassword);
+                response.Success = result.Succeeded;
+
+                if (!result.Succeeded)
+                {
+
+                    response.ErrorMessage = string.Join(" ", result.Errors.Select(x => x.Description).ToArray());
+                }
+                else
+                {
+                    //Enviar un email de confirmacion de clave cambiada
+                    await emailService.SendEmailAsync(request.Email,"Confiracion de cambio de clave",
+                    @$"
+                    <P> Estimado {userIdentity.FirstName} {userIdentity.LastName}</p>
+                    <p> Se ha cambiado su clave corecctaente</p>
+                    <hr />
+                    Atte. <br />
+                    Tramite Goreu @ 2024");
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                response.ErrorMessage = "Ocurrio un error al resetear el Password";
+                logger.LogError(ex, "{ErrorMessage} {Message}",response.ErrorMessage, ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<BaseResponse> ChangePasswordAsync(string email, ChangePasswordRequestDto request)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var userIdentity = await userManager.FindByEmailAsync(email);
+
+                if (userIdentity is null)
+                {
+                    throw new ApplicationException("Usuario no existe");
+                }
+
+                var result = await userManager.ChangePasswordAsync(userIdentity, request.OldPassword, request.NewPassword);
+                response.Success = result.Succeeded;
+                if (!result.Succeeded)
+                {
+                    response.ErrorMessage = string.Join(" ", result.Errors.Select(x => x.Description).ToArray());
+                }
+                else
+                {
+                    logger.LogInformation("Se cambio la clave para {email}", userIdentity.Email);
+                    //Enviar un email de confirmacion de clave cambiada
+                    await emailService.SendEmailAsync(email, "Confiracion de cambio de clave",
+                    @$"
+                    <P> Estimado {userIdentity.FirstName} {userIdentity.LastName}</p>
+                    <p> Se ha cambiado su clave corecctaente</p>
+                    <hr />
+                    Atte. <br />
+                    Tramite Goreu @ 2024");
+                }
+            }
+            catch (Exception ex) 
+            {
+                
+                response.ErrorMessage = "Error al cambiar la clave";
+                logger.LogError(ex, "Error al cambiar password {Message}", ex.Message);
+            }
+
             return response;
         }
     }

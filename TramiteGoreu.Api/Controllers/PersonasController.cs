@@ -18,7 +18,7 @@ namespace TramiteGoreu.Api.Controllers
         }
 
         [HttpGet("nombre")]
-       //[Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
+       [Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(string? nombres, [FromQuery]PaginationDto pagination)
         {
             var response=await service.GetAsync(nombres,pagination);
