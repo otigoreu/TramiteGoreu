@@ -29,7 +29,7 @@ builder.Services.Configure<AppSettings>(builder.Configuration);
 
 //6.identity
 ////builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-builder.Services.AddIdentity<TramiteGoreuUserIdentity, IdentityRole>(polices =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(polices =>
 {
     polices.Password.RequireDigit = true;
     polices.Password.RequiredLength = 6;

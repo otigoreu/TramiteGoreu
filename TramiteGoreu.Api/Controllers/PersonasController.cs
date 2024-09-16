@@ -24,6 +24,13 @@ namespace TramiteGoreu.Api.Controllers
             var response=await service.GetAsync(nombres,pagination);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+        [HttpGet("email")]
+       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> Get(string? email)
+        {
+            var response = await service.GetAsyncBYEmail(email);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id) 

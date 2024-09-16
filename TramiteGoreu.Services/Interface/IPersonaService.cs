@@ -7,6 +7,7 @@ namespace TramiteGoreu.Services.Interface
     public interface IPersonaService
     {
         Task<BaseResponseGeneric<ICollection<PersonaInfo>>> GetAsync(string? nombres, PaginationDto pagination);
+        Task<BaseResponseGeneric<PersonaInfo>> GetAsyncBYEmail(string email);
         Task<BaseResponseGeneric<PersonaResponseDto>> GetAsync(int id);
         Task<BaseResponseGeneric<int>> AddAsync(PersonaRequestDto resquest);
         Task<BaseResponse> UpdateAsync(int id, PersonaRequestDto resquest);

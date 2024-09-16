@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TramiteGoreu.Persistence
 {
-    public class TramiteGoreuUserIdentity : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         [StringLength(100)]
         public string FirstName { get; set; } = default!;

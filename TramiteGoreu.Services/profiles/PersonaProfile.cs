@@ -14,6 +14,7 @@ namespace TramiteGoreu.Services.profiles
             CreateMap<Persona, PersonaResponseDto>();
             CreateMap<PersonaRequestDto, Persona>()
                 .ForMember(d => d.fechaNac, o => o.MapFrom(x => DateOnly.Parse($"{x.fechaNac}")));
+            CreateMap<Persona, PersonaInfo>();
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security;
 using System.Security.Claims;
@@ -18,17 +20,20 @@ namespace TramiteGoreu.Services.Iplementation
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<TramiteGoreuUserIdentity> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<UserService> logger;
         private readonly IOptions<AppSettings> options;
         private readonly IPersonaRepository personaRepository;
-        private readonly SignInManager<TramiteGoreuUserIdentity> signInManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IMapper mapper;
         private readonly IEmailService emailService;
+        private readonly ApplicationDbContext context;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public UserService(UserManager<TramiteGoreuUserIdentity> userManager, ILogger<UserService> logger,
+        public UserService(UserManager<ApplicationUser> userManager, ILogger<UserService> logger,
             IOptions<AppSettings> options, IPersonaRepository personaRepository,
-            SignInManager<TramiteGoreuUserIdentity> signInManager, IMapper mapper, IEmailService emailService)
+            SignInManager<ApplicationUser> signInManager, IMapper mapper, IEmailService emailService,
+            ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.logger = logger;
@@ -37,6 +42,8 @@ namespace TramiteGoreu.Services.Iplementation
             this.signInManager = signInManager;
             this.mapper = mapper;
             this.emailService = emailService;
+            this.context = context;
+            this.roleManager = roleManager;
         }
 
         public async Task<BaseResponseGeneric<RegisterResponseDto>> RegisterAsync(RegisterRequestDto request)
@@ -44,7 +51,7 @@ namespace TramiteGoreu.Services.Iplementation
             var response = new BaseResponseGeneric<RegisterResponseDto>();
             try
             {
-                var user = new TramiteGoreuUserIdentity
+                var user = new ApplicationUser
                 {
                     UserName = request.Email,
                     Email = request.Email,
@@ -86,7 +93,8 @@ namespace TramiteGoreu.Services.Iplementation
                         {
                             UserId = user.Id,
                             Token = tokenResponse.Token,
-                            ExpirationDate = tokenResponse.ExpirationDate
+                            ExpirationDate = tokenResponse.ExpirationDate,
+                            Roles=tokenResponse.Roles
                         };
                     }
                 }
@@ -131,12 +139,12 @@ namespace TramiteGoreu.Services.Iplementation
             }
             return response;
         }
-        private async Task<LoginResponseDto> ConstruirToken(TramiteGoreuUserIdentity user)
+        private async Task<LoginResponseDto> ConstruirToken(ApplicationUser user)
         {
             //creamos los claims, que son informaciones emitidas por una fuente confiable, pueden contener cualquier key/value que definamos y que son añadidas al TOKEN
             var claims = new List<Claim>()
            {
-               new Claim(ClaimTypes.Email,user.Email), //Nunca enviar data sensible en un claim, ya que es leído por el cliente
+               new Claim(ClaimTypes.Email,user.Email ?? string.Empty), //Nunca enviar data sensible en un claim, ya que es leído por el cliente
                new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}")
            };
 
@@ -155,10 +163,12 @@ namespace TramiteGoreu.Services.Iplementation
             return new LoginResponseDto
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(securityToken),
-                ExpirationDate = expiracion
+                ExpirationDate = expiracion,
+                Roles=roles.ToList()
             };
         }
 
+       
         public async Task<BaseResponse> RequestTokenToResetPasswordAsync(ResetPasswordRequestDto request)
         {
             var response = new BaseResponse();
@@ -278,5 +288,383 @@ namespace TramiteGoreu.Services.Iplementation
 
             return response;
         }
+        //---------------------------------------------------------------------------------------------
+        public async Task<BaseResponseGeneric<List<UserResponseDto>>> GetUsersByRole(string? role)
+        {
+            var response = new BaseResponseGeneric<List<UserResponseDto>>();
+            try
+            {
+                List<ApplicationUser> resultado = new();
+                if (role.Length > 0)
+                {
+
+                    resultado = (await userManager.GetUsersInRoleAsync(role)).ToList();//trae los user por role
+                }
+                else {
+                    resultado = await context.Users.ToListAsync(); //trae a todos los user
+                
+                }
+
+                var listResponse = new List<UserResponseDto>();
+                foreach (var user in resultado) { 
+                    var roles= await userManager.GetRolesAsync(user);
+                    listResponse.Add(new UserResponseDto
+                    {
+                        Id=user.Id,
+                        FirstName=user.FirstName,
+                        LastName=user.LastName,
+                        Email=user.Email ?? string.Empty,
+                        Roles=roles.ToList()
+                    });
+                }
+                if (resultado.Count > 0)
+                {
+                    response.Success = true;
+                    response.Data = listResponse;
+                }
+                else {
+                    response.ErrorMessage = "Ningun usuario encontrado.";
+                    logger.LogWarning(response.ErrorMessage);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocurrio un error.";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+
+            return response;
+        }
+
+
+        public async Task<BaseResponseGeneric<UserResponseDto>> GetUserByEmail(string email)
+        {
+            var response = new BaseResponseGeneric<UserResponseDto>();
+            try
+            {
+                var person =await userManager.Users.Where(x=>x.Email==email).FirstOrDefaultAsync();
+                if (person is not null)
+                {
+                    var roles = await userManager.GetRolesAsync(person);
+                    var personDto = new UserResponseDto
+                    {
+                        Id = person.Id,
+                        Email = person.Email ?? string.Empty,
+                        FirstName = person.FirstName,
+                        LastName = person.LastName,
+                        Roles = roles.ToList()
+                    };
+                    response.Success = true;
+                    response.Data = personDto;
+
+                }
+                else
+                {
+                    response.ErrorMessage = "Ningun usuario encontrado.";
+                    logger.LogWarning(response.ErrorMessage);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocurrio un error";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<BaseResponse> CreateRoleAsync(string roleName)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                if (await roleManager.RoleExistsAsync(roleName))
+                {
+                    response.ErrorMessage = "Rol ya existe";
+                    return response;
+                }
+                var resultado = await roleManager.CreateAsync(new IdentityRole(roleName.ToUpper()));
+
+                if (resultado.Succeeded)
+                {
+                    response.Success = true;
+                }
+                else
+                {
+                    response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
+                    logger.LogWarning(response.ErrorMessage);
+                }
+
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocurrio un error al registrar el rol";
+                logger.LogError(ex, "{ErrorMessage}{Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> DeleteRoleAsync(string roleName)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var role = await roleManager.FindByNameAsync(roleName);
+                if (role is null ) 
+                {
+                    response.ErrorMessage = " Rol no encontrado";
+                    return response;
+
+                }
+
+                var resultado=await roleManager.DeleteAsync(role);
+                if (resultado.Succeeded)
+                {
+                    response.Success = true;
+                }
+                else
+                {
+                    response.ErrorMessage = string.Join(" ",resultado.Errors.Select(x=>x.Description).ToArray());
+                    logger.LogWarning(response.ErrorMessage);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Error al borrar Role";
+                logger.LogError(ex,"{ErrorMessage}{Message}",response.ErrorMessage, ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<BaseResponseGeneric<List<RoleResponseDto>>> GetRolesAsync()
+        {
+            var response = new BaseResponseGeneric<List<RoleResponseDto>>();
+
+            try
+            {
+                var rolesData = await roleManager.Roles.Select(x => new RoleResponseDto
+                {
+                    Id=x.Id,
+                    Name=x.Name ?? string.Empty,
+                    NormalizedName=x.NormalizedName ??string.Empty
+                }).ToListAsync();
+
+                if (rolesData is not null)
+                {
+                    response.Success = true;
+                    response.Data = rolesData;
+                }
+                else
+                {
+                    response.ErrorMessage = "ningun rol Encontrado";
+                    logger.LogWarning(response.ErrorMessage);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "ocurrio un error";
+                logger.LogError(ex, "{ErrorMessage}{MEssage}",response.ErrorMessage, ex.Message );
+            }
+
+
+            return response;
+        }
+
+        public async Task<BaseResponse> GrantUserRole(string userId, string roleName)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var user = await userManager.FindByIdAsync(userId);
+                if (user is null) 
+                {
+                    response.ErrorMessage = "usuario no enocntrado";
+                    return response;
+                }
+
+                //verifica si existe el rol
+                var roleExistis = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExistis) 
+                {
+                    response.ErrorMessage = "Rol no Existe";
+                    return response;
+                }
+                //verificar si el user tiene el rol
+                var userRoleExists = await userManager.IsInRoleAsync(user, roleName);
+                if (userRoleExists) {
+                    response.ErrorMessage = "ya cuenta con este rol";
+                    return response;
+                }
+
+                //agregar el rol
+                var resultado = await userManager.AddToRoleAsync(user, roleName);
+                if (resultado.Succeeded)
+                {
+                    response.Success = true;
+
+                }
+                else 
+                {
+                    response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x =>x.Description).ToArray());
+                    logger.LogWarning(response.ErrorMessage);
+                
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocurrio un error al agregar Rol al Usuario";
+                logger.LogError(ex, "{ErrorMessage}{Message}", response.ErrorMessage, ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<BaseResponse> GrantUserRoleByEmail(string email, string roleName)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var user = await userManager.FindByEmailAsync(email);
+                if (user is null)
+                {
+                    response.ErrorMessage = "usuario no enocntrado";
+                    return response;
+                }
+                var roleExistis = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExistis)
+                {
+                    response.ErrorMessage = "Rol no Existe";
+                    return response;
+                }
+                //verificar si el user tiene el rol
+                var userRoleExists = await userManager.IsInRoleAsync(user, roleName);
+                if (userRoleExists)
+                {
+                    response.ErrorMessage = "ya cuenta con este rol";
+                    return response;
+                }
+
+                //agregar el rol
+                var resultado = await userManager.AddToRoleAsync(user, roleName);
+                if (resultado.Succeeded)
+                {
+                    response.Success = true;
+
+                }
+                else
+                {
+                    response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
+                    logger.LogWarning(response.ErrorMessage);
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocurrio un error al agregar Rol al Usuario";
+                logger.LogError(ex, "{ErrorMessage}{Message}", response.ErrorMessage, ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<BaseResponse> RevokeUserRoles(string userId)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var user = await userManager.FindByIdAsync(userId);
+                if (user is null) 
+                {
+                    response.ErrorMessage = "usuario no encontrado";
+                    return response;
+                }
+                var roles = await userManager.GetRolesAsync(user);
+                var resultado = await userManager.RemoveFromRolesAsync(user, roles);
+                if (resultado.Succeeded)
+                {
+                    response.Success = true;
+
+                }
+                else 
+                {
+                    response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
+                    logger.LogWarning(response.ErrorMessage);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocuarrio un error al quitar roles";
+                logger.LogError(ex, "{ErrorMessage}{Message}", response.ErrorMessage, ex.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<BaseResponse> RevokeUserRole(string userId, string roleName)
+        {
+            var response = new BaseResponse();
+
+            try
+            {
+                var user = await userManager.FindByIdAsync(userId);
+                if (user is null)
+                {
+                    response.ErrorMessage = "usuario no encontrado";
+                    return response;
+                }
+               
+                var resultado = await userManager.RemoveFromRoleAsync(user, roleName);
+                if (resultado.Succeeded)
+                {
+                    response.Success = true;
+
+                }
+                else
+                {
+                    response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
+                    logger.LogWarning(response.ErrorMessage);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocuarrio un error al quitar rol";
+                logger.LogError(ex, "{ErrorMessage}{Message}", response.ErrorMessage, ex.Message);
+            }
+
+            return response;
+        }
     }
 }
+/// en las peticiones http , ¿cuando es necesario poner un atributo en 
+/// el url como "{userId}"?, atributo en [HttpPost("/{userId}/roles/grant")], del metodo GrantUserRole, 
+/// ¿solo cuando se va hacer una busqueda con ese atributo?
+/// lo digo porque tambien se hace una busqueda con el atributo roleName dentro de esa api

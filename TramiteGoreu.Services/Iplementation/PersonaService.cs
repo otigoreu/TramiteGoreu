@@ -126,5 +126,21 @@ namespace TramiteGoreu.Services.Iplementation
             return response;
         }
 
+        public async Task<BaseResponseGeneric<PersonaInfo>> GetAsyncBYEmail(string email)
+        {
+            var response = new BaseResponseGeneric<PersonaInfo>();
+            try
+            {
+
+                response.Data = mapper.Map<PersonaInfo> ( (await repository.GetAsync(predicate: s => s.email == email)).FirstOrDefault());
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
     }
 }

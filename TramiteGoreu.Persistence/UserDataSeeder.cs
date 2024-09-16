@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using TramiteGoreu.Entities;
-using static TramiteGoreu.Persistence.TramiteGoreuUserIdentity;
+using static TramiteGoreu.Persistence.ApplicationUser;
 
 namespace TramiteGoreu.Persistence
 {
@@ -10,7 +10,7 @@ namespace TramiteGoreu.Persistence
         public static async Task Seed(IServiceProvider service)
         {
             //User repository
-            var userManager = service.GetRequiredService<UserManager<TramiteGoreuUserIdentity>>();
+            var userManager = service.GetRequiredService<UserManager<ApplicationUser>>();
             //Role repository
             var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
             //Creating roles
@@ -24,7 +24,7 @@ namespace TramiteGoreu.Persistence
                 await roleManager.CreateAsync(customerRole);
 
             //Admin user
-            var adminUser = new TramiteGoreuUserIdentity()
+            var adminUser = new ApplicationUser()
             {
                 FirstName = "System",
                 LastName = "Administrator",

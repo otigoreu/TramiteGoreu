@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Transactions;
 using TramiteGoreu.Dto.Request;
 using TramiteGoreu.Services.Interface;
 
@@ -56,7 +57,68 @@ namespace TramiteGoreu.Api.Controllers
             var response = await service.ChangePasswordAsync(email, request);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+        //---------------------------------------------------------------------------------------------
+        [HttpGet("GetUsersByRole")]
+        public async Task<IActionResult> GetUsersByRole([FromQuery] string? role="")
+        {
 
+            var response = await service.GetUsersByRole(role);
+            return response.Success ? Ok(response) : BadRequest(response);
+            
+        }
+
+        [HttpPost("GetUserbyEmail/{email}")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            var response = await service.GetUserByEmail(email);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPost("roles/create")]
+        public async Task<IActionResult> CreateRole(string roleName)
+        { 
+            var response= await service.CreateRoleAsync(roleName);
+            return response.Success ? Ok(response): BadRequest(response);
+
+        }
+        [HttpDelete("role/remove/{roleName}")]
+        public async Task<IActionResult> DeleteRoles(string roleName)
+        {
+            var response = await service.DeleteRoleAsync(roleName);
+            return response.Success ? Ok(response) : BadRequest(Response);
+
+        }
+        [HttpGet("roles")]
+        public async Task<IActionResult> GetRoles()
+        {
+            var response= await service.GetRolesAsync();
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        [HttpPost("/{userId}/Roles/grant")]
+        public async Task<IActionResult> GrantRole(string userId, string RoleName)
+        {
+            var response =await service.GrantUserRole(userId, RoleName);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPost("/{email}/roles/grantByEmail")]
+        public async Task<IActionResult> GrantRolesByEmail(string email, string roleName)
+        { 
+            var response = await service.GrantUserRoleByEmail(email, roleName);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        [HttpPost("/{userId}/roles/revoke")]
+        public async Task<IActionResult> RevokeRoles(string userId)
+        {
+            var response = await service.RevokeUserRoles(userId);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        [HttpPost("/{userId}/role/revoke")]
+        public async Task<IActionResult> RevokeRole(string userId, string roleName)
+        {
+            var response = await service.RevokeUserRole(userId, roleName);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
 
     }
 }

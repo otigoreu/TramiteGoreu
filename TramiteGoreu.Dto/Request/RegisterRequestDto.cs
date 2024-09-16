@@ -12,12 +12,17 @@ namespace TramiteGoreu.Dto.Request
         [Required]
         [StringLength(100)]
         public string FirstName { get; set; } = default!;
+
         [Required]
         [StringLength(100)]
         public string LastName { get; set; } = default!;
+
+        [Required(ErrorMessage = "El email es obligatorio")]
         [EmailAddress]
         public string Email { get; set; } = default!;
+
         public string Password { get; set; } = default!;
+
         [Compare(nameof(Password), ErrorMessage = "Las contraseñas no coinciden")]
         public string ConfirmPassword { get; set; } = default!;
 
