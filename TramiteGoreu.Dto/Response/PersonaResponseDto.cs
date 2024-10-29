@@ -9,16 +9,16 @@ namespace TramiteGoreu.Dto.Response
     public class PersonaResponseDto
     {
         public int Id { get; set; }
-        public string nombres { get; set; } = default!;
-        public string apellidos { get; set; } = default!;
-        public DateOnly fechaNac { get; set; }
-        public string direccion { get; set; } = default!;
-        public string referencia { get; set; } = default!;
-        public string celular { get; set; } = default!;
-        public string edad { get; set; } = default!;
-        public string email { get; set; } = default!;
-        public string tipoDoc { get; set; } = default!;
-        public string nroDoc { get; set; } = default!;
-        public bool Status { get; set; }
+        public string Nombres { get; set; } = default!;
+        public string Apellidos { get; set; } = default!;
+        public DateOnly FechaNac { get; set; }
+        public string Direccion { get; set; } = default!;
+        public string Referencia { get; set; } = default!;
+        public string Celular { get; set; } = default!;
+        public string Edad { get; set; } = default!;
+        public string Email { get; set; } = default!;
+        public string TipoDoc { get; set; } = default!;
+        public string NroDoc { get; set; } = default!;
+        
     }
 }

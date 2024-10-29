@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -14,36 +15,57 @@ using TramiteGoreu.Dto.Response;
 using TramiteGoreu.Entities;
 using TramiteGoreu.Persistence;
 using TramiteGoreu.Repositories;
+using TramiteGoreu.Repositories.Implementacion;
+using TramiteGoreu.Repositories.Interfaces;
 using TramiteGoreu.Services.Interface;
 
 namespace TramiteGoreu.Services.Iplementation
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<Usuario> userManager;
         private readonly ILogger<UserService> logger;
+        private readonly IConfiguration configuration;
         private readonly IOptions<AppSettings> options;
         private readonly IPersonaRepository personaRepository;
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ISedeRepository sedeRepository;
+        private readonly SignInManager<Usuario> signInManager;
         private readonly IMapper mapper;
         private readonly IEmailService emailService;
         private readonly ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IUserRepository userRepository;
+        private readonly IAplicacionRepository aplicacionRepository;
 
-        public UserService(UserManager<ApplicationUser> userManager, ILogger<UserService> logger,
-            IOptions<AppSettings> options, IPersonaRepository personaRepository,
-            SignInManager<ApplicationUser> signInManager, IMapper mapper, IEmailService emailService,
-            ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+        public UserService(
+            UserManager<Usuario> userManager, 
+            ILogger<UserService> logger, 
+            IConfiguration configuration,
+            IOptions<AppSettings> options, 
+            SignInManager<Usuario> signInManager, 
+            IMapper mapper, 
+            ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager,
+            IPersonaRepository personaRepository,
+            ISedeRepository sedeRepository,
+            IUserRepository userRepository, 
+            IEmailService emailService,
+            IAplicacionRepository aplicacionRepository
+            )
         {
             this.userManager = userManager;
             this.logger = logger;
+            this.configuration = configuration;
             this.options = options;
             this.personaRepository = personaRepository;
+            this.sedeRepository = sedeRepository;
             this.signInManager = signInManager;
             this.mapper = mapper;
             this.emailService = emailService;
             this.context = context;
             this.roleManager = roleManager;
+            this.userRepository = userRepository;
+            this.aplicacionRepository = aplicacionRepository;
         }
 
         public async Task<BaseResponseGeneric<RegisterResponseDto>> RegisterAsync(RegisterRequestDto request)
@@ -51,59 +73,55 @@ namespace TramiteGoreu.Services.Iplementation
             var response = new BaseResponseGeneric<RegisterResponseDto>();
             try
             {
-                var user = new ApplicationUser
-                {
-                    UserName = request.Email,
-                    Email = request.Email,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    EmailConfirmed = true
-                };
-                var resultado = await userManager.CreateAsync(user, request.ConfirmPassword);
-                if (resultado.Succeeded)
-                {
-                    user = await userManager.FindByEmailAsync(request.Email);
+                var resultadoPersona= await personaRepository.GetAsync(request.idPersona);
+                var resultadoSede = await sedeRepository.GetAsync(request.idSede);
 
-                    if (user is not null)
+                if (resultadoPersona is not null && resultadoSede is not null)
+                {
+                    var user = new Usuario
                     {
-                        await userManager.AddToRoleAsync(user, Constants.RoleCustomer);
+                        UserName = request.UserName,
+                        Email = request.Email,
+                        FirstName = request.FirstName,
+                        LastName = request.LastName,
+                        IdPersona = request.idPersona,
+                        IdSede = request.idSede,
+                        EmailConfirmed = true
 
-                        var persona = new PersonaRequestDto()
+                    };
+
+                    var resultado = await userManager.CreateAsync(user, request.ConfirmPassword);
+                    if (resultado.Succeeded)
+                    {
+                        user = await userManager.FindByEmailAsync(request.Email);
+
+                        if (user is not null)
                         {
-                            email = request.Email,
-                            nombres = request.FirstName,
-                            apellidos = request.LastName,
-                            fechaNac="2024-01-01",
-                            direccion = "",
-                            referencia = "",
-                            celular = "",
-                            edad = "",
-                            tipoDoc = "",
-                            nroDoc = "",
-                        };
+                            await userManager.AddToRoleAsync(user, Constantes.RolCliente);
 
-                        await personaRepository.AddAsync(mapper.Map<Persona>(persona));
+                            // TODO: Enviar un email
 
-                        // TODO: Enviar un email
+                            response.Success = true;
 
-                        response.Success = true;
-
-                        var tokenResponse = await ConstruirToken(user);//returning jwt
-                        response.Data = new RegisterResponseDto
-                        {
-                            UserId = user.Id,
-                            Token = tokenResponse.Token,
-                            ExpirationDate = tokenResponse.ExpirationDate,
-                            Roles=tokenResponse.Roles
-                        };
+                            var tokenResponse = await ConstruirToken(user);//returning jwt
+                            response.Data = new RegisterResponseDto
+                            {
+                                UserId = user.Id,
+                                Token = tokenResponse.Token,
+                                ExpirationDate = tokenResponse.ExpirationDate,
+                                Roles = tokenResponse.Roles
+                            };
+                        }
                     }
+                    else
+                    {
+                        response.Success = false;
+                        response.ErrorMessage = String.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
+                        logger.LogWarning(response.ErrorMessage);
+                    }
+
                 }
-                else
-                {
-                    response.Success = false;
-                    response.ErrorMessage = String.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
-                    logger.LogWarning(response.ErrorMessage);
-                }
+                
             }
             catch (Exception ex)
             {
@@ -122,7 +140,8 @@ namespace TramiteGoreu.Services.Iplementation
 
                 if (resultado.Succeeded)
                 {
-                    var user = await userManager.FindByEmailAsync(request.UserName);
+                    //var user = await userManager.FindByEmailAsync(request.UserName);
+                    var user = await userManager.FindByNameAsync(request.UserName);
                     response.Success = true;
                     response.Data = await ConstruirToken(user);
                 }
@@ -139,14 +158,14 @@ namespace TramiteGoreu.Services.Iplementation
             }
             return response;
         }
-        private async Task<LoginResponseDto> ConstruirToken(ApplicationUser user)
+        private async Task<LoginResponseDto> ConstruirToken(Usuario user)
         {
-            //creamos los claims, que son informaciones emitidas por una fuente confiable, pueden contener cualquier key/value que definamos y que son añadidas al TOKEN
             var claims = new List<Claim>()
-           {
-               new Claim(ClaimTypes.Email,user.Email ?? string.Empty), //Nunca enviar data sensible en un claim, ya que es leído por el cliente
-               new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}")
-           };
+               {
+                   //new Claim(ClaimTypes.Email,user.Email ?? string.Empty), //Nunca enviar data sensible en un claim
+                   new Claim(ClaimTypes.Name,user.UserName ?? string.Empty), //Nunca enviar data sensible en un claim
+                   new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}")
+               };
 
             var roles = await userManager.GetRolesAsync(user);
             foreach (var role in roles)
@@ -154,17 +173,69 @@ namespace TramiteGoreu.Services.Iplementation
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            //firmando el JWT
-            var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.Jwt.JWTKey)); //nos valemos del proveedor de configuracion appsettings.Development.json para guardar una llaveJWT
+            //Persona
+            var persona = await personaRepository.GetAsync(user.IdPersona);
+
+            var personaDto = new PersonaResponseDto
+            {
+                Id = persona.Id,
+                Nombres = persona.Nombres,
+                Apellidos=persona.Apellidos,
+                FechaNac=persona.FechaNac,
+                Direccion=persona.Direccion,
+                Referencia=persona.Referencia,
+                Celular=persona.Celular,
+                Edad=persona.Edad,
+                Email=persona.Email,
+                TipoDoc=persona.TipoDoc,
+                NroDoc=persona.NroDoc
+            };
+
+            //Sede
+            var sede = await sedeRepository.GetAsync(user.IdSede);
+            var sedeDto = new SedeResponseDto
+            {
+                Id = sede.Id,
+                Descripcion = sede.Descripcion
+            };
+
+            //Aplicaciones
+            List<int> idAplicaciones = new List<int>();
+            var aplicacionesDto = new List<AplicacionResponseDto>();
+
+            var usuario = await userRepository.GetAsync(user.Id);
+
+            user.UsuarioAplicaciones = usuario != null ? usuario.UsuarioAplicaciones.ToList() : new List<UsuarioAplicacion>();
+
+            if (user.Id != null)
+            {
+                foreach (var item in user.UsuarioAplicaciones)
+                {
+                    idAplicaciones.Add(item.IdAplicacion);
+                }
+                var aplications = await aplicacionRepository.GetAsync(x => idAplicaciones.Contains(x.Id));
+
+                aplicacionesDto = aplications.Select(x => new AplicacionResponseDto
+                {
+                    Id = x.Id,
+                    Descripcion = x.Descripcion,
+                }).ToList();
+            }
+
+            //JWT Signing
+            var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:JWTKey"].ToString()));
             var credenciales = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
-            var expiracion = DateTime.UtcNow.AddSeconds(options.Value.Jwt.LifetimeInSeconds);//se puede configurar cualquier espacio de tiempo de validez de un token según las reglas de negocio
+            var expiracion = DateTime.UtcNow.AddSeconds(Convert.ToDouble(configuration["JWT:LifetimeInSeconds"].ToString()));
 
             var securityToken = new JwtSecurityToken(issuer: null, audience: null, claims: claims, signingCredentials: credenciales, expires: expiracion);
             return new LoginResponseDto
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(securityToken),
                 ExpirationDate = expiracion,
-                Roles=roles.ToList()
+                Roles = roles.ToList(),
+                Persona = personaDto,
+                Sede = sedeDto,
+                Aplicaciones = aplicacionesDto
             };
         }
 
@@ -289,12 +360,12 @@ namespace TramiteGoreu.Services.Iplementation
             return response;
         }
         //---------------------------------------------------------------------------------------------
-        public async Task<BaseResponseGeneric<List<UserResponseDto>>> GetUsersByRole(string? role)
+        public async Task<BaseResponseGeneric<List<UsuarioResponseDto>>> GetUsersByRole(string? role)
         {
-            var response = new BaseResponseGeneric<List<UserResponseDto>>();
+            var response = new BaseResponseGeneric<List<UsuarioResponseDto>>();
             try
             {
-                List<ApplicationUser> resultado = new();
+                List<Usuario> resultado = new();
                 if (role.Length > 0)
                 {
 
@@ -305,10 +376,10 @@ namespace TramiteGoreu.Services.Iplementation
                 
                 }
 
-                var listResponse = new List<UserResponseDto>();
+                var listResponse = new List<UsuarioResponseDto>();
                 foreach (var user in resultado) { 
                     var roles= await userManager.GetRolesAsync(user);
-                    listResponse.Add(new UserResponseDto
+                    listResponse.Add(new UsuarioResponseDto
                     {
                         Id=user.Id,
                         FirstName=user.FirstName,
@@ -339,16 +410,16 @@ namespace TramiteGoreu.Services.Iplementation
         }
 
 
-        public async Task<BaseResponseGeneric<UserResponseDto>> GetUserByEmail(string email)
+        public async Task<BaseResponseGeneric<UsuarioResponseDto>> GetUserByEmail(string email)
         {
-            var response = new BaseResponseGeneric<UserResponseDto>();
+            var response = new BaseResponseGeneric<UsuarioResponseDto>();
             try
             {
                 var person =await userManager.Users.Where(x=>x.Email==email).FirstOrDefaultAsync();
                 if (person is not null)
                 {
                     var roles = await userManager.GetRolesAsync(person);
-                    var personDto = new UserResponseDto
+                    var personDto = new UsuarioResponseDto
                     {
                         Id = person.Id,
                         Email = person.Email ?? string.Empty,
@@ -664,7 +735,4 @@ namespace TramiteGoreu.Services.Iplementation
         }
     }
 }
-/// en las peticiones http , ¿cuando es necesario poner un atributo en 
-/// el url como "{userId}"?, atributo en [HttpPost("/{userId}/roles/grant")], del metodo GrantUserRole, 
-/// ¿solo cuando se va hacer una busqueda con ese atributo?
-/// lo digo porque tambien se hace una busqueda con el atributo roleName dentro de esa api
+
