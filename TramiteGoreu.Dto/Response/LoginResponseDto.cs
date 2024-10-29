@@ -11,5 +11,8 @@ namespace TramiteGoreu.Dto.Response
         public string Token { get; set; } = default!;
         public DateTime ExpirationDate{ get; set; }
         public List<string> Roles { get; set; } = default!;
+        public PersonaResponseDto Persona { get; set; }
+        public SedeResponseDto Sede { get; set; }
+        public List<AplicacionResponseDto> Aplicaciones{ get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace TramiteGoreu.Dto.Request
         public string email { get; set; } = default!;
         public string tipoDoc { get; set; } = default!;
         public string nroDoc { get; set; } = default!;
+        public bool Status { get; set; } = true;
     }
 }

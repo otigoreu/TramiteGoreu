@@ -18,14 +18,14 @@ namespace TramiteGoreu.Api.Controllers
         }
 
         [HttpGet("nombre")]
-       [Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
+       //[Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(string? nombres, [FromQuery]PaginationDto pagination)
         {
             var response=await service.GetAsync(nombres,pagination);
             return response.Success ? Ok(response) : BadRequest(response);
         }
         [HttpGet("email")]
-       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(string? email)
         {
             var response = await service.GetAsyncBYEmail(email);

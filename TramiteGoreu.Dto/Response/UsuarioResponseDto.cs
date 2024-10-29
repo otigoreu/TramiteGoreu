@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TramiteGoreu.Dto.Response
 {
-    public class UserResponseDto
+    public class UsuarioResponseDto
     {
         public string Id { get; set; } = default!;
         public string Email { get; set; } = default!;

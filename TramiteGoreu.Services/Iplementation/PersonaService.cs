@@ -132,7 +132,7 @@ namespace TramiteGoreu.Services.Iplementation
             try
             {
 
-                response.Data = mapper.Map<PersonaInfo> ( (await repository.GetAsync(predicate: s => s.email == email)).FirstOrDefault());
+                response.Data = mapper.Map<PersonaInfo> ( (await repository.GetAsync(predicate: s => s.Email == email)).FirstOrDefault());
                 response.Success = true;
             }
             catch (Exception ex)

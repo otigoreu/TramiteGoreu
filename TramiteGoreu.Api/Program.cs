@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
+
 using TramiteGoreu.Entities;
 using TramiteGoreu.Persistence;
 using TramiteGoreu.Repositories;
+using TramiteGoreu.Repositories.Implementacion;
+using TramiteGoreu.Repositories.Interfaces;
 using TramiteGoreu.Services.Interface;
 using TramiteGoreu.Services.Iplementation;
 using TramiteGoreu.Services.profiles;
@@ -29,11 +32,13 @@ builder.Services.Configure<AppSettings>(builder.Configuration);
 
 //6.identity
 ////builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(polices =>
+builder.Services.AddIdentity<Usuario, IdentityRole>(polices =>
 {
     polices.Password.RequireDigit = true;
     polices.Password.RequiredLength = 6;
     polices.User.RequireUniqueEmail = true;
+
+
 })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
@@ -60,18 +65,33 @@ builder.Services.AddAuthorization();
 //2. registering y services
 //builder.Services.AddSingleton<PersonRepository>();
 builder.Services.AddTransient<IPersonaRepository, PersonaRepository>();
+builder.Services.AddTransient<IAplicacionRepository, AplicacionRepository>();
+builder.Services.AddTransient<IMenuRepository, MenuRepository>();
+builder.Services.AddTransient<ISedeRepository, SedeRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+
 
 builder.Services.AddTransient<IPersonaService, PersonaService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddTransient<IMenuService, MenuService>();
+builder.Services.AddTransient<ISedeService, SedeService>();
+builder.Services.AddTransient<IAplicacionService, AplicacionService>();
 
 //3.register mapper
 builder.Services.AddAutoMapper(config =>
 {
     //configuring the mapping perfiles
     config.AddProfile<PersonaProfile>();
+    config.AddProfile<AplicacionProfile>();
+    config.AddProfile<MenuProfile>();
+    config.AddProfile<SedeProfile>();
+
 
 });
+
+builder.Services.AddTransient<UserDataSeeder>();
+
 //4. CORS
 var corsConfiguration = "tramitegoreucors";
 builder.Services.AddCors(setup =>
@@ -125,12 +145,21 @@ app.UseAuthorization();
 app.UseCors(corsConfiguration);
 
 app.MapControllers();
-//automigration
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.MigrateAsync();
+// Aplicar migraciones y sembrar datos (asíncronamente)
+await ApplyMigrationsAndSeedDataAsync(app);
 
-    await UserDataSeeder.Seed(scope.ServiceProvider);
-}
 app.Run();
+
+static async Task ApplyMigrationsAndSeedDataAsync(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    if (dbContext.Database.GetPendingMigrations().Any())
+    {
+        await dbContext.Database.MigrateAsync();
+    }
+
+    var userDataSeeder = scope.ServiceProvider.GetRequiredService<UserDataSeeder>();
+    await userDataSeeder.SeedAsync();
+}

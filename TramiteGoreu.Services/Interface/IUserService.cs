@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TramiteGoreu.Dto.Request;
+﻿using TramiteGoreu.Dto.Request;
 using TramiteGoreu.Dto.Response;
 
 namespace TramiteGoreu.Services.Interface
@@ -12,11 +7,13 @@ namespace TramiteGoreu.Services.Interface
     {
         Task<BaseResponseGeneric<RegisterResponseDto>> RegisterAsync(RegisterRequestDto request);
         Task<BaseResponseGeneric<LoginResponseDto>> LoginAsync(LoginRequestDto request);
+        //-----------------------------------------------------------------------------------------
         Task<BaseResponse> RequestTokenToResetPasswordAsync(ResetPasswordRequestDto request);
         Task<BaseResponse> ResetPasswordAsync(NewPasswordRequestDto request);
         Task<BaseResponse> ChangePasswordAsync(string email, ChangePasswordRequestDto request);
-        Task<BaseResponseGeneric<List<UserResponseDto>>> GetUsersByRole(string? role);
-        Task<BaseResponseGeneric<UserResponseDto>> GetUserByEmail(string email);
+        //--------------------------------------------------------------------------------------------
+        Task<BaseResponseGeneric<List<UsuarioResponseDto>>> GetUsersByRole(string? role);
+        Task<BaseResponseGeneric<UsuarioResponseDto>> GetUserByEmail(string email);
         Task<BaseResponse> CreateRoleAsync(string roleName);
         Task<BaseResponse> DeleteRoleAsync(string roleName);
         Task<BaseResponseGeneric<List<RoleResponseDto>>> GetRolesAsync();

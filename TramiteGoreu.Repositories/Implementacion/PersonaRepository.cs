@@ -6,13 +6,13 @@ using TramiteGoreu.Entities.info;
 using TramiteGoreu.Persistence;
 using TramiteGoreu.Repositories.Utils;
 
-namespace TramiteGoreu.Repositories
+namespace TramiteGoreu.Repositories.Implementacion
 {
     public class PersonaRepository : RepositoryBase<Persona>, IPersonaRepository
     {
         private readonly IHttpContextAccessor httpContext;
 
-        public PersonaRepository(ApplicationDbContext context, IHttpContextAccessor httpContext): base (context)
+        public PersonaRepository(ApplicationDbContext context, IHttpContextAccessor httpContext) : base(context)
         {
             this.httpContext = httpContext;
         }
@@ -20,21 +20,21 @@ namespace TramiteGoreu.Repositories
         {
             //eager loading optimizado
             var queryable = context.Set<Persona>()
-                .Where(x => x.nombres.Contains(nombres ?? string.Empty))
+                .Where(x => x.Nombres.Contains(nombres ?? string.Empty))
                 .AsNoTracking()
                 .Select(x => new PersonaInfo
                 {
                     Id = x.Id,
-                    nombres = x.nombres,
-                    apellidos = x.apellidos,
-                    fechaNac = x.fechaNac.ToShortDateString(),
-                    direccion = x.direccion,
-                    referencia = x.referencia,
-                    celular=x.celular,
-                    edad=x.edad,
-                    email = x.email,
-                    tipoDoc = x.tipoDoc,
-                    nroDoc = x.nroDoc,
+                    nombres = x.Nombres,
+                    apellidos = x.Apellidos,
+                    fechaNac = x.FechaNac.ToShortDateString(),
+                    direccion = x.Direccion,
+                    referencia = x.Referencia,
+                    celular = x.Celular,
+                    edad = x.Edad,
+                    email = x.Email,
+                    tipoDoc = x.TipoDoc,
+                    nroDoc = x.NroDoc,
                     status = x.Status ? "Activo" : "Inactivo"
 
                 }).AsQueryable();
@@ -47,21 +47,21 @@ namespace TramiteGoreu.Repositories
         {
             //eager loading optimizado
             var queryable = context.Set<Persona>()
-                .Where(x => x.email.Contains(email ?? string.Empty))
+                .Where(x => x.Email.Contains(email ?? string.Empty))
                 .AsNoTracking()
                 .Select(x => new PersonaInfo
                 {
                     Id = x.Id,
-                    nombres = x.nombres,
-                    apellidos = x.apellidos,
-                    fechaNac = x.fechaNac.ToShortDateString(),
-                    direccion = x.direccion,
-                    referencia = x.referencia,
-                    celular = x.celular,
-                    edad = x.edad,
-                    email = x.email,
-                    tipoDoc = x.tipoDoc,
-                    nroDoc = x.nroDoc,
+                    nombres = x.Nombres,
+                    apellidos = x.Apellidos,
+                    fechaNac = x.FechaNac.ToShortDateString(),
+                    direccion = x.Direccion,
+                    referencia = x.Referencia,
+                    celular = x.Celular,
+                    edad = x.Edad,
+                    email = x.Email,
+                    tipoDoc = x.TipoDoc,
+                    nroDoc = x.NroDoc,
                     status = x.Status ? "Activo" : "Inactivo"
 
                 }).AsQueryable();
@@ -75,11 +75,11 @@ namespace TramiteGoreu.Repositories
             var person = await GetAsync(id);
             if (person is not null)
             {
-                person.Status=true;
+                person.Status = true;
                 await UpdateAsync();
             }
         }
 
-       
+
     }
 }

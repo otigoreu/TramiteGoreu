@@ -6,7 +6,7 @@ using TramiteGoreu.Entities;
 
 namespace TramiteGoreu.Persistence
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<Usuario>
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -21,9 +21,9 @@ namespace TramiteGoreu.Persistence
             //modelBuilder.Entity<Person>().Property(x => x.nombres).HasMaxLength(50);
             //modelBuilder.Entity<Person>().Property(x => x.apellidos).HasMaxLength(50);
 
-            modelBuilder.Entity<ApplicationUser>(x => x.ToTable("User","General"));
-            modelBuilder.Entity<IdentityRole>(x => x.ToTable("Role","General"));
-            modelBuilder.Entity<IdentityUserRole<string>>(x => x.ToTable("UserRole","General"));
+            //modelBuilder.Entity<ApplicationUser>(x => x.ToTable("User","General"));
+           // modelBuilder.Entity<IdentityRole>(x => x.ToTable("Role","General"));
+           modelBuilder.Entity<IdentityUserRole<string>>(x => x.ToTable("UsuarioRol"));
         }
 
         //Entity to tables

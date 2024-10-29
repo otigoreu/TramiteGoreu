@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TramiteGoreu.Entities;
 
 namespace TramiteGoreu.Persistence.Configurations
@@ -13,18 +8,19 @@ namespace TramiteGoreu.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Persona> builder)
         {
-            builder.Property(x=>x.nombres).HasMaxLength(50);
-            builder.Property(x=>x.apellidos).HasMaxLength(50);
-            builder.Property(x => x.fechaNac)
+            builder.HasKey(x => x.Id);
+            builder.Property(x=>x.Nombres).HasMaxLength(50);
+            builder.Property(x=>x.Apellidos).HasMaxLength(50);
+            builder.Property(x => x.FechaNac)
                 .HasColumnType("date")
                 .HasDefaultValueSql("GETDATE()");
-            builder.Property(x => x.direccion).HasMaxLength(100); 
-            builder.Property(x => x.referencia).HasMaxLength(200);
-            builder.Property(x => x.celular).HasMaxLength(20);
-            builder.Property(x => x.edad).HasMaxLength(3);
-            builder.Property(x => x.email).HasMaxLength(50);
-            builder.Property(x => x.tipoDoc).HasMaxLength(3);
-            builder.Property(x => x.nroDoc).HasMaxLength(9);
+            builder.Property(x => x.Direccion).HasMaxLength(100); 
+            builder.Property(x => x.Referencia).HasMaxLength(200);
+            builder.Property(x => x.Celular).HasMaxLength(20);
+            builder.Property(x => x.Edad).HasMaxLength(3);
+            builder.Property(x => x.Email).HasMaxLength(50).IsUnicode(false);
+            builder.Property(x => x.TipoDoc).HasMaxLength(3);
+            builder.Property(x => x.NroDoc).HasMaxLength(9).IsUnicode(false);
             builder.ToTable(nameof(Persona), "General");
             builder.HasQueryFilter(x=>x.Status);
 

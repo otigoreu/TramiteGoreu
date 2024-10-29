@@ -1,6 +1,7 @@
 ﻿using TramiteGoreu.Dto.Request;
 using TramiteGoreu.Entities;
 using TramiteGoreu.Entities.info;
+using TramiteGoreu.Repositories.Implementacion;
 
 namespace TramiteGoreu.Repositories
 {

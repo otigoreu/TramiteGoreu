@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Repositories
+namespace TramiteGoreu.Repositories.Implementacion
 {
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : EntityBase
     {
@@ -20,7 +20,7 @@ namespace TramiteGoreu.Repositories
 
         public async Task<ICollection<TEntity>> GetAsync()
         {
-           return await context.Set<TEntity>().AsNoTracking().ToListAsync();
+            return await context.Set<TEntity>().AsNoTracking().ToListAsync();
         }
         public async Task<TEntity?> GetAsync(int id)
         {
@@ -36,7 +36,7 @@ namespace TramiteGoreu.Repositories
         }
         public async Task<int> AddAsync(TEntity entity)
         {
-           await context.Set<TEntity>().AddAsync(entity);
+            await context.Set<TEntity>().AddAsync(entity);
             await context.SaveChangesAsync();
             return entity.Id;
         }
@@ -49,7 +49,7 @@ namespace TramiteGoreu.Repositories
             var item = await GetAsync(id);
             if (item is not null)
             {
-                item.Status = false;
+                //item.Status = false;
                 await UpdateAsync();
             }
         }

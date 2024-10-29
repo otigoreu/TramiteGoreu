@@ -1,47 +1,147 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using TramiteGoreu.Entities;
-using static TramiteGoreu.Persistence.ApplicationUser;
 
 namespace TramiteGoreu.Persistence
 {
-    public static class UserDataSeeder
+    public class UserDataSeeder
     {
-        public static async Task Seed(IServiceProvider service)
+        private readonly IServiceProvider service;
+        private readonly ApplicationDbContext context;
+
+        public UserDataSeeder(IServiceProvider service, ApplicationDbContext context)
+        {
+            this.service = service;
+            this.context = context;
+        }
+        public  async Task SeedAsync()
         {
             //User repository
-            var userManager = service.GetRequiredService<UserManager<ApplicationUser>>();
+            var userManager = service.GetRequiredService<UserManager<Usuario>>();
             //Role repository
             var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
             //Creating roles
-            var adminRole = new IdentityRole(Constants.RoleAdmin);
-            var customerRole = new IdentityRole(Constants.RoleCustomer);
+            var adminRole = new IdentityRole(Constantes.RoleAdmin);
+            var clienteRole = new IdentityRole(Constantes.RolCliente);
 
-            if (!await roleManager.RoleExistsAsync(Constants.RoleAdmin))
+            if (!await roleManager.RoleExistsAsync(Constantes.RoleAdmin))
                 await roleManager.CreateAsync(adminRole);
 
-            if (!await roleManager.RoleExistsAsync(Constants.RoleCustomer))
-                await roleManager.CreateAsync(customerRole);
+            if (!await roleManager.RoleExistsAsync(Constantes.RolCliente))
+                await roleManager.CreateAsync(clienteRole);
 
+            #region Admin
             //Admin user
-            var adminUser = new ApplicationUser()
+            var adminUser = new Usuario()
             {
                 FirstName = "System",
                 LastName = "Administrator",
-                UserName = "admin@gmail.com",
-                Email = "admin@gmail.com",
+                UserName = "43056714",
+                Email = "edercin@gmail.com",
                 EmailConfirmed = true
             };
-            if (await userManager.FindByEmailAsync("admin@gmail.com") is null)
+
+            var persona = new Persona
             {
-                var result = await userManager.CreateAsync(adminUser, "Admin1234*");
+                Nombres = "Edeher Rossetti",
+                Apellidos= "Ponce Morales",
+                FechaNac= new DateOnly(1982, 07, 10),
+                Direccion ="",
+                Referencia="",
+                Celular="",
+                Edad="",
+                Email= "edercin@gmail.com",
+                TipoDoc="",
+                NroDoc="",
+                
+                
+            };
+
+            // Guarda la entidad Persona en la base de datos
+            
+            context.Set<Persona>().Add(persona);
+
+            var sede = new Sede
+            {
+                Descripcion = "Central",
+                
+            };
+            context.Set<Sede>().Add(sede);
+            #endregion
+
+
+            #region Customer
+            //Admin user
+            var customerUser = new Usuario()
+            {
+                FirstName = "System",
+                LastName = "Customer",
+                UserName = "46519259",
+                Email = "edercinsoft@gmail.com",
+                PhoneNumber = "123456789",
+                EmailConfirmed = true
+            };
+
+            var persona2 = new Persona
+            {
+                Nombres = "Patricia",
+                Apellidos = "Lopez",
+                FechaNac = new DateOnly(1990, 05, 31),
+                Direccion = "",
+                Referencia = "",
+                Celular = "",
+                Edad = "",
+                Email = "edercinsoft@gmail.com",
+                TipoDoc = "",
+                NroDoc = "",
+                
+            };
+
+            // Guarda la entidad Persona en la base de datos
+            
+            context.Set<Persona>().Add(persona2);
+
+            var sede2 = new Sede
+            {
+                Descripcion = "Petitas",
+                
+            };
+           
+            context.Set<Sede>().Add(sede2);
+            #endregion
+
+            await context.SaveChangesAsync();
+
+            adminUser.IdPersona = persona.Id;
+            adminUser.IdSede = sede.Id;
+
+            customerUser.IdPersona = persona2.Id;
+            customerUser.IdSede = sede2.Id;
+
+            
+            if (await userManager.FindByEmailAsync("edercin@gmail.com") is null)
+            {
+                var result = await userManager.CreateAsync(adminUser, "Edeher*2024");
                 if (result.Succeeded)
                 {
                     // Obtenemos el registro del usuario
                     adminUser = await userManager.FindByEmailAsync(adminUser.Email);
                     // Aqui agregamos el Rol de Administrador para el usuario Admin
                     if (adminUser is not null)
-                        await userManager.AddToRoleAsync(adminUser, Constants.RoleAdmin);
+                        await userManager.AddToRoleAsync(adminUser, Constantes.RoleAdmin);
+                }
+            }
+            if (await userManager.FindByEmailAsync("edercinsfot@gmail.com") is null)
+            {
+                var result = await userManager.CreateAsync(customerUser, "Edeher*2025");
+                if (result.Succeeded)
+                {
+                    // Obtenemos el registro del usuario
+                    customerUser = await userManager.FindByEmailAsync(customerUser.Email);
+                    // Aqui agregamos el Rol de Administrador para el usuario Admin
+                    if (customerUser is not null)
+                        await userManager.AddToRoleAsync(customerUser, Constantes.RolCliente);
                 }
             }
         }
