@@ -9,6 +9,7 @@ namespace TramiteGoreu.Dto.Request
     public class AplicacionRequestDto
     {
         public string Descripcion { get; set; } = default!;
+        //***
         
                
     }
