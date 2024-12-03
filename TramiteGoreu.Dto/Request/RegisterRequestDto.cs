@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TramiteGoreu.Dto.Request
+namespace Goreu.Tramite.Dto.Request
 {
     public class RegisterRequestDto
     {
@@ -25,7 +25,7 @@ namespace TramiteGoreu.Dto.Request
         [Required]
         public int idPersona { get; set; }
         [Required]
-        public int idSede{ get; set; }
+        public int idSede { get; set; }
 
         public string Password { get; set; } = default!;
 

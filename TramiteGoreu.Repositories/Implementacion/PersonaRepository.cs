@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Persistence;
+using Goreu.Tramite.Repositories.Interfaces;
+using Goreu.Tramite.Repositories.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using TramiteGoreu.Dto.Request;
 using TramiteGoreu.Entities;
 using TramiteGoreu.Entities.info;
-using TramiteGoreu.Persistence;
-using TramiteGoreu.Repositories.Utils;
 
-namespace TramiteGoreu.Repositories.Implementacion
+namespace Goreu.Tramite.Repositories.Implementacion
 {
     public class PersonaRepository : RepositoryBase<Persona>, IPersonaRepository
     {

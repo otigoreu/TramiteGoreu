@@ -1,14 +1,13 @@
-﻿using TramiteGoreu.Dto.Request;
+﻿using Goreu.Tramite.Dto.Request;
 using TramiteGoreu.Entities;
 using TramiteGoreu.Entities.info;
-using TramiteGoreu.Repositories.Implementacion;
 
-namespace TramiteGoreu.Repositories
+namespace Goreu.Tramite.Repositories.Interfaces
 {
     public interface IPersonaRepository : IRepositoryBase<Persona>
     {
         Task<ICollection<PersonaInfo>> GetAsync(string? nombres, PaginationDto pagination);
         Task<ICollection<PersonaInfo>> GetAsyncEmail(string? email, PaginationDto pagination);
-        Task FinalizedAsync (int id);
+        Task FinalizedAsync(int id);
     }
 }

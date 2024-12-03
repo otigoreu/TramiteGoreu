@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Persistence
+namespace Goreu.Tramite.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<Usuario>
     {
@@ -14,7 +14,7 @@ namespace TramiteGoreu.Persistence
         }
         //PERSONALIZAR LA GEENRACION DE TABLAS
         //FLUENT api
-        protected override void OnModelCreating(ModelBuilder modelBuilder) 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -22,12 +22,12 @@ namespace TramiteGoreu.Persistence
             //modelBuilder.Entity<Person>().Property(x => x.apellidos).HasMaxLength(50);
 
             //modelBuilder.Entity<ApplicationUser>(x => x.ToTable("User","General"));
-           // modelBuilder.Entity<IdentityRole>(x => x.ToTable("Role","General"));
-           modelBuilder.Entity<IdentityUserRole<string>>(x => x.ToTable("UsuarioRol"));
+            // modelBuilder.Entity<IdentityRole>(x => x.ToTable("Role","General"));
+            modelBuilder.Entity<IdentityUserRole<string>>(x => x.ToTable("UsuarioRol"));
         }
 
         //Entity to tables
-       // public DbSet<Person> Persons { get; set; }
+        // public DbSet<Person> Persons { get; set; }
 
     }
 }

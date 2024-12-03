@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Persistence
+namespace Goreu.Tramite.Persistence
 {
     public class UserDataSeeder
     {
@@ -15,7 +15,7 @@ namespace TramiteGoreu.Persistence
             this.service = service;
             this.context = context;
         }
-        public  async Task SeedAsync()
+        public async Task SeedAsync()
         {
             //User repository
             var userManager = service.GetRequiredService<UserManager<Usuario>>();
@@ -45,28 +45,30 @@ namespace TramiteGoreu.Persistence
             var persona = new Persona
             {
                 Nombres = "Edeher Rossetti",
-                Apellidos= "Ponce Morales",
-                FechaNac= new DateOnly(1982, 07, 10),
-                Direccion ="",
-                Referencia="",
-                Celular="",
-                Edad="",
-                Email= "edercin@gmail.com",
-                TipoDoc="",
-                NroDoc="",
-                
-                
+                Apellidos = "Ponce Morales",
+                FechaNac = new DateOnly(1982, 07, 10),
+                Direccion = "",
+                Referencia = "",
+                Celular = "",
+                Edad = "",
+                Email = "edercin@gmail.com",
+                TipoDoc = "",
+                NroDoc = "",
+
+
             };
 
             // Guarda la entidad Persona en la base de datos
-            
+
+            // sino existe crear
             context.Set<Persona>().Add(persona);
 
             var sede = new Sede
             {
                 Descripcion = "Central",
-                
+
             };
+            // sino existe crear
             context.Set<Sede>().Add(sede);
             #endregion
 
@@ -95,19 +97,19 @@ namespace TramiteGoreu.Persistence
                 Email = "edercinsoft@gmail.com",
                 TipoDoc = "",
                 NroDoc = "",
-                
+
             };
 
             // Guarda la entidad Persona en la base de datos
-            
+            // sino existe crear
             context.Set<Persona>().Add(persona2);
 
             var sede2 = new Sede
             {
                 Descripcion = "Petitas",
-                
+
             };
-           
+            // sino existe crear
             context.Set<Sede>().Add(sede2);
             #endregion
 
@@ -119,7 +121,7 @@ namespace TramiteGoreu.Persistence
             customerUser.IdPersona = persona2.Id;
             customerUser.IdSede = sede2.Id;
 
-            
+
             if (await userManager.FindByEmailAsync("edercin@gmail.com") is null)
             {
                 var result = await userManager.CreateAsync(adminUser, "Edeher*2024");

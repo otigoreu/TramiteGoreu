@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Services.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Api.Controllers
+namespace Goreu.Tramite.Api.Controllers
 {
     [ApiController]
     [Route("api/personas")]
@@ -18,10 +18,10 @@ namespace TramiteGoreu.Api.Controllers
         }
 
         [HttpGet("nombre")]
-       //[Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> Get(string? nombres, [FromQuery]PaginationDto pagination)
+        //[Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> Get(string? nombres, [FromQuery] PaginationDto pagination)
         {
-            var response=await service.GetAsync(nombres,pagination);
+            var response = await service.GetAsync(nombres, pagination);
             return response.Success ? Ok(response) : BadRequest(response);
         }
         [HttpGet("email")]
@@ -33,28 +33,28 @@ namespace TramiteGoreu.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id) 
+        public async Task<IActionResult> Get(int id)
         {
             var response = await service.GetAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(PersonaRequestDto personRequestDto) 
+        public async Task<IActionResult> Post(PersonaRequestDto personRequestDto)
         {
             var response = await service.AddAsync(personRequestDto);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id,PersonaRequestDto personRequestDto) 
+        public async Task<IActionResult> Put(int id, PersonaRequestDto personRequestDto)
         {
-            var response = await service.UpdateAsync(id,personRequestDto);
+            var response = await service.UpdateAsync(id, personRequestDto);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id) 
+        public async Task<IActionResult> Delete(int id)
         {
             var response = await service.DeleteAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);

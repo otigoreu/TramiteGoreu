@@ -1,6 +1,6 @@
 ﻿using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Repositories.Implementacion
+namespace Goreu.Tramite.Repositories.Interfaces
 {
     public interface ISedeRepository : IRepositoryBase<Sede>
     {

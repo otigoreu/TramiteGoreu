@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Dto.Response;
+using Goreu.Tramite.Repositories.Interfaces;
+using Goreu.Tramite.Services.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
 using TramiteGoreu.Entities;
-using TramiteGoreu.Repositories.Implementacion;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Services.Iplementation
+namespace Goreu.Tramite.Services.Iplementation
 {
     public class MenuService : IMenuService
     {
@@ -40,16 +40,16 @@ namespace TramiteGoreu.Services.Iplementation
                 var menuDb = new Menu
                 {
                     DisplayName = request.DisplayName,
-                    IconName=request.IconName,
-                    Route=request.Route,
+                    IconName = request.IconName,
+                    Route = request.Route,
                     IdAplicacion = request.IdAplicacion,
                     ParentMenuId = request.ParentMenuId == 0 ? null : request.ParentMenuId
                 };
-                response.Data = await repository.AddAsync(menuDb);
+                response.Data = await repository.AddAsync(menuDb);// aca ya lo añade a la base de datos?
 
                 foreach (var item in request.IdRoles)
                 {
-                    roles.Add(new MenuRol { IdMenu = menuDb.Id, IdRol = item });
+                    roles.Add(new MenuRol { IdMenu = menuDb.Id, IdRol = item });// esto agrega a la base de datos?
                 }
                 menuDb.MenuRoles = roles;
                 await repository.UpdateAsync();
@@ -64,12 +64,14 @@ namespace TramiteGoreu.Services.Iplementation
             return response;
         }
 
-        public async Task<BaseResponseGeneric<ICollection<MenuResponseDto>>> GetByAplicationAsync(int idAplication, string email)
+        public async Task<BaseResponseGeneric<ICollection<MenuResponseDto>>> GetByAplicationAsync(int idAplication, string userName)
         {
             var response = new BaseResponseGeneric<ICollection<MenuResponseDto>>();
             try
             {
-                var persona = await usuario.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+                // var persona = await usuario.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+                var persona = await usuario.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync();
+                //este metodo .. es normal se puede usar siempre?
                 IList<string> roles = new List<string>();
                 if (persona is not null)
                 {
@@ -84,7 +86,7 @@ namespace TramiteGoreu.Services.Iplementation
                 var roleIds = new List<string>();
                 foreach (var role in roles)
                 {
-                    var roleEntity = await roleManager.FindByNameAsync(role);
+                    var roleEntity = await roleManager.FindByNameAsync(role);// con que se comprara
                     if (roleEntity != null)
                     {
                         roleIds.Add(roleEntity.Id);

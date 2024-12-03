@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Dto.Response;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
 
-namespace TramiteGoreu.Services.Interface
+namespace Goreu.Tramite.Services.Interface
 {
     public interface IMenuService
     {

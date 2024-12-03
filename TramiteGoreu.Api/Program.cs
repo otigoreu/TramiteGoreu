@@ -1,3 +1,9 @@
+using Goreu.Tramite.Persistence;
+using Goreu.Tramite.Repositories.Implementacion;
+using Goreu.Tramite.Repositories.Interfaces;
+using Goreu.Tramite.Services.Interface;
+using Goreu.Tramite.Services.Iplementation;
+using Goreu.Tramite.Services.profiles;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,13 +12,6 @@ using System.Reflection;
 using System.Text;
 
 using TramiteGoreu.Entities;
-using TramiteGoreu.Persistence;
-using TramiteGoreu.Repositories;
-using TramiteGoreu.Repositories.Implementacion;
-using TramiteGoreu.Repositories.Interfaces;
-using TramiteGoreu.Services.Interface;
-using TramiteGoreu.Services.Iplementation;
-using TramiteGoreu.Services.profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,7 +115,7 @@ builder.Services.AddSwaggerGen(config =>
     config.SwaggerDoc("v1",
         new Microsoft.OpenApi.Models.OpenApiInfo()
         {
-            Title = "TramiteGoreu API",
+            Title = "Goreu.Tramite.API",
             Description = "This is the documentation for my api in Goreu.",
             Version= "v1"
         });
@@ -131,7 +130,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(config =>
     {
-        config.SwaggerEndpoint("/swagger/v1/swagger.json", "TramiteGoreu API Swagger");
+        config.SwaggerEndpoint("/swagger/v1/swagger.json", "Goreu.Tramite API Swagger");
         config.RoutePrefix = "swagger";
     });
 }

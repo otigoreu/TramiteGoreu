@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
+using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Dto.Response;
+using Goreu.Tramite.Repositories.Interfaces;
+using Goreu.Tramite.Services.Interface;
 using Microsoft.Extensions.Logging;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
 using TramiteGoreu.Entities;
 using TramiteGoreu.Entities.info;
-using TramiteGoreu.Repositories;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Services.Iplementation
+namespace Goreu.Tramite.Services.Iplementation
 {
     public class PersonaService : IPersonaService
     {
@@ -23,12 +23,12 @@ namespace TramiteGoreu.Services.Iplementation
         }
         public async Task<BaseResponseGeneric<ICollection<PersonaInfo>>> GetAsync(string? nombres, PaginationDto pagination)
         {
-            var response= new BaseResponseGeneric<ICollection<PersonaInfo>>();
+            var response = new BaseResponseGeneric<ICollection<PersonaInfo>>();
             try
             {
-                
-                response.Data= await repository.GetAsync(nombres, pagination);
-                response.Success=true;
+
+                response.Data = await repository.GetAsync(nombres, pagination);
+                response.Success = true;
             }
             catch (Exception ex)
             {
@@ -74,12 +74,12 @@ namespace TramiteGoreu.Services.Iplementation
             try
             {
                 var data = await repository.GetAsync(id);
-                if (data is null) 
+                if (data is null)
                 {
                     response.ErrorMessage = $"la persona con id {id} no fue encontrado";
                 }
 
-                mapper.Map(request,data);
+                mapper.Map(request, data);
                 await repository.UpdateAsync();
                 response.Success = true;
             }
@@ -93,7 +93,7 @@ namespace TramiteGoreu.Services.Iplementation
 
         public async Task<BaseResponse> DeleteAsync(int id)
         {
-           var response =new BaseResponse();
+            var response = new BaseResponse();
             try
             {
                 await repository.DeleteAsync(id);
@@ -111,11 +111,11 @@ namespace TramiteGoreu.Services.Iplementation
 
         public async Task<BaseResponse> FinalizedAsync(int id)
         {
-           var response= new BaseResponse();
+            var response = new BaseResponse();
             try
             {
                 await repository.FinalizedAsync(id);
-                response.Success= true;
+                response.Success = true;
 
             }
             catch (Exception ex)
@@ -132,7 +132,7 @@ namespace TramiteGoreu.Services.Iplementation
             try
             {
 
-                response.Data = mapper.Map<PersonaInfo> ( (await repository.GetAsync(predicate: s => s.Email == email)).FirstOrDefault());
+                response.Data = mapper.Map<PersonaInfo>((await repository.GetAsync(predicate: s => s.Email == email)).FirstOrDefault());
                 response.Success = true;
             }
             catch (Exception ex)

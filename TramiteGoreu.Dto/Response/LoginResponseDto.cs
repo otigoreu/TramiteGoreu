@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TramiteGoreu.Dto.Response
+namespace Goreu.Tramite.Dto.Response
 {
     public class LoginResponseDto
     {
         public string Token { get; set; } = default!;
-        public DateTime ExpirationDate{ get; set; }
+        public DateTime ExpirationDate { get; set; }
         public List<string> Roles { get; set; } = default!;
         public PersonaResponseDto Persona { get; set; }
         public SedeResponseDto Sede { get; set; }
-        public List<AplicacionResponseDto> Aplicaciones{ get; set; }
+        public List<AplicacionResponseDto> Aplicaciones { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Repositories.Interfaces
+namespace Goreu.Tramite.Repositories.Interfaces
 {
     public interface IUserRepository
     {

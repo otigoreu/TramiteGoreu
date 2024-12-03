@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Persistence.Configurations
+namespace Goreu.Tramite.Persistence.Configurations
 {
     public class RolConfiguration : IEntityTypeConfiguration<Rol>
     {
         public void Configure(EntityTypeBuilder<Rol> builder)
         {
-            
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TramiteGoreu.Services.Interface
+﻿namespace Goreu.Tramite.Services.Interface
 {
     public interface IEmailService
     {

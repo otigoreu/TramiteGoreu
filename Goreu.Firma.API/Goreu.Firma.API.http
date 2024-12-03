@@ -1,0 +1,6 @@
+@Goreu.Firma.API_HostAddress = http://localhost:5157
+
+GET {{Goreu.Firma.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
+using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Dto.Response;
+using Goreu.Tramite.Repositories.Interfaces;
+using Goreu.Tramite.Services.Interface;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
 using TramiteGoreu.Entities;
-using TramiteGoreu.Repositories;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Services.Iplementation
+namespace Goreu.Tramite.Services.Iplementation
 {
     public class AplicacionService : IAplicacionService
     {

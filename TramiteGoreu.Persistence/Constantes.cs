@@ -1,4 +1,4 @@
-﻿namespace TramiteGoreu.Persistence
+﻿namespace Goreu.Tramite.Persistence
 {
     public class Constantes
     {

@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Services.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Transactions;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Api.Controllers
+namespace Goreu.Tramite.Api.Controllers
 {
     [ApiController]
     [Route("api/users")]
-    public class UsersController: ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService service;
 
@@ -53,18 +53,18 @@ namespace TramiteGoreu.Api.Controllers
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto request)
         {
             //Obtener eil del token actual
-            var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email ).Value;
+            var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email).Value;
             var response = await service.ChangePasswordAsync(email, request);
             return response.Success ? Ok(response) : BadRequest(response);
         }
         //---------------------------------------------------------------------------------------------
         [HttpGet("GetUsersByRole")]
-        public async Task<IActionResult> GetUsersByRole([FromQuery] string? role="")
+        public async Task<IActionResult> GetUsersByRole([FromQuery] string? role = "")
         {
 
             var response = await service.GetUsersByRole(role);
             return response.Success ? Ok(response) : BadRequest(response);
-            
+
         }
 
         [HttpPost("GetUserbyEmail/{email}")]
@@ -76,9 +76,9 @@ namespace TramiteGoreu.Api.Controllers
 
         [HttpPost("roles/create")]
         public async Task<IActionResult> CreateRole(string roleName)
-        { 
-            var response= await service.CreateRoleAsync(roleName);
-            return response.Success ? Ok(response): BadRequest(response);
+        {
+            var response = await service.CreateRoleAsync(roleName);
+            return response.Success ? Ok(response) : BadRequest(response);
 
         }
         [HttpDelete("role/remove/{roleName}")]
@@ -91,19 +91,19 @@ namespace TramiteGoreu.Api.Controllers
         [HttpGet("roles")]
         public async Task<IActionResult> GetRoles()
         {
-            var response= await service.GetRolesAsync();
+            var response = await service.GetRolesAsync();
             return response.Success ? Ok(response) : BadRequest(response);
         }
         [HttpPost("/{userId}/Roles/grant")]
         public async Task<IActionResult> GrantRole(string userId, string RoleName)
         {
-            var response =await service.GrantUserRole(userId, RoleName);
+            var response = await service.GrantUserRole(userId, RoleName);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpPost("/{email}/roles/grantByEmail")]
         public async Task<IActionResult> GrantRolesByEmail(string email, string roleName)
-        { 
+        {
             var response = await service.GrantUserRoleByEmail(email, roleName);
             return response.Success ? Ok(response) : BadRequest(response);
         }

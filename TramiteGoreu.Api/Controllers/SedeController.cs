@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Services.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Api.Controllers
+namespace Goreu.Tramite.Api.Controllers
 {
     [ApiController]
     [Route("api/sedes")]
-    public class SedeController :ControllerBase
+    public class SedeController : ControllerBase
     {
         private readonly ISedeService service;
 

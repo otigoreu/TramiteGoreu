@@ -8,9 +8,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using TramiteGoreu.Entities;
-using TramiteGoreu.Services.Interface;
+using Goreu.Tramite.Services.Interface;
 
-namespace TramiteGoreu.Services.Iplementation
+namespace Goreu.Tramite.Services.Iplementation
 {
     public class EmailService : IEmailService
     {

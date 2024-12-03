@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Services.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Api.Controllers
+namespace Goreu.Tramite.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -28,7 +28,7 @@ namespace TramiteGoreu.Api.Controllers
         [HttpGet("{idAplication:int}")]
         public async Task<IActionResult> GetByAplication(int idAplication)
         {
-            var email = HttpContext.User.Claims.First(p => p.Type == ClaimTypes.Email).Value;
+            var email = HttpContext.User.Claims.First(p => p.Type == ClaimTypes.Name).Value;
             var response = await service.GetByAplicationAsync(idAplication, email);
             return response.Success ? Ok(response) : BadRequest(response);
         }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TramiteGoreu.Dto.Response
+namespace Goreu.Tramite.Dto.Response
 {
-    public class RegisterResponseDto: LoginResponseDto
+    public class RegisterResponseDto : LoginResponseDto
     {
         public string UserId { get; set; } = default!;
     }

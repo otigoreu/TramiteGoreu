@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
+using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Dto.Response;
 using TramiteGoreu.Entities;
 using TramiteGoreu.Entities.info;
 
-namespace TramiteGoreu.Services.profiles
+namespace Goreu.Tramite.Services.profiles
 {
     public class PersonaProfile : Profile
     {

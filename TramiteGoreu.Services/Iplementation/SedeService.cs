@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Azure;
+using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Dto.Response;
+using Goreu.Tramite.Repositories.Interfaces;
+using Goreu.Tramite.Services.Interface;
 using Microsoft.Extensions.Logging;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
 using TramiteGoreu.Entities;
-using TramiteGoreu.Repositories.Implementacion;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Services.Iplementation
+namespace Goreu.Tramite.Services.Iplementation
 {
     public class SedeService : ISedeService
     {
@@ -15,7 +15,7 @@ namespace TramiteGoreu.Services.Iplementation
         private readonly ILogger<SedeService> logger;
         private readonly IMapper mapper;
 
-        public SedeService( ISedeRepository repository, ILogger<SedeService> logger, IMapper mapper)
+        public SedeService(ISedeRepository repository, ILogger<SedeService> logger, IMapper mapper)
         {
             this.repository = repository;
             this.logger = logger;
@@ -32,8 +32,8 @@ namespace TramiteGoreu.Services.Iplementation
             catch (Exception ex)
             {
                 response.ErrorMessage = "Ocurrio un error al obtener los datos";
-                logger.LogError(ex,"{ErrorMessage}{Message}" ,response.ErrorMessage, ex.Message);
-           
+                logger.LogError(ex, "{ErrorMessage}{Message}", response.ErrorMessage, ex.Message);
+
             }
             return response;
         }

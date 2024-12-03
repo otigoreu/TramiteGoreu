@@ -1,4 +1,9 @@
 ﻿using AutoMapper;
+using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Dto.Response;
+using Goreu.Tramite.Persistence;
+using Goreu.Tramite.Repositories.Interfaces;
+using Goreu.Tramite.Services.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,16 +15,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security;
 using System.Security.Claims;
 using System.Text;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
 using TramiteGoreu.Entities;
-using TramiteGoreu.Persistence;
-using TramiteGoreu.Repositories;
-using TramiteGoreu.Repositories.Implementacion;
-using TramiteGoreu.Repositories.Interfaces;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Services.Iplementation
+namespace Goreu.Tramite.Services.Iplementation
 {
     public class UserService : IUserService
     {
@@ -38,17 +36,17 @@ namespace TramiteGoreu.Services.Iplementation
         private readonly IAplicacionRepository aplicacionRepository;
 
         public UserService(
-            UserManager<Usuario> userManager, 
-            ILogger<UserService> logger, 
+            UserManager<Usuario> userManager,
+            ILogger<UserService> logger,
             IConfiguration configuration,
-            IOptions<AppSettings> options, 
-            SignInManager<Usuario> signInManager, 
-            IMapper mapper, 
+            IOptions<AppSettings> options,
+            SignInManager<Usuario> signInManager,
+            IMapper mapper,
             ApplicationDbContext context,
             RoleManager<IdentityRole> roleManager,
             IPersonaRepository personaRepository,
             ISedeRepository sedeRepository,
-            IUserRepository userRepository, 
+            IUserRepository userRepository,
             IEmailService emailService,
             IAplicacionRepository aplicacionRepository
             )
@@ -73,7 +71,7 @@ namespace TramiteGoreu.Services.Iplementation
             var response = new BaseResponseGeneric<RegisterResponseDto>();
             try
             {
-                var resultadoPersona= await personaRepository.GetAsync(request.idPersona);
+                var resultadoPersona = await personaRepository.GetAsync(request.idPersona);
                 var resultadoSede = await sedeRepository.GetAsync(request.idSede);
 
                 if (resultadoPersona is not null && resultadoSede is not null)
@@ -116,12 +114,12 @@ namespace TramiteGoreu.Services.Iplementation
                     else
                     {
                         response.Success = false;
-                        response.ErrorMessage = String.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
+                        response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
                         logger.LogWarning(response.ErrorMessage);
                     }
 
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -180,15 +178,15 @@ namespace TramiteGoreu.Services.Iplementation
             {
                 Id = persona.Id,
                 Nombres = persona.Nombres,
-                Apellidos=persona.Apellidos,
-                FechaNac=persona.FechaNac,
-                Direccion=persona.Direccion,
-                Referencia=persona.Referencia,
-                Celular=persona.Celular,
-                Edad=persona.Edad,
-                Email=persona.Email,
-                TipoDoc=persona.TipoDoc,
-                NroDoc=persona.NroDoc
+                Apellidos = persona.Apellidos,
+                FechaNac = persona.FechaNac,
+                Direccion = persona.Direccion,
+                Referencia = persona.Referencia,
+                Celular = persona.Celular,
+                Edad = persona.Edad,
+                Email = persona.Email,
+                TipoDoc = persona.TipoDoc,
+                NroDoc = persona.NroDoc
             };
 
             //Sede
@@ -239,7 +237,7 @@ namespace TramiteGoreu.Services.Iplementation
             };
         }
 
-       
+
         public async Task<BaseResponse> RequestTokenToResetPasswordAsync(ResetPasswordRequestDto request)
         {
             var response = new BaseResponse();
@@ -299,7 +297,7 @@ namespace TramiteGoreu.Services.Iplementation
                 else
                 {
                     //Enviar un email de confirmacion de clave cambiada
-                    await emailService.SendEmailAsync(request.Email,"Confiracion de cambio de clave",
+                    await emailService.SendEmailAsync(request.Email, "Confiracion de cambio de clave",
                     @$"
                     <P> Estimado {userIdentity.FirstName} {userIdentity.LastName}</p>
                     <p> Se ha cambiado su clave corecctaente</p>
@@ -310,9 +308,9 @@ namespace TramiteGoreu.Services.Iplementation
             }
             catch (Exception ex)
             {
-                
+
                 response.ErrorMessage = "Ocurrio un error al resetear el Password";
-                logger.LogError(ex, "{ErrorMessage} {Message}",response.ErrorMessage, ex.Message);
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
 
             return response;
@@ -350,9 +348,9 @@ namespace TramiteGoreu.Services.Iplementation
                     Tramite Goreu @ 2024");
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                
+
                 response.ErrorMessage = "Error al cambiar la clave";
                 logger.LogError(ex, "Error al cambiar password {Message}", ex.Message);
             }
@@ -371,21 +369,23 @@ namespace TramiteGoreu.Services.Iplementation
 
                     resultado = (await userManager.GetUsersInRoleAsync(role)).ToList();//trae los user por role
                 }
-                else {
+                else
+                {
                     resultado = await context.Users.ToListAsync(); //trae a todos los user
-                
+
                 }
 
                 var listResponse = new List<UsuarioResponseDto>();
-                foreach (var user in resultado) { 
-                    var roles= await userManager.GetRolesAsync(user);
+                foreach (var user in resultado)
+                {
+                    var roles = await userManager.GetRolesAsync(user);
                     listResponse.Add(new UsuarioResponseDto
                     {
-                        Id=user.Id,
-                        FirstName=user.FirstName,
-                        LastName=user.LastName,
-                        Email=user.Email ?? string.Empty,
-                        Roles=roles.ToList()
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email ?? string.Empty,
+                        Roles = roles.ToList()
                     });
                 }
                 if (resultado.Count > 0)
@@ -393,7 +393,8 @@ namespace TramiteGoreu.Services.Iplementation
                     response.Success = true;
                     response.Data = listResponse;
                 }
-                else {
+                else
+                {
                     response.ErrorMessage = "Ningun usuario encontrado.";
                     logger.LogWarning(response.ErrorMessage);
                 }
@@ -415,7 +416,7 @@ namespace TramiteGoreu.Services.Iplementation
             var response = new BaseResponseGeneric<UsuarioResponseDto>();
             try
             {
-                var person =await userManager.Users.Where(x=>x.Email==email).FirstOrDefaultAsync();
+                var person = await userManager.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
                 if (person is not null)
                 {
                     var roles = await userManager.GetRolesAsync(person);
@@ -490,21 +491,21 @@ namespace TramiteGoreu.Services.Iplementation
             try
             {
                 var role = await roleManager.FindByNameAsync(roleName);
-                if (role is null ) 
+                if (role is null)
                 {
                     response.ErrorMessage = " Rol no encontrado";
                     return response;
 
                 }
 
-                var resultado=await roleManager.DeleteAsync(role);
+                var resultado = await roleManager.DeleteAsync(role);
                 if (resultado.Succeeded)
                 {
                     response.Success = true;
                 }
                 else
                 {
-                    response.ErrorMessage = string.Join(" ",resultado.Errors.Select(x=>x.Description).ToArray());
+                    response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
                     logger.LogWarning(response.ErrorMessage);
                 }
 
@@ -513,7 +514,7 @@ namespace TramiteGoreu.Services.Iplementation
             {
 
                 response.ErrorMessage = "Error al borrar Role";
-                logger.LogError(ex,"{ErrorMessage}{Message}",response.ErrorMessage, ex.Message);
+                logger.LogError(ex, "{ErrorMessage}{Message}", response.ErrorMessage, ex.Message);
             }
 
             return response;
@@ -527,9 +528,9 @@ namespace TramiteGoreu.Services.Iplementation
             {
                 var rolesData = await roleManager.Roles.Select(x => new RoleResponseDto
                 {
-                    Id=x.Id,
-                    Name=x.Name ?? string.Empty,
-                    NormalizedName=x.NormalizedName ??string.Empty
+                    Id = x.Id,
+                    Name = x.Name ?? string.Empty,
+                    NormalizedName = x.NormalizedName ?? string.Empty
                 }).ToListAsync();
 
                 if (rolesData is not null)
@@ -548,7 +549,7 @@ namespace TramiteGoreu.Services.Iplementation
             {
 
                 response.ErrorMessage = "ocurrio un error";
-                logger.LogError(ex, "{ErrorMessage}{MEssage}",response.ErrorMessage, ex.Message );
+                logger.LogError(ex, "{ErrorMessage}{MEssage}", response.ErrorMessage, ex.Message);
             }
 
 
@@ -562,7 +563,7 @@ namespace TramiteGoreu.Services.Iplementation
             try
             {
                 var user = await userManager.FindByIdAsync(userId);
-                if (user is null) 
+                if (user is null)
                 {
                     response.ErrorMessage = "usuario no enocntrado";
                     return response;
@@ -570,14 +571,15 @@ namespace TramiteGoreu.Services.Iplementation
 
                 //verifica si existe el rol
                 var roleExistis = await roleManager.RoleExistsAsync(roleName);
-                if (!roleExistis) 
+                if (!roleExistis)
                 {
                     response.ErrorMessage = "Rol no Existe";
                     return response;
                 }
                 //verificar si el user tiene el rol
                 var userRoleExists = await userManager.IsInRoleAsync(user, roleName);
-                if (userRoleExists) {
+                if (userRoleExists)
+                {
                     response.ErrorMessage = "ya cuenta con este rol";
                     return response;
                 }
@@ -589,11 +591,11 @@ namespace TramiteGoreu.Services.Iplementation
                     response.Success = true;
 
                 }
-                else 
+                else
                 {
-                    response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x =>x.Description).ToArray());
+                    response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
                     logger.LogWarning(response.ErrorMessage);
-                
+
                 }
 
 
@@ -667,7 +669,7 @@ namespace TramiteGoreu.Services.Iplementation
             try
             {
                 var user = await userManager.FindByIdAsync(userId);
-                if (user is null) 
+                if (user is null)
                 {
                     response.ErrorMessage = "usuario no encontrado";
                     return response;
@@ -679,7 +681,7 @@ namespace TramiteGoreu.Services.Iplementation
                     response.Success = true;
 
                 }
-                else 
+                else
                 {
                     response.ErrorMessage = string.Join(" ", resultado.Errors.Select(x => x.Description).ToArray());
                     logger.LogWarning(response.ErrorMessage);
@@ -709,7 +711,7 @@ namespace TramiteGoreu.Services.Iplementation
                     response.ErrorMessage = "usuario no encontrado";
                     return response;
                 }
-               
+
                 var resultado = await userManager.RemoveFromRoleAsync(user, roleName);
                 if (resultado.Succeeded)
                 {

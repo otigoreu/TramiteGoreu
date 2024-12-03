@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Persistence.Configurations
+namespace Goreu.Tramite.Persistence.Configurations
 {
-    public class SedeConfiguration: IEntityTypeConfiguration<Sede>
+    public class SedeConfiguration : IEntityTypeConfiguration<Sede>
     {
         public void Configure(EntityTypeBuilder<Sede> builder)
         {

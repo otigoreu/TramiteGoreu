@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Services.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Services.Interface;
 
-namespace TramiteGoreu.Api.Controllers
+namespace Goreu.Tramite.Api.Controllers
 {
     [ApiController]
     [Route("api/aplicaciones")]
-    public class AplicacionController: ControllerBase
+    public class AplicacionController : ControllerBase
     {
         private readonly IAplicacionService service;
 

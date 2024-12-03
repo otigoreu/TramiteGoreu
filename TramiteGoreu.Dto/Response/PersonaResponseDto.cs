@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TramiteGoreu.Dto.Response
+namespace Goreu.Tramite.Dto.Response
 {
     public class PersonaResponseDto
     {
@@ -19,6 +19,6 @@ namespace TramiteGoreu.Dto.Response
         public string Email { get; set; } = default!;
         public string TipoDoc { get; set; } = default!;
         public string NroDoc { get; set; } = default!;
-        
+
     }
 }

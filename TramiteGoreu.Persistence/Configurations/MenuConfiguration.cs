@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Persistence.Configurations
+namespace Goreu.Tramite.Persistence.Configurations
 {
     public class MenuConfiguration : IEntityTypeConfiguration<Menu>
     {
@@ -18,7 +18,7 @@ namespace TramiteGoreu.Persistence.Configurations
 
             builder.Property(x => x.DisplayName).HasMaxLength(50);
             builder.Property(x => x.IconName).HasMaxLength(50);
-            builder.Property(x=>x.Route).HasMaxLength(50);
+            builder.Property(x => x.Route).HasMaxLength(50);
             builder.ToTable(nameof(Menu), "Administrador");
             builder.HasQueryFilter(x => x.Status);
 

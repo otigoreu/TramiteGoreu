@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Repositories.Implementacion
+namespace Goreu.Tramite.Repositories.Interfaces
 {
     public interface IRepositoryBase<TEntity> where TEntity : EntityBase
     {

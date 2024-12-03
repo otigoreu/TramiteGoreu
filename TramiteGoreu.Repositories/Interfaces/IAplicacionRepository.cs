@@ -1,9 +1,8 @@
 ﻿using TramiteGoreu.Entities;
-using TramiteGoreu.Repositories.Implementacion;
 
-namespace TramiteGoreu.Repositories
+namespace Goreu.Tramite.Repositories.Interfaces
 {
-    public interface IAplicacionRepository: IRepositoryBase<Aplicacion>
+    public interface IAplicacionRepository : IRepositoryBase<Aplicacion>
     {
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TramiteGoreu.Dto.Request
+﻿namespace Goreu.Tramite.Dto.Request
 {
     public class PaginationDto
     {
@@ -9,7 +9,7 @@
         public int RecordsPerPage
         {
             get { return recordsPerPage; }
-            set { recordsPerPage = (value > maxRecordsPerPage) ? maxRecordsPerPage : value; }
+            set { recordsPerPage = value > maxRecordsPerPage ? maxRecordsPerPage : value; }
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using TramiteGoreu.Dto.Request;
-using TramiteGoreu.Dto.Response;
+﻿using Goreu.Tramite.Dto.Request;
+using Goreu.Tramite.Dto.Response;
 using TramiteGoreu.Entities.info;
 
-namespace TramiteGoreu.Services.Interface
+namespace Goreu.Tramite.Services.Interface
 {
     public interface IPersonaService
     {
