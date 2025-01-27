@@ -52,11 +52,21 @@ builder.Services.AddAuthentication(x =>
         throw new InvalidOperationException("JWT key not configured"));
     x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
+        // ValidateIssuer = false,
+        //ValidateAudience = false,
+        //ValidateLifetime = true,
+        //ValidateIssuerSigningKey = true,
+        //IssuerSigningKey = new SymmetricSecurityKey(key)
+
+        ValidateIssuer = true, //Habilita la validación del emisor
+        ValidIssuer = builder.Configuration["JWT:Issuer"], //Define el emisor del token
+        ValidateAudience = true, //Habilita la validación de la audiencia
+        ValidAudiences = builder.Configuration.GetSection("JWT:Audiences").Get<string[]>(), //Define la audiencia esperada
+        ValidateLifetime = true, //Asegúrate de que el token no esté expirado
+        ValidateIssuerSigningKey = true, //Valida la clave de firma
         IssuerSigningKey = new SymmetricSecurityKey(key)
+
+
     };
 });
 builder.Services.AddAuthorization();
@@ -92,15 +102,39 @@ builder.Services.AddAutoMapper(config =>
 builder.Services.AddTransient<UserDataSeeder>();
 
 //4. CORS
-var corsConfiguration = "tramitegoreucors";
-builder.Services.AddCors(setup =>
+//var corsConfiguration = "tramitegoreucors";
+//builder.Services.AddCors(setup =>
+//{
+//    setup.AddPolicy(corsConfiguration, policy =>
+//    {
+//        policy.AllowAnyOrigin();
+//        policy.AllowAnyHeader().WithExposedHeaders(new string[] { "totalrecordsquantity" });
+//        policy.AllowAnyMethod();
+//    });
+//});
+builder.Services.AddCors(options =>
 {
-    setup.AddPolicy(corsConfiguration, policy =>
+    options.AddPolicy("AllowConfiguredOrigins", policyBuilder =>
     {
-        policy.AllowAnyOrigin();
-        policy.AllowAnyHeader().WithExposedHeaders(new string[] { "totalrecordsquantity" });
-        policy.AllowAnyMethod();
-    });
+        //Obtenemos las URL de los clientes válidos desde appsettings
+        var allowedOrigins = builder.Configuration.GetSection("JWT:Audiences").Get<string[]>() ??
+                             throw new InvalidOperationException("JWT Audiences not configured.");
+
+        if (allowedOrigins.Any())
+        {
+            policyBuilder.WithOrigins(allowedOrigins) //Permite solo los orígenes configurados
+                .AllowAnyMethod() //Puedes ajustar los métodos según tu necesidad
+                .AllowAnyHeader(); //Permitir solo los encabezados necesarios si aplica
+                
+        }
+        else
+        {
+            throw new InvalidOperationException("No se configuraron orígenes válidos en JWT:Audiences.");
+        }
+    }
+
+    
+    );
 });
 
 builder.Services.AddControllers();
@@ -141,7 +175,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseCors(corsConfiguration);
+//app.UseCors(corsConfiguration);
+app.UseCors("AllowConfiguredOrigins");
 
 app.MapControllers();
 // Aplicar migraciones y sembrar datos (asíncronamente)

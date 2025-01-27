@@ -219,13 +219,24 @@ namespace Goreu.Tramite.Services.Iplementation
                     Descripcion = x.Descripcion,
                 }).ToList();
             }
+            // Agregar múltiples audiencias como claims dinámicamente
+            var audiences = options.Value.Jwt.Audiences;
+            foreach (var audience in audiences)
+            {
+                claims.Add(new Claim(JwtRegisteredClaimNames.Aud, audience)); //Necesario cuando la API será usada por otras APIs
+            }
 
             //JWT Signing
             var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:JWTKey"].ToString()));
             var credenciales = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
             var expiracion = DateTime.UtcNow.AddSeconds(Convert.ToDouble(configuration["JWT:LifetimeInSeconds"].ToString()));
 
-            var securityToken = new JwtSecurityToken(issuer: null, audience: null, claims: claims, signingCredentials: credenciales, expires: expiracion);
+            var securityToken = new JwtSecurityToken(
+                issuer: options.Value.Jwt.Issuer,  
+                claims: claims, 
+                signingCredentials: credenciales, 
+                expires: expiracion
+                );
             return new LoginResponseDto
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(securityToken),

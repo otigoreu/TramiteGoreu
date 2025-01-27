@@ -15,6 +15,8 @@ namespace TramiteGoreu.Entities
     public class Jwt
     {
         public string JWTKey{ get; set; } = default!;
+        public string Issuer { get; set; }
+        public string[] Audiences { get; set; }
         public int LifetimeInSeconds { get; set; }
     }
     public class SmtpConfiguration
