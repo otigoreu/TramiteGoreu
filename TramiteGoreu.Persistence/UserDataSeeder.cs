@@ -61,7 +61,7 @@ namespace Goreu.Tramite.Persistence
             // Guarda la entidad Persona en la base de datos
 
             // sino existe crear
-            context.Set<Persona>().Add(persona);
+            //context.Set<Persona>().Add(persona);
 
             var sede = new Sede
             {
@@ -69,12 +69,12 @@ namespace Goreu.Tramite.Persistence
 
             };
             // sino existe crear
-            context.Set<Sede>().Add(sede);
+            //context.Set<Sede>().Add(sede);
             #endregion
 
 
             #region Customer
-            //Admin user
+            //Customer user
             var customerUser = new Usuario()
             {
                 FirstName = "System",
@@ -102,7 +102,7 @@ namespace Goreu.Tramite.Persistence
 
             // Guarda la entidad Persona en la base de datos
             // sino existe crear
-            context.Set<Persona>().Add(persona2);
+            //context.Set<Persona>().Add(persona2);
 
             var sede2 = new Sede
             {
@@ -110,20 +110,36 @@ namespace Goreu.Tramite.Persistence
 
             };
             // sino existe crear
-            context.Set<Sede>().Add(sede2);
+           // context.Set<Sede>().Add(sede2);
             #endregion
 
-            await context.SaveChangesAsync();
+            //await context.SaveChangesAsync();
 
-            adminUser.IdPersona = persona.Id;
-            adminUser.IdSede = sede.Id;
+            //adminUser.IdPersona = persona.Id;
+            //adminUser.IdSede = sede.Id;
 
-            customerUser.IdPersona = persona2.Id;
-            customerUser.IdSede = sede2.Id;
+            //customerUser.IdPersona = persona2.Id;
+            //customerUser.IdSede = sede2.Id;
 
 
             if (await userManager.FindByEmailAsync("edercin@gmail.com") is null)
             {
+
+                // sino existe crear
+                context.Set<Persona>().Add(persona);
+                context.Set<Persona>().Add(persona2);
+
+                context.Set<Sede>().Add(sede);
+
+                context.Set<Sede>().Add(sede2);
+
+                await context.SaveChangesAsync();
+
+                adminUser.IdPersona = persona.Id;
+                adminUser.IdSede = sede.Id;
+                customerUser.IdPersona = persona2.Id;
+                customerUser.IdSede = sede2.Id;
+
                 var result = await userManager.CreateAsync(adminUser, "Edeher*2024");
                 if (result.Succeeded)
                 {
