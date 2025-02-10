@@ -28,7 +28,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     Id = x.Id,
                     nombres = x.Nombres,
                     apellidos = x.Apellidos,
-                    fechaNac = x.FechaNac.ToShortDateString(),
+                    fechaNac = x.FechaNac,
                     direccion = x.Direccion,
                     referencia = x.Referencia,
                     celular = x.Celular,
@@ -36,7 +36,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     email = x.Email,
                     tipoDoc = x.TipoDoc,
                     nroDoc = x.NroDoc,
-                    status = x.Status ? "Activo" : "Inactivo"
+                    status = x.Status
 
                 }).AsQueryable();
 
@@ -55,7 +55,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     Id = x.Id,
                     nombres = x.Nombres,
                     apellidos = x.Apellidos,
-                    fechaNac = x.FechaNac.ToShortDateString(),
+                    fechaNac = x.FechaNac,
                     direccion = x.Direccion,
                     referencia = x.Referencia,
                     celular = x.Celular,
@@ -63,7 +63,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     email = x.Email,
                     tipoDoc = x.TipoDoc,
                     nroDoc = x.NroDoc,
-                    status = x.Status ? "Activo" : "Inactivo"
+                    status = x.Status 
 
                 }).AsQueryable();
 

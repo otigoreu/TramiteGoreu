@@ -11,7 +11,7 @@ namespace TramiteGoreu.Entities.info
         public int Id { get; set; }
         public string nombres { get; set; } = default!;
         public string apellidos { get; set; } = default!;
-        public string fechaNac { get; set; } = default!;
+        public DateTime fechaNac { get; set; } = default!;
         public string direccion { get; set; } = default!;
         public string referencia { get; set; } = default!;
         public string celular { get; set; } = default!;
@@ -19,6 +19,6 @@ namespace TramiteGoreu.Entities.info
         public string email { get; set; } = default!;
         public string tipoDoc { get; set; } = default!;
         public string nroDoc { get; set; } = default!;
-        public string status { get; set; } = default!;
+        public bool status { get; set; } = default!;
     }
 }

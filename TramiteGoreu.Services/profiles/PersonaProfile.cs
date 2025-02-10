@@ -12,8 +12,9 @@ namespace Goreu.Tramite.Services.profiles
         {
             CreateMap<PersonaInfo, PersonaResponseDto>();
             CreateMap<Persona, PersonaResponseDto>();
-            CreateMap<PersonaRequestDto, Persona>()
-                .ForMember(d => d.FechaNac, o => o.MapFrom(x => DateOnly.Parse($"{x.fechaNac}")));
+            //CreateMap<PersonaRequestDto, Persona>()
+            //    .ForMember(d => d.FechaNac, o => o.MapFrom(x => DateOnly.Parse($"{x.fechaNac}")));
+            CreateMap<PersonaRequestDto, Persona>();
             CreateMap<Persona, PersonaInfo>();
         }
     }

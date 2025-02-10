@@ -94,26 +94,26 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.GetRolesAsync();
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        [HttpPost("/{userId}/Roles/grant")]
+        [HttpPost("roles/grant/{userId}")]
         public async Task<IActionResult> GrantRole(string userId, string RoleName)
         {
             var response = await service.GrantUserRole(userId, RoleName);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        [HttpPost("/{email}/roles/grantByEmail")]
+        [HttpPost("roles/grantByEmail/{email}")]
         public async Task<IActionResult> GrantRolesByEmail(string email, string roleName)
         {
             var response = await service.GrantUserRoleByEmail(email, roleName);
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        [HttpPost("/{userId}/roles/revoke")]
+        [HttpPost("roles/revoke/{userId}")]
         public async Task<IActionResult> RevokeRoles(string userId)
         {
             var response = await service.RevokeUserRoles(userId);
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        [HttpPost("/{userId}/role/revoke")]
+        [HttpPost("role/revoke/{userId}")]
         public async Task<IActionResult> RevokeRole(string userId, string roleName)
         {
             var response = await service.RevokeUserRole(userId, roleName);

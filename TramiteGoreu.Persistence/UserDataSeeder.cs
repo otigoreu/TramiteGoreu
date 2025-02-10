@@ -46,7 +46,7 @@ namespace Goreu.Tramite.Persistence
             {
                 Nombres = "Edeher Rossetti",
                 Apellidos = "Ponce Morales",
-                FechaNac = new DateOnly(1982, 07, 10),
+                FechaNac = new DateTime(1982, 07, 10),
                 Direccion = "",
                 Referencia = "",
                 Celular = "",
@@ -89,7 +89,7 @@ namespace Goreu.Tramite.Persistence
             {
                 Nombres = "Patricia",
                 Apellidos = "Lopez",
-                FechaNac = new DateOnly(1990, 05, 31),
+                FechaNac = new DateTime(1990, 05, 31),
                 Direccion = "",
                 Referencia = "",
                 Celular = "",

@@ -10,7 +10,7 @@ namespace Goreu.Tramite.Dto.Request
     {
         public string nombres { get; set; } = default!;
         public string apellidos { get; set; } = default!;
-        public string fechaNac { get; set; } = default!;
+        public DateTime fechaNac { get; set; } = default!;
         public string direccion { get; set; } = default!;
         public string referencia { get; set; } = default!;
         public string celular { get; set; } = default!;

@@ -12,7 +12,7 @@ namespace Goreu.Tramite.Persistence.Configurations
             builder.Property(x => x.Nombres).HasMaxLength(50);
             builder.Property(x => x.Apellidos).HasMaxLength(50);
             builder.Property(x => x.FechaNac)
-                .HasColumnType("date")
+                .HasColumnType("datetime")
                 .HasDefaultValueSql("GETDATE()");
             builder.Property(x => x.Direccion).HasMaxLength(100);
             builder.Property(x => x.Referencia).HasMaxLength(200);
