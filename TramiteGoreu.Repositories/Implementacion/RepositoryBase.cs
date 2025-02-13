@@ -47,12 +47,16 @@ namespace Goreu.Tramite.Repositories.Implementacion
         }
         public async Task DeleteAsync(int id)
         {
-            var item = await GetAsync(id);
+            var item = await context.Set<TEntity>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x=>x.Id==id);       
             if (item is not null)
             {
-                //item.Status = false;
-                await UpdateAsync();
+                context.Set<TEntity>().Remove(item);
+                await context.SaveChangesAsync();
             }
+            else
+                throw new InvalidOperationException($"No se encontro el registro con id {id}");
         }
 
 

@@ -1,7 +1,5 @@
 ﻿using Goreu.Tramite.Dto.Request;
 using Goreu.Tramite.Services.Interface;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Goreu.Tramite.Api.Controllers

@@ -22,8 +22,4 @@
     <ProjectReference Include="..\TramiteGoreu.Repositories\Goreu.Tramite.Repositories.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Iplementation\NewFolder\" />
-  </ItemGroup>
-
 </Project>

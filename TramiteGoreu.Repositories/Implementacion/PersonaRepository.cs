@@ -76,11 +76,22 @@ namespace Goreu.Tramite.Repositories.Implementacion
             var person = await GetAsync(id);
             if (person is not null)
             {
-                person.Status = true;
+                person.Status = false;
                 await UpdateAsync();
             }
         }
 
+        public async Task InitializedAsync(int id)
+        {
+            var person = await context.Set<Persona>().IgnoreQueryFilters().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
+            if (person is not null)
+            {
+                person.Status = true;
+                context.Set<Persona>().Update(person);
+                await context.SaveChangesAsync();
+
+            }
+        }
     }
 }

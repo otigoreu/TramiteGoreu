@@ -11,8 +11,9 @@ namespace Goreu.Tramite.Services.Interface
         Task<BaseResponseGeneric<PersonaResponseDto>> GetAsync(int id);
         Task<BaseResponseGeneric<int>> AddAsync(PersonaRequestDto resquest);
         Task<BaseResponse> UpdateAsync(int id, PersonaRequestDto resquest);
-        Task<BaseResponse> DeleteAsync(int i);
+        Task<BaseResponse> DeleteAsync(int id);
         Task<BaseResponse> FinalizedAsync(int id);
+        Task<BaseResponse> InitializedAsync(int id);
 
     }
 }

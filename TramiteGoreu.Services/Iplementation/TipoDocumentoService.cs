@@ -1,92 +1,102 @@
 ﻿using AutoMapper;
+using Azure;
 using Goreu.Tramite.Dto.Request;
 using Goreu.Tramite.Dto.Response;
+using Goreu.Tramite.Entities;
 using Goreu.Tramite.Repositories.Interfaces;
 using Goreu.Tramite.Services.Interface;
 using Microsoft.Extensions.Logging;
-using TramiteGoreu.Entities;
-using TramiteGoreu.Entities.info;
 
 namespace Goreu.Tramite.Services.Iplementation
 {
-    public class PersonaService : IPersonaService
+    public class TipoDocumentoService : ITipoDocumentoService
     {
-        private readonly IPersonaRepository repository;
-        private readonly ILogger<PersonaService> logger;
+        private readonly ITipoDocumentoRepository repository;
+        private readonly ILogger<TipoDocumentoService> logger;
         private readonly IMapper mapper;
 
-        public PersonaService(IPersonaRepository repository, ILogger<PersonaService> logger, IMapper mapper)
+        public TipoDocumentoService(ITipoDocumentoRepository repository, ILogger<TipoDocumentoService> logger,IMapper mapper) 
         {
             this.repository = repository;
             this.logger = logger;
             this.mapper = mapper;
         }
-        public async Task<BaseResponseGeneric<ICollection<PersonaInfo>>> GetAsync(string? nombres, PaginationDto pagination)
+
+        public async Task<BaseResponseGeneric<ICollection<TipoDocumentoResponseDto>>> GetAsync()
         {
-            var response = new BaseResponseGeneric<ICollection<PersonaInfo>>();
+           var response= new BaseResponseGeneric<ICollection<TipoDocumentoResponseDto>>();
             try
+            {
+                var data = await repository.GetAsync();
+                response.Data = mapper.Map<ICollection<TipoDocumentoResponseDto>>(data);
+                response.Success = true;
+
+            }
+            catch (Exception ex)
             {
 
-                response.Data = await repository.GetAsync(nombres, pagination);
-                response.Success = true;
-            }
-            catch (Exception ex)
-            {
-                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                response.ErrorMessage = "OCurrio un error al obtener los datos";
                 logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
             return response;
         }
-        public async Task<BaseResponseGeneric<PersonaResponseDto>> GetAsync(int id)
+
+        public async Task<BaseResponseGeneric<TipoDocumentoResponseDto>> GetAsync(int id)
         {
-            var response = new BaseResponseGeneric<PersonaResponseDto>();
+            var response = new BaseResponseGeneric<TipoDocumentoResponseDto>();
             try
             {
-                var data = await repository.GetAsync(id);
-                response.Data = mapper.Map<PersonaResponseDto>(data);
+                var data= await repository.GetAsync(id);
+                response .Data=mapper.Map<TipoDocumentoResponseDto>(data);
                 response.Success = true;
             }
             catch (Exception ex)
             {
-                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+
+                response.ErrorMessage = "ocurrio un problema al obtener el registro";
                 logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
             return response;
+            
         }
-        public async Task<BaseResponseGeneric<int>> AddAsync(PersonaRequestDto request)
+        public async Task<BaseResponseGeneric<int>> AddAsync(TipoDocumentoRequestDto request)
         {
             var response = new BaseResponseGeneric<int>();
+
             try
             {
-                response.Data = await repository.AddAsync(mapper.Map<Persona>(request));
+                response.Data = await repository.AddAsync(mapper.Map<TipoDocumento>(request));
                 response.Success = true;
             }
             catch (Exception ex)
             {
-                response.ErrorMessage = "Ocurrio un error al guardar los datos";
+
+                response.ErrorMessage = "ocurrio un problema al agregar datos";
                 logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
             return response;
         }
-        public async Task<BaseResponse> UpdateAsync(int id, PersonaRequestDto request)
+
+        public async Task<BaseResponse> UpdateAsync(int id, TipoDocumentoRequestDto resquest)
         {
             var response = new BaseResponse();
+
             try
             {
                 var data = await repository.GetAsync(id);
-                if (data is null)
-                {
-                    response.ErrorMessage = $"la persona con id {id} no fue encontrado";
+                if (data is null) {
+                    response.ErrorMessage = $"el expediente con id {id} no fue encontrado";
                 }
-
-                mapper.Map(request, data);
+                mapper.Map(resquest, data);
                 await repository.UpdateAsync();
                 response.Success = true;
+
             }
-            catch (Exception ex)
+            catch (Exception ex )
             {
-                response.ErrorMessage = "Ocurrio un error al actualizar  los datos";
-                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+
+                response.ErrorMessage = "ocrurrio un problema al actualizar datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}",response.ErrorMessage, ex.Message);
             }
             return response;
         }
@@ -94,6 +104,7 @@ namespace Goreu.Tramite.Services.Iplementation
         public async Task<BaseResponse> DeleteAsync(int id)
         {
             var response = new BaseResponse();
+
             try
             {
                 await repository.DeleteAsync(id);
@@ -103,8 +114,8 @@ namespace Goreu.Tramite.Services.Iplementation
             catch (Exception ex)
             {
 
-                response.ErrorMessage = "Ocurrio un error al Eliminar los datos";
-                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+                response.ErrorMessage = "Cocurrio un problem al procesadr datos";
+                logger.LogError(ex, "{ErrorMEssage} {MEssage}", response.ErrorMessage, ex.Message);
             }
             return response;
         }
@@ -116,28 +127,10 @@ namespace Goreu.Tramite.Services.Iplementation
             {
                 await repository.FinalizedAsync(id);
                 response.Success = true;
-
             }
             catch (Exception ex)
             {
-                response.ErrorMessage = "Ocurrio un error al finalizar los datos";
-                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
-            }
-            return response;
-        }
-
-        public async Task<BaseResponseGeneric<PersonaInfo>> GetAsyncBYEmail(string email)
-        {
-            var response = new BaseResponseGeneric<PersonaInfo>();
-            try
-            {
-
-                response.Data = mapper.Map<PersonaInfo>((await repository.GetAsync(predicate: s => s.Email == email)).FirstOrDefault());
-                response.Success = true;
-            }
-            catch (Exception ex)
-            {
-                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                response.ErrorMessage = "Ocurrio un error al finalizar Datos";
                 logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
             return response;

@@ -26,7 +26,7 @@ namespace Goreu.Tramite.Api.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
         [HttpGet("email")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(string? email)
         {
             var response = await service.GetAsyncBYEmail(email);
@@ -60,10 +60,18 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.DeleteAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        [HttpPatch("{id:int}")]
+        [HttpPatch("finalized/{id:int}")]
         public async Task<IActionResult> Patch(int id)
         {
             var response = await service.FinalizedAsync(id);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPatch("initialized/{id:int}")]
+        public async Task<IActionResult> PatchInit(int id)
+        {
+
+            var response = await service.InitializedAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);
         }
     }

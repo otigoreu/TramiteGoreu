@@ -18,7 +18,7 @@ namespace Goreu.Tramite.Persistence.Configurations
 
             builder.Property(x => x.DisplayName).HasMaxLength(50);
             builder.Property(x => x.IconName).HasMaxLength(50);
-            builder.Property(x => x.Route).HasMaxLength(50);
+            builder.Property(x => x.Route).HasMaxLength(200);
             builder.ToTable(nameof(Menu), "Administrador");
             builder.HasQueryFilter(x => x.Status);
 

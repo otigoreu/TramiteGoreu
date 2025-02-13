@@ -78,6 +78,7 @@ builder.Services.AddTransient<IAplicacionRepository, AplicacionRepository>();
 builder.Services.AddTransient<IMenuRepository, MenuRepository>();
 builder.Services.AddTransient<ISedeRepository, SedeRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ITipoDocumentoRepository, TipoDocumentoRepository>();
 
 
 builder.Services.AddTransient<IPersonaService, PersonaService>();
@@ -86,6 +87,7 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IMenuService, MenuService>();
 builder.Services.AddTransient<ISedeService, SedeService>();
 builder.Services.AddTransient<IAplicacionService, AplicacionService>();
+builder.Services.AddTransient<ITipoDocumentoService, TipoDocumentoService>();
 
 //3.register mapper
 builder.Services.AddAutoMapper(config =>
@@ -95,6 +97,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<AplicacionProfile>();
     config.AddProfile<MenuProfile>();
     config.AddProfile<SedeProfile>();
+    config.AddProfile<TipoDocumentoProfile>();
 
 
 });
