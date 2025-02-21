@@ -1,6 +1,8 @@
 ﻿using Goreu.Tramite.Entities;
+using Goreu.Tramite.Entities.info;
 using Goreu.Tramite.Persistence;
 using Goreu.Tramite.Repositories.Interfaces;
+using Goreu.Tramite.Repositories.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TramiteGoreu.Entities.info;
+using TramiteGoreu.Entities;
 
 namespace Goreu.Tramite.Repositories.Implementacion
 {
@@ -28,6 +32,26 @@ namespace Goreu.Tramite.Repositories.Implementacion
                 tipoDocu.Status = false;
                 await UpdateAsync();
             }
+        }
+
+        public async Task<ICollection<TipoDocumentoInfo>> GetAsync(string? descripcion)
+        {
+            //eager loading optimizado
+            var queryable = context.Set<TipoDocumento>()
+                .Where(x => x.Descripcion.Contains(descripcion ?? string.Empty))
+                .IgnoreQueryFilters()
+                .AsNoTracking()
+                .Select(x => new TipoDocumentoInfo
+                {
+                    Id = x.Id,
+                    Descripcion = x.Descripcion,
+                    Abrev = x.Abrev,
+                    status = x.Status
+
+                }).AsQueryable();
+
+            await httpContext.HttpContext.InsertarPaginacionHeader(queryable);
+            return await queryable.ToListAsync();
         }
 
         public async Task InitializedAsync(int id)

@@ -131,6 +131,8 @@ namespace Goreu.Tramite.Services.Iplementation
 
         public async Task<BaseResponseGeneric<LoginResponseDto>> LoginAsync(LoginRequestDto request)
         {
+
+
             var response = new BaseResponseGeneric<LoginResponseDto>();
             try
             {
@@ -158,11 +160,14 @@ namespace Goreu.Tramite.Services.Iplementation
         }
         private async Task<LoginResponseDto> ConstruirToken(Usuario user)
         {
+
             var claims = new List<Claim>()
                {
+
                    //new Claim(ClaimTypes.Email,user.Email ?? string.Empty), //Nunca enviar data sensible en un claim
                    new Claim(ClaimTypes.Name,user.UserName ?? string.Empty), //Nunca enviar data sensible en un claim
                    new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}")
+
                };
 
             var roles = await userManager.GetRolesAsync(user);
@@ -173,7 +178,8 @@ namespace Goreu.Tramite.Services.Iplementation
 
             //Persona
             var persona = await personaRepository.GetAsync(user.IdPersona);
-
+            Console.WriteLine("user ="+user.IdPersona);
+            Console.WriteLine("Persona =" + persona.Id);
             var personaDto = new PersonaResponseDto
             {
                 Id = persona.Id,

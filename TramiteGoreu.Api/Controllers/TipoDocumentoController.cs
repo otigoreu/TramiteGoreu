@@ -14,6 +14,14 @@ namespace Goreu.Tramite.Api.Controllers
             this.service = service;
         }
 
+        [HttpGet("descripcion")]
+        public async Task<IActionResult> Get(string? descripcion)
+        {
+
+            var response = await service.GetAsync(descripcion);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get() {
         
@@ -53,14 +61,14 @@ namespace Goreu.Tramite.Api.Controllers
 
         }
 
-        [HttpPatch("finalized/{id:int}")]
-        public async Task<IActionResult> Patch(int id)
+        [HttpDelete("finalized/{id:int}")]
+        public async Task<IActionResult> PatchFinit(int id)
         {
 
             var response = await service.FinalizedAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        [HttpPatch("initialized/{id:int}")]
+        [HttpGet("initialized/{id:int}")]
         public async Task<IActionResult> PatchInit(int id)
         {
 

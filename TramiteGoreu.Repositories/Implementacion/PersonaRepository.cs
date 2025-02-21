@@ -44,6 +44,33 @@ namespace Goreu.Tramite.Repositories.Implementacion
             return await queryable.OrderBy(x => x.Id).Paginate(pagination).ToListAsync();
 
         }
+        public async Task<ICollection<PersonaInfo>> GetAsyncfilter(string? nombres, PaginationDto pagination)
+        {
+            //eager loading optimizado
+            var queryable = context.Set<Persona>()
+                .Where(x => x.Nombres.Contains(nombres ?? string.Empty))
+                .IgnoreQueryFilters()
+                .AsNoTracking()
+                .Select(x => new PersonaInfo
+                {
+                    Id = x.Id,
+                    nombres = x.Nombres,
+                    apellidos = x.Apellidos,
+                    fechaNac = x.FechaNac,
+                    direccion = x.Direccion,
+                    referencia = x.Referencia,
+                    celular = x.Celular,
+                    edad = x.Edad,
+                    email = x.Email,
+                    tipoDoc = x.TipoDoc,
+                    nroDoc = x.NroDoc,
+                    status = x.Status
+
+                }).AsQueryable();
+
+            await httpContext.HttpContext.InsertarPaginacionHeader(queryable);
+            return await queryable.OrderBy(x => x.Id).Paginate(pagination).ToListAsync();
+        }
         public async Task<ICollection<PersonaInfo>> GetAsyncEmail(string? email, PaginationDto pagination)
         {
             //eager loading optimizado
@@ -93,5 +120,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
 
             }
         }
+
+        
     }
 }

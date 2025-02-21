@@ -8,7 +8,7 @@ namespace Goreu.Tramite.Api.Controllers
 {
     [ApiController]
     [Route("api/personas")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+   // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PersonasController : ControllerBase
     {
         private readonly IPersonaService service;
@@ -23,6 +23,13 @@ namespace Goreu.Tramite.Api.Controllers
         public async Task<IActionResult> Get(string? nombres, [FromQuery] PaginationDto pagination)
         {
             var response = await service.GetAsync(nombres, pagination);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("nombrefilter")]
+        //[Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> Getfilter(string? nombres, [FromQuery] PaginationDto pagination)
+        {
+            var response = await service.GetAsyncfilter(nombres, pagination);
             return response.Success ? Ok(response) : BadRequest(response);
         }
         [HttpGet("email")]
@@ -60,14 +67,14 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.DeleteAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        [HttpPatch("finalized/{id:int}")]
-        public async Task<IActionResult> Patch(int id)
+        [HttpDelete("finalized/{id:int}")]
+        public async Task<IActionResult> PatchFinit(int id)
         {
             var response = await service.FinalizedAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        [HttpPatch("initialized/{id:int}")]
+        [HttpGet("initialized/{id:int}")]
         public async Task<IActionResult> PatchInit(int id)
         {
 

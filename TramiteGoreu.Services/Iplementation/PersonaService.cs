@@ -37,6 +37,22 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
+        public async Task<BaseResponseGeneric<ICollection<PersonaInfo>>> GetAsyncfilter(string? nombres, PaginationDto pagination)
+        {
+            var response = new BaseResponseGeneric<ICollection<PersonaInfo>>();
+            try
+            {
+
+                response.Data = await repository.GetAsyncfilter(nombres, pagination);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
         public async Task<BaseResponseGeneric<PersonaResponseDto>> GetAsync(int id)
         {
             var response = new BaseResponseGeneric<PersonaResponseDto>();
@@ -158,5 +174,7 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
+
+       
     }
 }
