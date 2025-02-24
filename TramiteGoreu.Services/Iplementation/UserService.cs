@@ -73,9 +73,11 @@ namespace Goreu.Tramite.Services.Iplementation
             {
                 var resultadoPersona = await personaRepository.GetAsync(request.idPersona);
                 var resultadoSede = await sedeRepository.GetAsync(request.idSede);
+               
 
                 if (resultadoPersona is not null && resultadoSede is not null)
                 {
+                   
                     var user = new Usuario
                     {
                         UserName = request.UserName,
@@ -87,7 +89,7 @@ namespace Goreu.Tramite.Services.Iplementation
                         EmailConfirmed = true
 
                     };
-
+                    
                     var resultado = await userManager.CreateAsync(user, request.ConfirmPassword);
                     if (resultado.Succeeded)
                     {
@@ -96,7 +98,7 @@ namespace Goreu.Tramite.Services.Iplementation
                         if (user is not null)
                         {
                             await userManager.AddToRoleAsync(user, Constantes.RolCliente);
-
+                            
                             // TODO: Enviar un email
 
                             response.Success = true;
@@ -108,7 +110,9 @@ namespace Goreu.Tramite.Services.Iplementation
                                 Token = tokenResponse.Token,
                                 ExpirationDate = tokenResponse.ExpirationDate,
                                 Roles = tokenResponse.Roles
+
                             };
+                            
                         }
                     }
                     else
@@ -333,7 +337,7 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
-        public async Task<BaseResponse> ChangePasswordAsync(string email, ChangePasswordRequestDto request)
+        public async Task<BaseResponse> ChangePasswordAsyncEmail(string email, ChangePasswordRequestDto request)
         {
             var response = new BaseResponse();
 
@@ -357,6 +361,55 @@ namespace Goreu.Tramite.Services.Iplementation
                     logger.LogInformation("Se cambio la clave para {email}", userIdentity.Email);
                     //Enviar un email de confirmacion de clave cambiada
                     await emailService.SendEmailAsync(email, "Confiracion de cambio de clave",
+                    @$"
+                    <P> Estimado {userIdentity.FirstName} {userIdentity.LastName}</p>
+                    <p> Se ha cambiado su clave corecctaente</p>
+                    <hr />
+                    Atte. <br />
+                    Tramite Goreu @ 2024");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Error al cambiar la clave";
+                logger.LogError(ex, "Error al cambiar password {Message}", ex.Message);
+            }
+
+            return response;
+        }
+        //---------------------------------------------------------------------------------------------
+        public async Task<BaseResponse> ChangePasswordAsyncUserName(string userName, ChangePasswordRequestDto request)
+        {
+            var response = new BaseResponse();
+            Console.WriteLine("usuario 0 :" + userName);
+            try
+            {
+                var userIdentity = await userManager.FindByNameAsync(userName);
+                Console.WriteLine("usuario 1 :" + userIdentity.UserName);
+
+                if (userIdentity is null)
+                {
+                    Console.WriteLine("usuario 2 :" + userIdentity.UserName);
+                    throw new ApplicationException("Usuario no existe");
+                    
+                }
+
+                var result = await userManager.ChangePasswordAsync(userIdentity, request.OldPassword, request.NewPassword);
+                response.Success = result.Succeeded;
+                if (!result.Succeeded)
+                {
+                    Console.WriteLine("usuario 3 :" + userIdentity.UserName);
+                    response.ErrorMessage = string.Join(" ", result.Errors.Select(x => x.Description).ToArray());
+                }
+                else
+                {
+                    Console.WriteLine("usuario 4 :" + userIdentity.UserName);
+                    Console.WriteLine("usuario 4 email :" + userIdentity.Email);
+
+                    logger.LogInformation("Se cambio la clave para {email}", userIdentity.Email);
+                    //Enviar un email de confirmacion de clave cambiada
+                    await emailService.SendEmailAsync(userIdentity.Email, "Confiracion de cambio de clave",
                     @$"
                     <P> Estimado {userIdentity.FirstName} {userIdentity.LastName}</p>
                     <p> Se ha cambiado su clave corecctaente</p>
@@ -752,6 +805,8 @@ namespace Goreu.Tramite.Services.Iplementation
 
             return response;
         }
+
+        
     }
 }
 

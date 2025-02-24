@@ -10,7 +10,8 @@ namespace Goreu.Tramite.Services.Interface
         //-----------------------------------------------------------------------------------------
         Task<BaseResponse> RequestTokenToResetPasswordAsync(ResetPasswordRequestDto request);
         Task<BaseResponse> ResetPasswordAsync(NewPasswordRequestDto request);
-        Task<BaseResponse> ChangePasswordAsync(string email, ChangePasswordRequestDto request);
+        Task<BaseResponse> ChangePasswordAsyncEmail(string email, ChangePasswordRequestDto request);
+        Task<BaseResponse> ChangePasswordAsyncUserName(string userName, ChangePasswordRequestDto request);
         //--------------------------------------------------------------------------------------------
         Task<BaseResponseGeneric<List<UsuarioResponseDto>>> GetUsersByRole(string? role);
         Task<BaseResponseGeneric<UsuarioResponseDto>> GetUserByEmail(string email);

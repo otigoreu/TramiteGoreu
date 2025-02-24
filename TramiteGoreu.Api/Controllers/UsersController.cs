@@ -48,16 +48,26 @@ namespace Goreu.Tramite.Api.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
+        //[HttpPost("ChangePassword")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto request)
+        //{
+        //    //Obtener eil del token actual
+        //    var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email).Value;
+        //    var response = await service.ChangePasswordAsync(email, request);
+        //    return response.Success ? Ok(response) : BadRequest(response);
+        //}
+
         [HttpPost("ChangePassword")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto request)
+        public async Task<IActionResult> ChangePasswordUserName([FromBody] ChangePasswordRequestDto request)
         {
             //Obtener eil del token actual
-            var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email).Value;
-            var response = await service.ChangePasswordAsync(email, request);
+            var userName = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Name).Value;
+            var response = await service.ChangePasswordAsyncUserName(userName, request);
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        //---------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------clear--
         [HttpGet("GetUsersByRole")]
         public async Task<IActionResult> GetUsersByRole([FromQuery] string? role = "")
         {
