@@ -10,6 +10,6 @@ namespace Goreu.Tramite.Dto.Response
     {
         public int Id { get; set; }
         public string Descripcion { get; set; } = default!;
-
+        public string Status { get; set; } = default!;
     }
 }

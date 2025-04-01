@@ -127,7 +127,8 @@ builder.Services.AddCors(options =>
         {
             policyBuilder.WithOrigins(allowedOrigins) //Permite solo los orígenes configurados
                 .AllowAnyMethod() //Puedes ajustar los métodos según tu necesidad
-                .AllowAnyHeader(); //Permitir solo los encabezados necesarios si aplica
+                .AllowAnyHeader() //Permitir solo los encabezados necesarios si aplica
+                .AllowCredentials(); //Anotacion pra produccion
                 
         }
         else
