@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Goreu.Tramite.Dto.Request;
 using Goreu.Tramite.Dto.Response;
+using Goreu.Tramite.Entities.info;
 using Goreu.Tramite.Repositories.Interfaces;
 using Goreu.Tramite.Services.Interface;
 using Microsoft.Extensions.Logging;
@@ -99,6 +100,23 @@ namespace Goreu.Tramite.Services.Iplementation
             {
                 var data = await repository.GetAsync(id);
                 response.Data = mapper.Map<AplicacionResponseDto>(data);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponseGeneric<ICollection<AplicacionInfo>>> GetAsync(string? descripcion)
+        {
+            var response = new BaseResponseGeneric<ICollection<AplicacionInfo>>();
+            try
+            {
+
+                response.Data = await repository.GetAsync(descripcion);
                 response.Success = true;
             }
             catch (Exception ex)

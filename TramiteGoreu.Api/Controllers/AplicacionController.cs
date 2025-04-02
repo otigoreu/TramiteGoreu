@@ -14,6 +14,13 @@ namespace Goreu.Tramite.Api.Controllers
         {
             this.service = service;
         }
+        [HttpGet("descripcion")]
+        public async Task<IActionResult> Get(string? descripcion)
+        {
+
+            var response = await service.GetAsync(descripcion);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
 
         [HttpGet]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
