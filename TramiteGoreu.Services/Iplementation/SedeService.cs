@@ -56,6 +56,22 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
+        public async Task<BaseResponse> FinalizedAsync(int id)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                await repository.FinalizedAsync(id);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al finalizar Datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
         public async Task<BaseResponseGeneric<ICollection<SedeResponseDto>>> GetAsync()
         {
             var response = new BaseResponseGeneric<ICollection<SedeResponseDto>>();
@@ -85,6 +101,22 @@ namespace Goreu.Tramite.Services.Iplementation
             catch (Exception ex)
             {
                 response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> InitializedAsync(int id)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                await repository.InitializedAsync(id);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al Inicializar Datos";
                 logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
             return response;

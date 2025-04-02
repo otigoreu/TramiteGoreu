@@ -15,5 +15,7 @@ namespace Goreu.Tramite.Services.Interface
         Task<BaseResponse> UpdateAsync(int id, AplicacionRequestDto request);
         Task<BaseResponseGeneric<ICollection<AplicacionResponseDto>>> GetAsync();
         Task<BaseResponseGeneric<AplicacionResponseDto>> GetAsync(int id);
+        Task<BaseResponse> FinalizedAsync(int id);
+        Task<BaseResponse> InitializedAsync(int id);
     }
 }
