@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Goreu.Tramite.Dto.Request;
 using Goreu.Tramite.Dto.Response;
+using Goreu.Tramite.Entities.info;
 using Goreu.Tramite.Repositories.Interfaces;
 using Goreu.Tramite.Services.Interface;
 using Microsoft.AspNetCore.Identity;
@@ -64,6 +65,8 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
+       
+
         public async Task<BaseResponseGeneric<ICollection<MenuResponseDto>>> GetByAplicationAsync(int idAplication, string userName)
         {
             var response = new BaseResponseGeneric<ICollection<MenuResponseDto>>();
@@ -109,6 +112,93 @@ namespace Goreu.Tramite.Services.Iplementation
             catch (Exception ex)
             {
                 response.ErrorMessage = "Ocurrió un error al añadir la información";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+        public async Task<BaseResponseGeneric<ICollection<MenuInfo>>> GetAsync(string? displayName)
+        {
+            var response = new BaseResponseGeneric<ICollection<MenuInfo>>();
+            try
+            {
+
+                response.Data = await repository.GetAsync(displayName);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> DeleteAsync(int id)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                await repository.DeleteAsync(id);
+                response.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocurrio un error al deshabilitar los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+        public async Task<BaseResponse> InitializedAsync(int id)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                await repository.InitializedAsync(id);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al Inicializar Datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+        public async Task<BaseResponse> FinalizedAsync(int id)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                await repository.FinalizedAsync(id);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al finalizar Datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> UpdateAsync(int id, MenuRequestDto request)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var data = await repository.GetAsync(id);
+                if (data is null)
+                {
+                    response.ErrorMessage = $"la persona con id {id} no fue encontrado";
+                }
+
+                mapper.Map(request, data);
+                await repository.UpdateAsync();
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al actualizar  los datos";
                 logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
             return response;

@@ -1,6 +1,12 @@
-﻿namespace Goreu.Tramite.Dto.Response
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Goreu.Tramite.Entities.info
 {
-    public class MenuResponseDto
+    public class MenuInfo
     {
         public int Id { get; set; }
         public string DisplayName { get; set; } = default!;
@@ -8,6 +14,6 @@
         public string Route { get; set; } = default!;
         public int IdAplicacion { get; set; }
         public int? ParentMenuId { get; set; }
-        public string Status { get; set; } = default!;
+        public bool status { get; set; } = default!;
     }
 }
