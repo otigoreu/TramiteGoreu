@@ -40,6 +40,13 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.AddAsync(request);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+        [HttpPost("single")]
+        public async Task<IActionResult> Post(MenuRequestDtoSingle request)
+        {
+            var response = await service.AddAsyncSingle(request);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
         [HttpPut]
         public async Task<IActionResult> Put(int id, MenuRequestDto menuRequestDto)
         {

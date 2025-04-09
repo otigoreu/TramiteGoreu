@@ -4,17 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Goreu.Tramite.Entities.info
+namespace Goreu.Tramite.Dto.Request
 {
-    public class MenuInfo
+    public class MenuRequestDtoSingle
     {
-        public int Id { get; set; }
         public string DisplayName { get; set; } = default!;
         public string IconName { get; set; } = default!;
         public string Route { get; set; } = default!;
-        public int AplicacionId { get; set; }
-        public string Aplicacion { get; set; } = default!;
+        public int IdAplicacion { get; set; }
         public int? ParentMenuId { get; set; }
-        public bool status { get; set; } = default!;
     }
 }

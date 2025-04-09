@@ -36,6 +36,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
         public async Task<ICollection<MenuInfo>> GetAsync(string? displayName)
         {
             var queryable = context.Set<Menu>()
+               .Include(x=>x.Aplicacion)
                .Where(x => x.DisplayName.Contains(displayName ?? string.Empty))
                .IgnoreQueryFilters()
                .AsNoTracking()
@@ -45,7 +46,8 @@ namespace Goreu.Tramite.Repositories.Implementacion
                    DisplayName = x.DisplayName,
                    IconName=x.IconName,
                    Route=x.Route,
-                   IdAplicacion=x.IdAplicacion,
+                   AplicacionId=x.Aplicacion.Id,
+                   Aplicacion=x.Aplicacion.Descripcion,
                    ParentMenuId=x.ParentMenuId,
                    status = x.Status
 

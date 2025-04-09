@@ -13,6 +13,7 @@ namespace Goreu.Tramite.Services.Interface
     {
 
         Task<BaseResponseGeneric<int>> AddAsync(MenuRequestDto request);
+        Task<BaseResponseGeneric<int>> AddAsyncSingle(MenuRequestDtoSingle request);
         Task<BaseResponseGeneric<ICollection<MenuResponseDto>>> GetByAplicationAsync(int idAplication, string email);
         Task<BaseResponseGeneric<ICollection<MenuInfo>>> GetAsync(string? displayName);
         Task<BaseResponse> DeleteAsync(int id);

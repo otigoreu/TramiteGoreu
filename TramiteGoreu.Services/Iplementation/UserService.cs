@@ -428,6 +428,7 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
         //---------------------------------------------------------------------------------------------
+        //toso los usuario con ese rol
         public async Task<BaseResponseGeneric<List<UsuarioResponseDto>>> GetUsersByRole(string? role)
         {
             var response = new BaseResponseGeneric<List<UsuarioResponseDto>>();
@@ -589,7 +590,8 @@ namespace Goreu.Tramite.Services.Iplementation
 
             return response;
         }
-
+        //-------------------------------------------------------------------------------------------
+        //trae todos los roles
         public async Task<BaseResponseGeneric<List<RoleResponseDto>>> GetRolesAsync()
         {
             var response = new BaseResponseGeneric<List<RoleResponseDto>>();

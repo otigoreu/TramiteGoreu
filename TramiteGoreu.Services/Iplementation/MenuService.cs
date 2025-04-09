@@ -65,7 +65,28 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
-       
+        public async Task<BaseResponseGeneric<int>> AddAsyncSingle(MenuRequestDtoSingle request) {
+
+            var response = new BaseResponseGeneric<int>();
+            try
+            {
+                response.Data = await repository.AddAsync(mapper.Map<Menu>(request));
+                response.Success = true;
+
+
+            }
+            catch (Exception ex)
+            {
+
+               response.ErrorMessage="Ocurrio un error al guardar los datos";
+                logger.LogError(ex, "{ErrorMessage}{Message}", response.ErrorMessage,ex.Message);
+            }
+
+            return response;
+
+        }
+
+
 
         public async Task<BaseResponseGeneric<ICollection<MenuResponseDto>>> GetByAplicationAsync(int idAplication, string userName)
         {

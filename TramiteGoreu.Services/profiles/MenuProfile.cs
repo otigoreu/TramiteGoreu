@@ -10,6 +10,10 @@ namespace Goreu.Tramite.Services.profiles
         public MenuProfile()
         {
             CreateMap<Menu, MenuRequestDto>();
+            CreateMap<Menu, MenuRequestDtoSingle>();
+            CreateMap<MenuRequestDto, Menu>();
+            CreateMap<MenuRequestDtoSingle, Menu>();
+
             CreateMap<Menu, MenuResponseDto>();
 
 

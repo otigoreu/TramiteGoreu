@@ -66,7 +66,8 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.ChangePasswordAsyncUserName(userName, request);
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        //-------------------------------------------------------------------------------------------clear--
+        //-------------------------------------------------------------------------------------------
+        //trae los usuarios con ese rol
         [HttpGet("GetUsersByRole")]
         public async Task<IActionResult> GetUsersByRole([FromQuery] string? role = "")
         {
@@ -97,6 +98,8 @@ namespace Goreu.Tramite.Api.Controllers
             return response.Success ? Ok(response) : BadRequest(Response);
 
         }
+        //-------------------------------------------------------------------------------------------
+        //trae todos los roles
         [HttpGet("roles")]
         public async Task<IActionResult> GetRoles()
         {
