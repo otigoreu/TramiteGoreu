@@ -18,6 +18,7 @@ namespace Goreu.Tramite.Services.Interface
         Task<BaseResponseGeneric<ICollection<MenuInfo>>> GetAsync(string? displayName);
         Task<BaseResponse> DeleteAsync(int id);
         Task<BaseResponse> UpdateAsync(int id, MenuRequestDto request);
+        Task<BaseResponse> UpdateAsyncSingle(int id, MenuRequestDtoSingle request);
         Task<BaseResponse> FinalizedAsync(int id);
         Task<BaseResponse> InitializedAsync(int id);
     }

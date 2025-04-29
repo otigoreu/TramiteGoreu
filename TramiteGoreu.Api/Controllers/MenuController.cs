@@ -53,6 +53,13 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.UpdateAsync(id, menuRequestDto);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
+        [HttpPut("single")]
+        public async Task<IActionResult> Put(int id, MenuRequestDtoSingle request)
+        {
+            var response = await service.UpdateAsyncSingle(id, request);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

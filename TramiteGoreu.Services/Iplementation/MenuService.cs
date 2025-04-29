@@ -210,7 +210,30 @@ namespace Goreu.Tramite.Services.Iplementation
                 var data = await repository.GetAsync(id);
                 if (data is null)
                 {
-                    response.ErrorMessage = $"la persona con id {id} no fue encontrado";
+                    response.ErrorMessage = $"El Menu con id {id} no fue encontrado";
+                }
+
+                mapper.Map(request, data);
+                await repository.UpdateAsync();
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al actualizar  los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> UpdateAsyncSingle(int id, MenuRequestDtoSingle request)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                var data = await repository.GetAsync(id);
+                if (data is null)
+                {
+                    response.ErrorMessage = $"El Menu con id {id} no fue encontrado";
                 }
 
                 mapper.Map(request, data);

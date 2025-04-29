@@ -46,7 +46,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
                    DisplayName = x.DisplayName,
                    IconName=x.IconName,
                    Route=x.Route,
-                   AplicacionId=x.Aplicacion.Id,
+                   IdAplicacion=x.Aplicacion.Id,
                    Aplicacion=x.Aplicacion.Descripcion,
                    ParentMenuId=x.ParentMenuId,
                    status = x.Status

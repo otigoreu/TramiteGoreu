@@ -12,7 +12,7 @@ namespace Goreu.Tramite.Entities.info
         public string DisplayName { get; set; } = default!;
         public string IconName { get; set; } = default!;
         public string Route { get; set; } = default!;
-        public int AplicacionId { get; set; }
+        public int IdAplicacion { get; set; }
         public string Aplicacion { get; set; } = default!;
         public int? ParentMenuId { get; set; }
         public bool status { get; set; } = default!;
