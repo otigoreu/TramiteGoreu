@@ -15,8 +15,10 @@ namespace Goreu.Tramite.Services.Interface
         //--------------------------------------------------------------------------------------------
         Task<BaseResponseGeneric<List<UsuarioResponseDto>>> GetUsersByRole(string? role);
         Task<BaseResponseGeneric<UsuarioResponseDto>> GetUserByEmail(string email);
+        //--------------------------------------------------------------------------------------------
         Task<BaseResponse> CreateRoleAsync(string roleName);
         Task<BaseResponse> DeleteRoleAsync(string roleName);
+        //--------------------------------------------------------------------------------------------
         Task<BaseResponseGeneric<List<RoleResponseDto>>> GetRolesAsync();
         Task<BaseResponse> GrantUserRole(string userId, string roleName);
         Task<BaseResponse> GrantUserRoleByEmail(string email, string roleName);

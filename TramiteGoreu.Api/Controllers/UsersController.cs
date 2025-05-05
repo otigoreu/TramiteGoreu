@@ -77,7 +77,7 @@ namespace Goreu.Tramite.Api.Controllers
 
         }
 
-        [HttpPost("GetUserbyEmail/{email}")]
+        [HttpGet("GetUserbyEmail")]
         public async Task<IActionResult> GetUserByEmail(string email)
         {
             var response = await service.GetUserByEmail(email);

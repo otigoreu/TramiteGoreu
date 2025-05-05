@@ -521,6 +521,7 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
+        //CREAR ROL
         public async Task<BaseResponse> CreateRoleAsync(string roleName)
         {
             var response = new BaseResponse();
@@ -554,7 +555,7 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
-
+        //ELIMINAR  ROL
         public async Task<BaseResponse> DeleteRoleAsync(string roleName)
         {
             var response = new BaseResponse();
