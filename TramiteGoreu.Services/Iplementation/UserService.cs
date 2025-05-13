@@ -321,7 +321,7 @@ namespace Goreu.Tramite.Services.Iplementation
                     await emailService.SendEmailAsync(request.Email, "Confiracion de cambio de clave",
                     @$"
                     <P> Estimado {userIdentity.FirstName} {userIdentity.LastName}</p>
-                    <p> Se ha cambiado su clave corecctaente</p>
+                    <p> Se ha cambiado su clave correctamente</p>
                     <hr />
                     Atte. <br />
                     Tramite Goreu @ 2024");
@@ -386,12 +386,12 @@ namespace Goreu.Tramite.Services.Iplementation
             try
             {
                 var userIdentity = await userManager.FindByNameAsync(userName);
-                Console.WriteLine("usuario 1 :" + userIdentity.UserName);
+                
 
                 if (userIdentity is null)
                 {
                     Console.WriteLine("usuario 2 :" + userIdentity.UserName);
-                    throw new ApplicationException("Usuario no existe");
+                    
                     
                 }
 
@@ -399,13 +399,12 @@ namespace Goreu.Tramite.Services.Iplementation
                 response.Success = result.Succeeded;
                 if (!result.Succeeded)
                 {
-                    Console.WriteLine("usuario 3 :" + userIdentity.UserName);
+                    
                     response.ErrorMessage = string.Join(" ", result.Errors.Select(x => x.Description).ToArray());
                 }
                 else
                 {
-                    Console.WriteLine("usuario 4 :" + userIdentity.UserName);
-                    Console.WriteLine("usuario 4 email :" + userIdentity.Email);
+                    
 
                     logger.LogInformation("Se cambio la clave para {email}", userIdentity.Email);
                     //Enviar un email de confirmacion de clave cambiada
