@@ -9,7 +9,8 @@ namespace Goreu.Tramite.Dto.Request
     public class PersonaRequestDto
     {
         public string nombres { get; set; } = default!;
-        public string apellidos { get; set; } = default!;
+        public string apellidoPat { get; set; } = default!;
+        public string apellidoMat { get; set; } = default!;
         public DateTime fechaNac { get; set; } = default!;
         public string direccion { get; set; } = default!;
         public string referencia { get; set; } = default!;

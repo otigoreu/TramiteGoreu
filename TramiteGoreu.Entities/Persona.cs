@@ -5,7 +5,8 @@ namespace TramiteGoreu.Entities
     public class Persona : EntityBase
     {
         public string Nombres { get; set; } = default!;
-        public string Apellidos { get; set; } = default!;
+        public string ApellidoPat { get; set; } = default!;
+        public string ApellidoMat { get; set; } = default!;
         public DateTime FechaNac { get; set; }
         public string Direccion { get; set; } = default!;
         public string Referencia { get; set; } = default!;

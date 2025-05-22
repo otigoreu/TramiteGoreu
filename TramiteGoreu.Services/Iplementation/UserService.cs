@@ -188,7 +188,8 @@ namespace Goreu.Tramite.Services.Iplementation
             {
                 Id = persona.Id,
                 Nombres = persona.Nombres,
-                Apellidos = persona.Apellidos,
+                ApellidoPat = persona.ApellidoPat,
+                ApellidoMat = persona.ApellidoMat,
                 FechaNac = persona.FechaNac,
                 Direccion = persona.Direccion,
                 Referencia = persona.Referencia,

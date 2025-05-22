@@ -27,7 +27,8 @@ namespace Goreu.Tramite.Repositories.Implementacion
                 {
                     Id = x.Id,
                     nombres = x.Nombres,
-                    apellidos = x.Apellidos,
+                    apellidoPat = x.ApellidoPat,
+                    apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
                     direccion = x.Direccion,
                     referencia = x.Referencia,
@@ -55,7 +56,8 @@ namespace Goreu.Tramite.Repositories.Implementacion
                 {
                     Id = x.Id,
                     nombres = x.Nombres,
-                    apellidos = x.Apellidos,
+                    apellidoPat = x.ApellidoPat,
+                    apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
                     direccion = x.Direccion,
                     referencia = x.Referencia,
@@ -81,7 +83,8 @@ namespace Goreu.Tramite.Repositories.Implementacion
                 {
                     Id = x.Id,
                     nombres = x.Nombres,
-                    apellidos = x.Apellidos,
+                    apellidoPat = x.ApellidoPat,
+                    apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
                     direccion = x.Direccion,
                     referencia = x.Referencia,

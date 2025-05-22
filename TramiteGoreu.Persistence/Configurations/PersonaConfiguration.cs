@@ -10,7 +10,8 @@ namespace Goreu.Tramite.Persistence.Configurations
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Nombres).HasMaxLength(50);
-            builder.Property(x => x.Apellidos).HasMaxLength(50);
+            builder.Property(x => x.ApellidoPat).HasMaxLength(50);
+            builder.Property(x => x.ApellidoMat).HasMaxLength(50);
             builder.Property(x => x.FechaNac)
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("GETDATE()");
