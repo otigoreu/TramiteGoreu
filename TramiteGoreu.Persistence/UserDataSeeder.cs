@@ -24,8 +24,8 @@ namespace Goreu.Tramite.Persistence
             //Role repository
             var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
             //Menu Repository
-            
 
+            #region Roles
             //Creating roles
             var adminRole = new IdentityRole(Constantes.RoleAdmin);
             var clienteRole = new IdentityRole(Constantes.RolCliente);
@@ -35,6 +35,7 @@ namespace Goreu.Tramite.Persistence
 
             if (!await roleManager.RoleExistsAsync(Constantes.RolCliente))
                 await roleManager.CreateAsync(clienteRole);
+            #endregion
 
             #region Admin
             //Admin user
@@ -119,14 +120,6 @@ namespace Goreu.Tramite.Persistence
             // sino existe crear
             // context.Set<Sede>().Add(sede2);
             #endregion
-
-            //await context.SaveChangesAsync();
-
-            //adminUser.IdPersona = persona.Id;
-            //adminUser.IdSede = sede.Id;
-
-            //customerUser.IdPersona = persona2.Id;
-            //customerUser.IdSede = sede2.Id;
 
             #region Aplicacion
 
@@ -250,7 +243,7 @@ namespace Goreu.Tramite.Persistence
 
                 #endregion
 
-                #region sedeApp
+            #region sedeApp
 
                 var sedeApp = new SedeAplicacion {
                 
@@ -262,7 +255,7 @@ namespace Goreu.Tramite.Persistence
 
                 #endregion
 
-                #region menuRol
+            #region menuRol
 
                 var rol1 = await roleManager.FindByNameAsync(Constantes.RoleAdmin);
                 var rol2 = await roleManager.FindByNameAsync(Constantes.RolCliente);
@@ -310,6 +303,7 @@ namespace Goreu.Tramite.Persistence
                 context.Set<MenuRol>().Add(menuRol4);
                 context.Set<MenuRol>().Add(menuRol5);
                 context.Set<MenuRol>().Add(menuRol6);
+                
 
                 #endregion
 
