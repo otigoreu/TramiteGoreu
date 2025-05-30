@@ -50,7 +50,7 @@ namespace Goreu.Tramite.Services.Iplementation
 
                 foreach (var item in request.IdRoles)
                 {
-                    roles.Add(new MenuRol { IdMenu = menuDb.Id, IdRol = item });// esto agrega a la base de datos?
+                    roles.Add(new MenuRol { IdMenu = menuDb.Id, IdRole = item });// esto agrega a la base de datos?
                 }
                 menuDb.MenuRoles = roles;
                 await repository.UpdateAsync();

@@ -79,6 +79,7 @@ builder.Services.AddTransient<IMenuRepository, MenuRepository>();
 builder.Services.AddTransient<ISedeRepository, SedeRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITipoDocumentoRepository, TipoDocumentoRepository>();
+builder.Services.AddTransient<IRolRepository, RolRepository>();
 
 
 builder.Services.AddTransient<IPersonaService, PersonaService>();
@@ -88,6 +89,7 @@ builder.Services.AddTransient<IMenuService, MenuService>();
 builder.Services.AddTransient<ISedeService, SedeService>();
 builder.Services.AddTransient<IAplicacionService, AplicacionService>();
 builder.Services.AddTransient<ITipoDocumentoService, TipoDocumentoService>();
+builder.Services.AddTransient<IRolService, RolService>();
 
 //3.register mapper
 builder.Services.AddAutoMapper(config =>
@@ -98,6 +100,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<MenuProfile>();
     config.AddProfile<SedeProfile>();
     config.AddProfile<TipoDocumentoProfile>();
+    config.AddProfile<RolProfile>();
 
 
 });

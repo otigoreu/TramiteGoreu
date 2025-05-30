@@ -28,7 +28,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
         {
             return await context.Set<Menu>()
                .Where(menu => menu.IdAplicacion == applicationId &&
-                              menu.MenuRoles.Any(mr => roleIds.Contains(mr.IdRol)))
+                              menu.MenuRoles.Any(mr => roleIds.Contains(mr.IdRole)))
                .ToListAsync();
         }
 

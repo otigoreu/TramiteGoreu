@@ -2,7 +2,7 @@
 
 namespace TramiteGoreu.Entities
 {
-    public class Rol: IdentityRole
+    public class Role: IdentityRole
     {
         public bool CanCreate { get; set; }
         public bool CanDelete { get; set; }

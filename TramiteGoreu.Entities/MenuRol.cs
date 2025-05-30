@@ -9,8 +9,8 @@ namespace TramiteGoreu.Entities
     public class MenuRol
     {
         public int IdMenu { get; set; }
-        public string IdRol { get; set; }
+        public string IdRole { get; set; }
         public Menu Menu { get; set; }
-        public Rol Rol { get; set; }
+        public Role Rol { get; set; }
     }
 }

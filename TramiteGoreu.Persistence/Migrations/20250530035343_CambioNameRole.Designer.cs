@@ -4,6 +4,7 @@ using Goreu.Tramite.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TramiteGoreu.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250530035343_CambioNameRole")]
+    partial class CambioNameRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,11 +60,6 @@ namespace TramiteGoreu.Persistence.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -77,11 +75,9 @@ namespace TramiteGoreu.Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Role", (string)null);
+                    b.ToTable("AspNetRoles", (string)null);
 
-                    b.HasDiscriminator().HasValue("IdentityRole");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -257,12 +253,12 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Property<int>("IdMenu")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdRole")
+                    b.Property<string>("IdRol")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("IdMenu", "IdRole");
+                    b.HasKey("IdMenu", "IdRol");
 
-                    b.HasIndex("IdRole");
+                    b.HasIndex("IdRol");
 
                     b.ToTable("MenuRol");
                 });
@@ -497,7 +493,7 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Property<bool>("CanUpdate")
                         .HasColumnType("bit");
 
-                    b.HasDiscriminator().HasValue("Role");
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -579,7 +575,7 @@ namespace TramiteGoreu.Persistence.Migrations
 
                     b.HasOne("TramiteGoreu.Entities.Role", "Rol")
                         .WithMany("MenuRoles")
-                        .HasForeignKey("IdRole")
+                        .HasForeignKey("IdRol")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -643,6 +639,15 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Navigation("Aplicacion");
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("TramiteGoreu.Entities.Role", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithOne()
+                        .HasForeignKey("TramiteGoreu.Entities.Role", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TramiteGoreu.Entities.Aplicacion", b =>

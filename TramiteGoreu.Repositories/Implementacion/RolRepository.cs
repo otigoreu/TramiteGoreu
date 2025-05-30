@@ -1,36 +1,40 @@
-﻿using Goreu.Tramite.Repositories.Interfaces;
+﻿using Goreu.Tramite.Persistence;
+using Goreu.Tramite.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TramiteGoreu.Entities;
-using TramiteGoreu.Persistence.Migrations;
 
 namespace Goreu.Tramite.Repositories.Implementacion
 {
     public class RolRepository : IRolRepository
     {
 
-        protected readonly DbContext context;
+        private readonly IHttpContextAccessor httpContext;
+        private readonly DbContext context;
 
-        public RolRepository(DbContext context)
+        public RolRepository(ApplicationDbContext context, IHttpContextAccessor httpContext) 
         {
+            this.httpContext = httpContext;
             this.context = context;
         }
 
-        public async Task<Rol?> GetAsync(string id)
+        public async Task<Role?> GetAsync(string id)
         {
-            return await context.Set<Rol>().FindAsync(id);
+            return await context.Set<Role>().FindAsync(id);
         }
 
 
-        public async Task<string> AddAsync(Rol rol)
+        public async Task<string> AddAsync(Role rol)
         {
-            await context.Set<Rol>().AddAsync(rol);
+            await context.Set<Role>().AddAsync(rol);
             await context.SaveChangesAsync();
             return rol.Id;
         }
 
-        public async Task<ICollection<Rol>> GetAsync()
+        public async Task<ICollection<Role>> GetAllAsync()
         {
-            return await context.Set<Rol>().AsNoTracking().ToListAsync();
+            return await context.Set<Role>().AsNoTracking().ToListAsync();
         }
     }
 }

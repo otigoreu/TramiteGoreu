@@ -19,7 +19,7 @@ namespace Goreu.Tramite.Services.Iplementation
         private readonly RoleManager<IdentityRole> rolManager;
         private readonly ILogger<RolService> logger;
         private readonly IConfiguration configuration;
-        private readonly SignInManager<Rol> singInManager;
+        private readonly SignInManager<Role> singInManager;
         private readonly IMapper mapper;
         private readonly ApplicationDbContext context;
         private readonly IRolRepository repository;
@@ -28,7 +28,6 @@ namespace Goreu.Tramite.Services.Iplementation
             RoleManager<IdentityRole> rolManager,
             ILogger<RolService> logger,
             IConfiguration configuration,
-            SignInManager<Rol> singInManager,
             IMapper mapper,
             ApplicationDbContext context ,
             IRolRepository repository
@@ -37,12 +36,11 @@ namespace Goreu.Tramite.Services.Iplementation
             this.rolManager = rolManager;
             this.logger = logger;
             this.configuration = configuration;
-            this.singInManager = singInManager;
             this.mapper = mapper;
             this.context = context;
             this.repository = repository;
         }
-
+        //FUNCIONA
         public async Task<BaseResponseGeneric<string>> AddSync(RolRequestDto request)
         {
             var response = new BaseResponseGeneric<string>();
@@ -53,7 +51,7 @@ namespace Goreu.Tramite.Services.Iplementation
                     response.ErrorMessage = "Rol ya existe";
                     return response;
                 }
-                response.Data = await repository.AddAsync(mapper.Map<Rol>(request));
+                response.Data = await repository.AddAsync(mapper.Map<Role>(request));
                 response.Success = true;
 
                 return response;
@@ -73,16 +71,18 @@ namespace Goreu.Tramite.Services.Iplementation
             var response = new BaseResponse();
             try
             {
-                if (await rolManager.FindByIdAsync(id) != null)
-                {
 
-                    await rolManager.DeleteAsync(new IdentityRole(id));
-                    response.Success = true;
+                if (await rolManager.FindByIdAsync(id) == null)
+                {
+                    
+                    
+                    response.ErrorMessage = "Rol no existe";
                 }
                 else {
 
-                    response.ErrorMessage = "Rol no existe";
-                 
+                    await rolManager.DeleteAsync(new IdentityRole(id));
+                    response.Success = true;
+
                 }
 
             }
@@ -100,7 +100,7 @@ namespace Goreu.Tramite.Services.Iplementation
             var response = new BaseResponseGeneric<ICollection<RolResponseDto>>();
             try
             {
-                var data = await repository.GetAsync();
+                var data = await repository.GetAllAsync();
                 response.Data = mapper.Map<ICollection<RolResponseDto>>(data);
                 response.Success = true;
             }
@@ -112,6 +112,7 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
+        //FUNCIONA
         public async Task<BaseResponseGeneric<RolResponseDto>> GetAsync(string id)
         {
             var response = new BaseResponseGeneric<RolResponseDto>();
@@ -129,6 +130,7 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
+        //FUNCIONA
         public async Task<BaseResponse> UpdateAsync(string id, RolRequestDto request)
         {
             var response = new BaseResponse();

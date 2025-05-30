@@ -12,6 +12,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
     {
         private readonly IHttpContextAccessor httpContext;
 
+
         public AplicacionRepository(ApplicationDbContext context, IHttpContextAccessor httpContext) : base(context)
         {
             this.httpContext = httpContext;

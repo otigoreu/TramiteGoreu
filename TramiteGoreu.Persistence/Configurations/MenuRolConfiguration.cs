@@ -8,7 +8,7 @@ namespace Goreu.Tramite.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<MenuRol> builder)
         {
-            builder.HasKey(x => new { x.IdMenu, x.IdRol });
+            builder.HasKey(x => new { x.IdMenu, x.IdRole });
             // Configurar la relación con menu
             builder.HasOne(ua => ua.Menu)
                    .WithMany(u => u.MenuRoles)
@@ -17,7 +17,7 @@ namespace Goreu.Tramite.Persistence.Configurations
             // Configurar la relación con role
             builder.HasOne(ua => ua.Rol)
                    .WithMany(a => a.MenuRoles)
-                   .HasForeignKey(ua => ua.IdRol);
+                   .HasForeignKey(ua => ua.IdRole);
         }
     }
 }

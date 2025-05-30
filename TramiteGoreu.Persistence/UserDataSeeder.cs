@@ -27,17 +27,38 @@ namespace Goreu.Tramite.Persistence
 
             #region Roles
             //Creating roles
-            var adminRole = new IdentityRole(Constantes.RoleAdmin);
-            var clienteRole = new IdentityRole(Constantes.RolCliente);
+            var role1 = new Role
+            {
+                Name = Constantes.RoleAdmin,
+                CanCreate=true,
+                CanDelete = true,
+                CanUpdate = true,
+                CanSearch = true,
+                NormalizedName = Constantes.RoleAdmin
+            };
+            var role2 = new Role
+            {
+                Name = Constantes.RolCliente,
+                CanCreate = true,
+                CanDelete = true,
+                CanUpdate = true,
+                CanSearch = true,
+                NormalizedName = Constantes.RolCliente
+            };
 
-            if (!await roleManager.RoleExistsAsync(Constantes.RoleAdmin))
-                await roleManager.CreateAsync(adminRole);
 
-            if (!await roleManager.RoleExistsAsync(Constantes.RolCliente))
-                await roleManager.CreateAsync(clienteRole);
+            //var adminRole = new IdentityRole(Constantes.RoleAdmin);
+            //var clienteRole = new IdentityRole(Constantes.RolCliente);
+
+            //if (!await roleManager.RoleExistsAsync(Constantes.RoleAdmin))
+            //    await roleManager.CreateAsync(adminRole);
+
+            //if (!await roleManager.RoleExistsAsync(Constantes.RolCliente))
+            //    await roleManager.CreateAsync(clienteRole);
+
             #endregion
 
-            #region Admin
+            #region UsuarioAdmin
             //Admin user
             var adminUser = new Usuario()
             {
@@ -64,12 +85,9 @@ namespace Goreu.Tramite.Persistence
 
 
             };
+            #endregion
 
-            // Guarda la entidad Persona en la base de datos
-
-            // sino existe crear
-            //context.Set<Persona>().Add(persona);
-
+            #region Sede
             var sede = new Sede
             {
                 Descripcion = "Central",
@@ -79,8 +97,7 @@ namespace Goreu.Tramite.Persistence
             //context.Set<Sede>().Add(sede);
             #endregion
 
-
-            #region Customer
+            #region UsuarioCustomer
             //Customer user
             var customerUser = new Usuario()
             {
@@ -206,12 +223,13 @@ namespace Goreu.Tramite.Persistence
                 Abrev = "CEX"
 
             };
-            
 
+            #endregion
 
             if (await userManager.FindByEmailAsync("edercin@gmail.com") is null)
             {
-
+                context.Set<Role>().Add(role1);
+                context.Set<Role>().Add(role2);
                 // sino existe crear
                 context.Set<Persona>().Add(persona);
                 context.Set<Persona>().Add(persona2);
@@ -241,7 +259,7 @@ namespace Goreu.Tramite.Persistence
                 customerUser.IdPersona = persona2.Id;
                 customerUser.IdSede = sede2.Id;
 
-                #endregion
+               
 
             #region sedeApp
 
@@ -257,44 +275,44 @@ namespace Goreu.Tramite.Persistence
 
             #region menuRol
 
-                var rol1 = await roleManager.FindByNameAsync(Constantes.RoleAdmin);
-                var rol2 = await roleManager.FindByNameAsync(Constantes.RolCliente);
+                //var rol1 = await roleManager.FindByNameAsync(Constantes.RoleAdmin);
+                //var rol2 = await roleManager.FindByNameAsync(Constantes.RolCliente);
                 var menuRol1 = new MenuRol
                 {
 
                     IdMenu = menu1.Id,
-                    IdRol = rol1.Id
+                    IdRole = role1.Id
                 };
                 var menuRol2 = new MenuRol
                 {
 
                     IdMenu = menu2.Id,
-                    IdRol = rol1.Id
+                    IdRole = role1.Id
                 };
                 var menuRol3 = new MenuRol
                 {
 
                     IdMenu = menu3.Id,
-                    IdRol = rol1.Id
+                    IdRole = role1.Id
                 };
                 var menuRol4 = new MenuRol
                 {
 
                     IdMenu = menu4.Id,
-                    IdRol = rol1.Id
+                    IdRole = role1.Id
                 };
                 var menuRol5 = new MenuRol
                 {
 
                     IdMenu = menu5.Id,
-                    IdRol = rol1.Id
+                    IdRole = role1.Id
                 };
 
                 var menuRol6 = new MenuRol
                 {
 
                     IdMenu = menu2.Id,
-                    IdRol = rol2.Id
+                    IdRole = role2.Id
                 };
 
                 context.Set<MenuRol>().Add(menuRol1);

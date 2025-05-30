@@ -8,9 +8,9 @@ namespace Goreu.Tramite.Repositories.Interfaces
 {
     public interface IRolRepository 
     {
-        Task<ICollection<Rol>> GetAsync();
-        Task<Rol?> GetAsync(string id);
-        Task<string> AddAsync(Rol rol);
+        Task<ICollection<Role>> GetAllAsync();
+        Task<Role?> GetAsync(string id);
+        Task<string> AddAsync(Role rol);
 
 
     }

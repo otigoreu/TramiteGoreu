@@ -7,7 +7,7 @@
         public bool CanDelete { get; set; } = true;
         public bool CanUpdate { get; set; } = true;
         public bool CanSearch { get; set; } = true;
-
+        public string NormalizedName { get; set; } = default!;
 
     }
 }
