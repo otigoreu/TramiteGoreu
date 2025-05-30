@@ -30,12 +30,9 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     apellidoPat = x.ApellidoPat,
                     apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
-                    direccion = x.Direccion,
-                    referencia = x.Referencia,
-                    celular = x.Celular,
                     edad = x.Edad,
                     email = x.Email,
-                    tipoDoc = x.TipoDoc,
+                    idTipoDoc = x.IdTipoDoc,
                     nroDoc = x.NroDoc,
                     status = x.Status
 
@@ -59,12 +56,9 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     apellidoPat = x.ApellidoPat,
                     apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
-                    direccion = x.Direccion,
-                    referencia = x.Referencia,
-                    celular = x.Celular,
                     edad = x.Edad,
                     email = x.Email,
-                    tipoDoc = x.TipoDoc,
+                    idTipoDoc = x.IdTipoDoc,
                     nroDoc = x.NroDoc,
                     status = x.Status
 
@@ -86,12 +80,9 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     apellidoPat = x.ApellidoPat,
                     apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
-                    direccion = x.Direccion,
-                    referencia = x.Referencia,
-                    celular = x.Celular,
                     edad = x.Edad,
                     email = x.Email,
-                    tipoDoc = x.TipoDoc,
+                    idTipoDoc = x.IdTipoDoc,
                     nroDoc = x.NroDoc,
                     status = x.Status 
 

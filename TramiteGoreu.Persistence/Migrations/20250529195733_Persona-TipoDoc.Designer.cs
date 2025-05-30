@@ -4,6 +4,7 @@ using Goreu.Tramite.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TramiteGoreu.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250529195733_Persona-TipoDoc")]
+    partial class PersonaTipoDoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +80,7 @@ namespace TramiteGoreu.Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Role", (string)null);
+                    b.ToTable("AspNetRoles", (string)null);
 
                     b.HasDiscriminator().HasValue("IdentityRole");
 
@@ -257,12 +260,12 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Property<int>("IdMenu")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdRole")
+                    b.Property<string>("IdRol")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("IdMenu", "IdRole");
+                    b.HasKey("IdMenu", "IdRol");
 
-                    b.HasIndex("IdRole");
+                    b.HasIndex("IdRol");
 
                     b.ToTable("MenuRol");
                 });
@@ -284,6 +287,16 @@ namespace TramiteGoreu.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Celular")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Edad")
                         .IsRequired()
@@ -314,6 +327,11 @@ namespace TramiteGoreu.Persistence.Migrations
                         .HasMaxLength(9)
                         .IsUnicode(false)
                         .HasColumnType("varchar(9)");
+
+                    b.Property<string>("Referencia")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -466,7 +484,7 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.ToTable("UsuarioAplicacion");
                 });
 
-            modelBuilder.Entity("TramiteGoreu.Entities.Role", b =>
+            modelBuilder.Entity("TramiteGoreu.Entities.Rol", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
@@ -482,7 +500,7 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Property<bool>("CanUpdate")
                         .HasColumnType("bit");
 
-                    b.HasDiscriminator().HasValue("Role");
+                    b.HasDiscriminator().HasValue("Rol");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -562,9 +580,9 @@ namespace TramiteGoreu.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TramiteGoreu.Entities.Role", "Rol")
+                    b.HasOne("TramiteGoreu.Entities.Rol", "Rol")
                         .WithMany("MenuRoles")
-                        .HasForeignKey("IdRole")
+                        .HasForeignKey("IdRol")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -679,7 +697,7 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Navigation("UsuarioAplicaciones");
                 });
 
-            modelBuilder.Entity("TramiteGoreu.Entities.Role", b =>
+            modelBuilder.Entity("TramiteGoreu.Entities.Rol", b =>
                 {
                     b.Navigation("MenuRoles");
                 });

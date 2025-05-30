@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Goreu.Tramite.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TramiteGoreu.Entities;
 
@@ -8,378 +9,203 @@ namespace Goreu.Tramite.Persistence
 {
     public class UserDataSeeder
     {
-        private readonly IServiceProvider service;
-        private readonly ApplicationDbContext context;
-        
+        private readonly IServiceProvider _service;
+        private readonly ApplicationDbContext _context;
 
         public UserDataSeeder(IServiceProvider service, ApplicationDbContext context)
         {
-            this.service = service;
-            this.context = context;
+            _service = service;
+            _context = context;
         }
+
         public async Task SeedAsync()
         {
-            //User repository
-            var userManager = service.GetRequiredService<UserManager<Usuario>>();
-            //Role repository
-            var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
-            //Menu Repository
+            var userManager = _service.GetRequiredService<UserManager<Usuario>>();
+            var roleManager = _service.GetRequiredService<RoleManager<IdentityRole>>();
 
-            #region Roles
-            //Creating roles
-            var role1 = new Role
+            await EnsureRolesCreatedAsync(roleManager);
+            await EnsureTipoDocumentosCreatedAsync();
+            await EnsureAplicacionesCreatedAsync();
+            await EnsureMenusCreatedAsync();
+            await EnsureMenuRolesAsync();
+            await EnsureUsuariosYSedesAsync(userManager);
+        }
+
+        private async Task EnsureRolesCreatedAsync(RoleManager<IdentityRole> roleManager)
+        {
+            async Task CreateRoleIfNotExists(string name)
             {
-                Name = Constantes.RoleAdmin,
-                CanCreate=true,
-                CanDelete = true,
-                CanUpdate = true,
-                CanSearch = true,
-                NormalizedName = Constantes.RoleAdmin
-            };
-            var role2 = new Role
+                if (!await roleManager.RoleExistsAsync(name))
+                {
+                    var role = new Role
+                    {
+                        Name = name,
+                        NormalizedName = name.ToUpper(),
+                        CanCreate = true,
+                        CanUpdate = true,
+                        CanDelete = true,
+                        CanSearch = true
+                    };
+                    await roleManager.CreateAsync(role);
+                }
+            }
+
+            await CreateRoleIfNotExists(Constantes.RoleAdmin);
+            await CreateRoleIfNotExists(Constantes.RolCliente);
+        }
+
+        private async Task EnsureTipoDocumentosCreatedAsync()
+        {
+            if (!await _context.Set<TipoDocumento>().AnyAsync())
             {
-                Name = Constantes.RolCliente,
-                CanCreate = true,
-                CanDelete = true,
-                CanUpdate = true,
-                CanSearch = true,
-                NormalizedName = Constantes.RolCliente
-            };
+                _context.AddRange(
+                    new TipoDocumento { Descripcion = "Documento nacional de Identidad", Abrev = "DNI" },
+                    new TipoDocumento { Descripcion = "Carnet de Extranjeria", Abrev = "CEX" }
+                );
+                await _context.SaveChangesAsync();
+            }
+        }
 
-
-            //var adminRole = new IdentityRole(Constantes.RoleAdmin);
-            //var clienteRole = new IdentityRole(Constantes.RolCliente);
-
-            //if (!await roleManager.RoleExistsAsync(Constantes.RoleAdmin))
-            //    await roleManager.CreateAsync(adminRole);
-
-            //if (!await roleManager.RoleExistsAsync(Constantes.RolCliente))
-            //    await roleManager.CreateAsync(clienteRole);
-
-            #endregion
-
-            #region UsuarioAdmin
-            //Admin user
-            var adminUser = new Usuario()
+        private async Task EnsureAplicacionesCreatedAsync()
+        {
+            if (!await _context.Set<Aplicacion>().AnyAsync())
             {
-                FirstName = "System",
-                LastName = "Administrator",
-                UserName = "43056714",
-                Email = "edercin@gmail.com",
-                EmailConfirmed = true
-            };
+                _context.AddRange(
+                    new Aplicacion { Descripcion = "TRAMITE" },
+                    new Aplicacion { Descripcion = "PLANILLA" },
+                    new Aplicacion { Descripcion = "SISMORE" }
+                );
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task EnsureMenusCreatedAsync()
+        {
+            var tramiteApp = await _context.Set<Aplicacion>().FirstOrDefaultAsync(a => a.Descripcion == "TRAMITE");
+            if (tramiteApp == null) return;
+
+            if (!await _context.Set<Menu>().AnyAsync())
+            {
+                _context.AddRange(
+                    new Menu { DisplayName = "Persona", IconName = "users", Route = "pages/persona", IdAplicacion = tramiteApp.Id },
+                    new Menu { DisplayName = "TipoDocumento", IconName = "file-barcode", Route = "pages/tipo-documento", IdAplicacion = tramiteApp.Id },
+                    new Menu { DisplayName = "Aplicacion", IconName = "brand-google-play", Route = "pages/aplicacion", IdAplicacion = tramiteApp.Id },
+                    new Menu { DisplayName = "Sede", IconName = "building-factory-2", Route = "pages/sede", IdAplicacion = tramiteApp.Id },
+                    new Menu { DisplayName = "Menu", IconName = "menu-deep", Route = "pages/menu", IdAplicacion = tramiteApp.Id }
+                );
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task EnsureMenuRolesAsync()
+        {
+            var adminRole = await _context.Roles
+                .FirstOrDefaultAsync(r => r.Name == "Administrador");
+
+            if (adminRole == null)
+                return; // o lanza excepción si es requerido
+
+            var menus = await _context.Set<Menu>().ToListAsync();
+
+            foreach (var menu in menus)
+            {
+                bool existe = await _context.Set<MenuRol>()
+                    .AnyAsync(mr => mr.IdMenu == menu.Id && mr.IdRole == adminRole.Id);
+
+                if (!existe)
+                {
+                    _context.Add(new MenuRol
+                    {
+                        IdMenu = menu.Id,
+                        IdRole = adminRole.Id
+                    });
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task EnsureUsuariosYSedesAsync(UserManager<Usuario> userManager)
+        {
+            // Usuario Admin
+            await CrearUsuarioAsync(userManager, "43056714", "edercin@gmail.com", "System", "Administrator", "Edeher Rossetti", "Ponce", "Morales", "DNI", "00000000", "Central", Constantes.RoleAdmin);
+
+            await CrearUsuarioAsync(userManager, "42928945", "pp.llerenalima@gmail.com", "System", "Administrator", "Piero Paolo", "Llerena", "Lima", "DNI", "42928945", "Central", Constantes.RoleAdmin);
+
+            // Usuario Cliente
+            await CrearUsuarioAsync(userManager, "46519259", "edercinsoft@gmail.com", "System", "Customer", "Patricia", "Lopez", "Vasquez", "DNI", "12345678", "Petitas", Constantes.RolCliente);
+        }
+
+        private async Task CrearUsuarioAsync(
+            UserManager<Usuario> userManager,
+            string username, string email, string firstName, string lastName,
+            string nombres, string apePat, string apeMat, string abrevDoc, string nroDoc,
+            string sedeDesc, string rol)
+        {
+            if (await userManager.FindByEmailAsync(email) != null) return;
+
+            var tipoDoc = await _context.Set<TipoDocumento>().FirstOrDefaultAsync(td => td.Abrev == abrevDoc);
+            if (tipoDoc == null) throw new InvalidOperationException($"TipoDocumento '{abrevDoc}' no existe.");
 
             var persona = new Persona
             {
-                Nombres = "Edeher Rossetti",
-                ApellidoPat = "Ponce",
-                ApellidoMat = "Morales",
-                FechaNac = new DateTime(1982, 07, 10),
-                Direccion = "",
-                Referencia = "",
-                Celular = "",
+                Nombres = nombres,
+                ApellidoPat = apePat,
+                ApellidoMat = apeMat,
+                FechaNac = new DateTime(1990, 1, 1),
                 Edad = "",
-                Email = "edercin@gmail.com",
-                TipoDoc = "",
-                NroDoc = "",
-
-
-            };
-            #endregion
-
-            #region Sede
-            var sede = new Sede
-            {
-                Descripcion = "Central",
-
-            };
-            // sino existe crear
-            //context.Set<Sede>().Add(sede);
-            #endregion
-
-            #region UsuarioCustomer
-            //Customer user
-            var customerUser = new Usuario()
-            {
-                FirstName = "System",
-                LastName = "Customer",
-                UserName = "46519259",
-                Email = "edercinsoft@gmail.com",
-                PhoneNumber = "123456789",
-                EmailConfirmed = true
+                Email = email,
+                IdTipoDoc = tipoDoc.Id,
+                NroDoc = nroDoc
             };
 
-            var persona2 = new Persona
+            var sede = await _context.Set<Sede>().FirstOrDefaultAsync(s => s.Descripcion == sedeDesc);
+            if (sede == null)
             {
-                Nombres = "Patricia",
-                ApellidoPat = "Lopez",
-                ApellidoMat = "Vasquez",
-                FechaNac = new DateTime(1990, 05, 31),
-                Direccion = "",
-                Referencia = "",
-                Celular = "",
-                Edad = "",
-                Email = "edercinsoft@gmail.com",
-                TipoDoc = "",
-                NroDoc = "",
-
-            };
-
-            // Guarda la entidad Persona en la base de datos
-            // sino existe crear
-            //context.Set<Persona>().Add(persona2);
-
-            var sede2 = new Sede
-            {
-                Descripcion = "Petitas",
-
-            };
-            // sino existe crear
-            // context.Set<Sede>().Add(sede2);
-            #endregion
-
-            #region Aplicacion
-
-            var app1 = new Aplicacion
-            {
-                Descripcion="TRAMITE"
-            };
-
-            
-
-            var app2 = new Aplicacion
-            {
-                Descripcion = "PLANILLA"
-            };
-
-            var app3 = new Aplicacion
-            {
-                Descripcion = "SISMORE"
-            };
-
-            #endregion
-
-            #region menu
-
-            var menu1 = new Menu
-            {
-                DisplayName= "Persona",
-                IconName= "users",
-                Route= "pages/persona",
-                IdAplicacion=1,
-                ParentMenu=null,
-
-            };
-            var menu2 = new Menu
-            {
-                DisplayName = "TipoDocumento",
-                IconName = "file-barcode",
-                Route = "pages/tipo-documento",
-                IdAplicacion = 1,
-                ParentMenu = null,
-
-            };
-            var menu3 = new Menu
-            {
-                DisplayName = "Aplicacion",
-                IconName = "brand-google-play",
-                Route = "pages/aplicacion",
-                IdAplicacion = 1,
-                ParentMenu = null,
-
-            };
-            var menu4 = new Menu
-            {
-                DisplayName = "Sede",
-                IconName = "building-factory-2",
-                Route = "pages/sede",
-                IdAplicacion = 1,
-                ParentMenu = null,
-
-            };
-            var menu5 = new Menu
-            {
-                DisplayName = "Menu",
-                IconName = "menu-deep",
-                Route = "pages/menu",
-                IdAplicacion = 1,
-                ParentMenu = null,
-
-            };
-
-            #endregion
-
-            #region tipoDocu
-
-            var tipodoc1 = new TipoDocumento
-            {
-                Descripcion="Documento nacional de Identidad",
-                Abrev="DNI"
-
-            };
-            var tipodoc2 = new TipoDocumento
-            {
-                Descripcion = "Carnet de Extranjeria",
-                Abrev = "CEX"
-
-            };
-
-            #endregion
-
-            if (await userManager.FindByEmailAsync("edercin@gmail.com") is null)
-            {
-                context.Set<Role>().Add(role1);
-                context.Set<Role>().Add(role2);
-                // sino existe crear
-                context.Set<Persona>().Add(persona);
-                context.Set<Persona>().Add(persona2);
-
-                context.Set<Sede>().Add(sede);
-
-                context.Set<Sede>().Add(sede2);
-
-                context.Set<Aplicacion>().Add(app1);
-                context.Set<Aplicacion>().Add(app2);
-                context.Set<Aplicacion>().Add(app3);
-
-                context.Set<Menu>().Add(menu1);
-                context.Set<Menu>().Add(menu2);
-                context.Set<Menu>().Add(menu3);
-                context.Set<Menu>().Add(menu4);
-                context.Set<Menu>().Add(menu5);
-
-                context.Set<TipoDocumento>().Add(tipodoc1);
-                context.Set<TipoDocumento>().Add(tipodoc2);
-
-
-                await context.SaveChangesAsync();
-
-                adminUser.IdPersona = persona.Id;
-                adminUser.IdSede = sede.Id;
-                customerUser.IdPersona = persona2.Id;
-                customerUser.IdSede = sede2.Id;
-
-               
-
-            #region sedeApp
-
-                var sedeApp = new SedeAplicacion {
-                
-                    IdSede=sede.Id,
-                    IdAplicacion=app1.Id,
-                    status=true
-                
-                };
-
-                #endregion
-
-            #region menuRol
-
-                //var rol1 = await roleManager.FindByNameAsync(Constantes.RoleAdmin);
-                //var rol2 = await roleManager.FindByNameAsync(Constantes.RolCliente);
-                var menuRol1 = new MenuRol
-                {
-
-                    IdMenu = menu1.Id,
-                    IdRole = role1.Id
-                };
-                var menuRol2 = new MenuRol
-                {
-
-                    IdMenu = menu2.Id,
-                    IdRole = role1.Id
-                };
-                var menuRol3 = new MenuRol
-                {
-
-                    IdMenu = menu3.Id,
-                    IdRole = role1.Id
-                };
-                var menuRol4 = new MenuRol
-                {
-
-                    IdMenu = menu4.Id,
-                    IdRole = role1.Id
-                };
-                var menuRol5 = new MenuRol
-                {
-
-                    IdMenu = menu5.Id,
-                    IdRole = role1.Id
-                };
-
-                var menuRol6 = new MenuRol
-                {
-
-                    IdMenu = menu2.Id,
-                    IdRole = role2.Id
-                };
-
-                context.Set<MenuRol>().Add(menuRol1);
-                context.Set<MenuRol>().Add(menuRol2);
-                context.Set<MenuRol>().Add(menuRol3);
-                context.Set<MenuRol>().Add(menuRol4);
-                context.Set<MenuRol>().Add(menuRol5);
-                context.Set<MenuRol>().Add(menuRol6);
-                
-
-                #endregion
-
-
-
-                context.Set<SedeAplicacion>().Add(sedeApp);
-
-                await context.SaveChangesAsync();
-
-                var result = await userManager.CreateAsync(adminUser, "Edeher*2024");
-                if (result.Succeeded)
-                {
-                    // Obtenemos el registro del usuario
-                    adminUser = await userManager.FindByEmailAsync(adminUser.Email);
-                    // Aqui agregamos el Rol de Administrador para el usuario Admin
-
-                    if (adminUser is not null) { 
-
-                    var userApp = new UsuarioAplicacion
-                    {
-
-                        IdUsuario = adminUser.Id,
-                        IdAplicacion = app1.Id
-                    };
-                        context.Set<UsuarioAplicacion>().Add(userApp);
-                        await context.SaveChangesAsync();
-
-
-                        await userManager.AddToRoleAsync(adminUser, Constantes.RoleAdmin);
-                }
-                }
+                sede = new Sede { Descripcion = sedeDesc };
+                _context.Add(sede);
+                await _context.SaveChangesAsync();
             }
-            if (await userManager.FindByEmailAsync("edercinsfot@gmail.com") is null)
+
+            _context.Add(persona);
+            await _context.SaveChangesAsync();
+
+            var user = new Usuario
             {
-                var result = await userManager.CreateAsync(customerUser, "Edeher*2025");
-                if (result.Succeeded)
+                FirstName = firstName,
+                LastName = lastName,
+                UserName = username,
+                Email = email,
+                EmailConfirmed = true,
+                IdPersona = persona.Id,
+                IdSede = sede.Id
+            };
+
+            var result = await userManager.CreateAsync(user, "Acceso*2024");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, rol);
+
+                var tramiteApp = await _context.Set<Aplicacion>().FirstOrDefaultAsync(a => a.Descripcion == "TRAMITE");
+
+                if (tramiteApp != null)
                 {
-                    // Obtenemos el registro del usuario
-                    customerUser = await userManager.FindByEmailAsync(customerUser.Email);
-                    // Aqui agregamos el Rol de Administrador para el usuario Admin
-                    if (customerUser is not null) {
+                    _context.Add(new UsuarioAplicacion { IdUsuario = user.Id, IdAplicacion = tramiteApp.Id });
 
-                        var userApp1 = new UsuarioAplicacion
+                    var sedeAppExistente = await _context.Set<SedeAplicacion>()
+                        .FirstOrDefaultAsync(sa => sa.IdSede == sede.Id && sa.IdAplicacion == tramiteApp.Id);
+
+                    if (sedeAppExistente == null)
+                    {
+                        _context.Add(new SedeAplicacion
                         {
-
-                            IdUsuario = customerUser.Id,
-                            IdAplicacion = app1.Id
-                        };
-                        context.Set<UsuarioAplicacion>().Add(userApp1);
-                        await context.SaveChangesAsync();
-
-                        await userManager.AddToRoleAsync(customerUser, Constantes.RolCliente);
-
+                            IdSede = sede.Id,
+                            IdAplicacion = tramiteApp.Id,
+                            status = true
+                        });
                     }
 
-                        
-
-
+                    await _context.SaveChangesAsync();
                 }
             }
         }

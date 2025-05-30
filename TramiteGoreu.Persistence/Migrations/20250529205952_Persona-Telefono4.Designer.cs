@@ -4,6 +4,7 @@ using Goreu.Tramite.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TramiteGoreu.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250529205952_Persona-Telefono4")]
+    partial class PersonaTelefono4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,37 @@ namespace TramiteGoreu.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Goreu.Tramite.Entities.Telefono", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("IdPersona")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdPersona");
+
+                    b.ToTable("Telefono", "General");
+                });
 
             modelBuilder.Entity("Goreu.Tramite.Entities.TipoDocumento", b =>
                 {
@@ -77,7 +111,7 @@ namespace TramiteGoreu.Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Role", (string)null);
+                    b.ToTable("AspNetRoles", (string)null);
 
                     b.HasDiscriminator().HasValue("IdentityRole");
 
@@ -257,12 +291,12 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Property<int>("IdMenu")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdRole")
+                    b.Property<string>("IdRol")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("IdMenu", "IdRole");
+                    b.HasKey("IdMenu", "IdRol");
 
-                    b.HasIndex("IdRole");
+                    b.HasIndex("IdRol");
 
                     b.ToTable("MenuRol");
                 });
@@ -284,6 +318,11 @@ namespace TramiteGoreu.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Edad")
                         .IsRequired()
@@ -314,6 +353,11 @@ namespace TramiteGoreu.Persistence.Migrations
                         .HasMaxLength(9)
                         .IsUnicode(false)
                         .HasColumnType("varchar(9)");
+
+                    b.Property<string>("Referencia")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -466,7 +510,7 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.ToTable("UsuarioAplicacion");
                 });
 
-            modelBuilder.Entity("TramiteGoreu.Entities.Role", b =>
+            modelBuilder.Entity("TramiteGoreu.Entities.Rol", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
@@ -482,7 +526,18 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Property<bool>("CanUpdate")
                         .HasColumnType("bit");
 
-                    b.HasDiscriminator().HasValue("Role");
+                    b.HasDiscriminator().HasValue("Rol");
+                });
+
+            modelBuilder.Entity("Goreu.Tramite.Entities.Telefono", b =>
+                {
+                    b.HasOne("TramiteGoreu.Entities.Persona", "Persona")
+                        .WithMany("Telefonos")
+                        .HasForeignKey("IdPersona")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Persona");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -562,9 +617,9 @@ namespace TramiteGoreu.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TramiteGoreu.Entities.Role", "Rol")
+                    b.HasOne("TramiteGoreu.Entities.Rol", "Rol")
                         .WithMany("MenuRoles")
-                        .HasForeignKey("IdRole")
+                        .HasForeignKey("IdRol")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -664,6 +719,8 @@ namespace TramiteGoreu.Persistence.Migrations
 
             modelBuilder.Entity("TramiteGoreu.Entities.Persona", b =>
                 {
+                    b.Navigation("Telefonos");
+
                     b.Navigation("Usuarios");
                 });
 
@@ -679,7 +736,7 @@ namespace TramiteGoreu.Persistence.Migrations
                     b.Navigation("UsuarioAplicaciones");
                 });
 
-            modelBuilder.Entity("TramiteGoreu.Entities.Role", b =>
+            modelBuilder.Entity("TramiteGoreu.Entities.Rol", b =>
                 {
                     b.Navigation("MenuRoles");
                 });

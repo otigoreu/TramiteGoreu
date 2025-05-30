@@ -20,7 +20,17 @@ var builder = WebApplication.CreateBuilder(args);
 //1.register or configure my context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("defaultConnection")
+        //, b => b.MigrationsAssembly("Goreu.Tramite.Persistence")
+        //, sqlOptions =>
+        //{
+        //    sqlOptions.EnableRetryOnFailure(
+        //        maxRetryCount: 5,
+        //        maxRetryDelay: TimeSpan.FromSeconds(10),
+        //        errorNumbersToAdd: null);
+        //}
+    );
 });
 //5.Settings context
 builder.Services.AddHttpContextAccessor();
