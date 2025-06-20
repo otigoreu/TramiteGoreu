@@ -43,11 +43,24 @@ namespace Goreu.Tramite.Api.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-
         [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
             var response = await service.DeleteAsync(id);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        [HttpDelete("finalized")]
+        public async Task<IActionResult> PatchFinit(string id)
+        {
+
+            var response = await service.FinalizedAsync(id);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("initialized")]
+        public async Task<IActionResult> PatchInit(string id)
+        {
+
+            var response = await service.InitializedAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);
         }
     }

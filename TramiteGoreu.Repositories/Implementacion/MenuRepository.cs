@@ -4,6 +4,7 @@ using Goreu.Tramite.Repositories.Interfaces;
 using Goreu.Tramite.Repositories.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TramiteGoreu.Entities;
 
 namespace Goreu.Tramite.Repositories.Implementacion
@@ -80,5 +81,16 @@ namespace Goreu.Tramite.Repositories.Implementacion
             }
         }
 
+        public async Task<ICollection<MenuInfoRol>> GetAsyncWithRole(string? displayName)
+        {
+
+            var query = context.Set<MenuInfoRol>().FromSqlRaw("MenuWithRolAndApp {0}",displayName ?? string.Empty);
+
+            return await query.ToListAsync();
+
+            
+
+
+        }
     }
 }

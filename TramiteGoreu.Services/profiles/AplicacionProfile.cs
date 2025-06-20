@@ -10,6 +10,7 @@ namespace Goreu.Tramite.Services.profiles
         public AplicacionProfile()
         {
             CreateMap<Aplicacion, AplicacionResponseDto>();
+            CreateMap<AplicacionRequestDtoSingle, Aplicacion>();
             CreateMap<AplicacionRequestDto, Aplicacion>();
         }
     }

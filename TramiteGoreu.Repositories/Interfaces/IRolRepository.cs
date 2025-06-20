@@ -11,6 +11,9 @@ namespace Goreu.Tramite.Repositories.Interfaces
         Task<ICollection<Role>> GetAllAsync();
         Task<Role?> GetAsync(string id);
         Task<string> AddAsync(Role rol);
+        Task DeleteAsync(string id);
+        Task FinalizedAsync(string id);
+        Task InitializedAsync(string id);
 
 
     }

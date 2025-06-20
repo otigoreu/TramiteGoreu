@@ -12,11 +12,13 @@ namespace Goreu.Tramite.Services.Interface
     public interface IAplicacionService
     {
         Task<BaseResponseGeneric<int>> AddAsync(AplicacionRequestDto request);
+        Task<BaseResponseGeneric<int>> AddAsyncSingle(AplicacionRequestDtoSingle request);
         Task<BaseResponse> DeleteAsync(int id);
         Task<BaseResponse> UpdateAsync(int id, AplicacionRequestDto request);
         Task<BaseResponseGeneric<ICollection<AplicacionResponseDto>>> GetAsync();
         Task<BaseResponseGeneric<AplicacionResponseDto>> GetAsync(int id);
         Task<BaseResponseGeneric<ICollection<AplicacionInfo>>> GetAsync(string? descripcion);
+        Task<BaseResponseGeneric<ICollection<AplicacionInfoSede>>> GetAsyncWithSede(string? descripcion);
         Task<BaseResponse> FinalizedAsync(int id);
         Task<BaseResponse> InitializedAsync(int id);
     }

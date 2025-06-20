@@ -25,6 +25,13 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.GetAsync(displayName);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+        [HttpGet("displayNameWithRole")]
+        public async Task<IActionResult> GetWithRole(string? displayName)
+        {
+
+            var response = await service.GetAsyncWithRole(displayName);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
 
         [HttpGet("{idAplication:int}")]
         public async Task<IActionResult> GetByAplication(int idAplication)

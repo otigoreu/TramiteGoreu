@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Goreu.Tramite.Dto.Request
 {
-    public class AplicacionRequestDto
+    public class AplicacionRequestDtoSingle
     {
         public string Descripcion { get; set; } = default!;
-        public List<int> idSedes { get; set; }
+
+
+
     }
 }

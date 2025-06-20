@@ -45,6 +45,13 @@ namespace Goreu.Tramite.Repositories.Implementacion
             return await queryable.ToListAsync();
         }
 
+        public async Task<ICollection<AplicacionInfoSede>> GetAsyncWithSede(string? descripcion)
+        {
+            var query = context.Set<AplicacionInfoSede>().FromSqlRaw("AppWithSede {0}", descripcion ?? string.Empty);
+
+            return await query.ToListAsync();
+        }
+
         public async Task InitializedAsync(int id)
         {
             var aplicacion = await context.Set<Aplicacion>().IgnoreQueryFilters().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);

@@ -65,26 +65,14 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
-
+        //FUNCIONA
         public async Task<BaseResponse> DeleteAsync(string id)
         {
             var response = new BaseResponse();
             try
             {
-
-                if (await rolManager.FindByIdAsync(id) == null)
-                {
-                    
-                    
-                    response.ErrorMessage = "Rol no existe";
-                }
-                else {
-
-                    await rolManager.DeleteAsync(new IdentityRole(id));
-                    response.Success = true;
-
-                }
-
+                await repository.DeleteAsync(id);
+                response.Success = true;
             }
             catch (Exception ex)
             {
@@ -95,6 +83,23 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
+        public async Task<BaseResponse> FinalizedAsync(string id)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                await repository.FinalizedAsync(id);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al finalizar Datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        //FUNCIONA
         public async Task<BaseResponseGeneric<ICollection<RolResponseDto>>> GetAsync()
         {
             var response = new BaseResponseGeneric<ICollection<RolResponseDto>>();
@@ -125,6 +130,22 @@ namespace Goreu.Tramite.Services.Iplementation
             catch (Exception ex)
             {
                 response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> InitializedAsync(string id)
+        {
+            var response = new BaseResponse();
+            try
+            {
+                await repository.InitializedAsync(id);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al Inicializar Datos";
                 logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
             return response;

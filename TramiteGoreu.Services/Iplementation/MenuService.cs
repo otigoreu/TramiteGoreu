@@ -86,8 +86,6 @@ namespace Goreu.Tramite.Services.Iplementation
 
         }
 
-
-
         public async Task<BaseResponseGeneric<ICollection<MenuResponseDto>>> GetByAplicationAsync(int idAplication, string userName)
         {
             var response = new BaseResponseGeneric<ICollection<MenuResponseDto>>();
@@ -144,6 +142,23 @@ namespace Goreu.Tramite.Services.Iplementation
             {
 
                 response.Data = await repository.GetAsync(displayName);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponseGeneric<ICollection<MenuInfoRol>>> GetAsyncWithRole(string? displayName)
+        {
+            var response = new BaseResponseGeneric<ICollection<MenuInfoRol>>();
+            try
+            {
+
+                response.Data = await repository.GetAsyncWithRole(displayName);
                 response.Success = true;
             }
             catch (Exception ex)
@@ -247,5 +262,7 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
+
+      
     }
 }

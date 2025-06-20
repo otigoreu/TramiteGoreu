@@ -187,14 +187,14 @@ namespace Goreu.Tramite.Persistence
 
                 var tramiteApp = await _context.Set<Aplicacion>().FirstOrDefaultAsync(a => a.Descripcion == "TRAMITE");
 
-                if (tramiteApp != null)
+
                 {
                     _context.Add(new UsuarioAplicacion { IdUsuario = user.Id, IdAplicacion = tramiteApp.Id });
 
                     var sedeAppExistente = await _context.Set<SedeAplicacion>()
                         .FirstOrDefaultAsync(sa => sa.IdSede == sede.Id && sa.IdAplicacion == tramiteApp.Id);
 
-                    if (sedeAppExistente == null)
+
                     {
                         _context.Add(new SedeAplicacion
                         {

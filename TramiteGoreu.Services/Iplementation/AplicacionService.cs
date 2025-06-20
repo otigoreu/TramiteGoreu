@@ -26,7 +26,7 @@ namespace Goreu.Tramite.Services.Iplementation
             this.logger = logger;
             this.mapper = mapper;
         }
-        public async Task<BaseResponseGeneric<int>> AddAsync(AplicacionRequestDto request)
+        public async Task<BaseResponseGeneric<int>> AddAsyncSingle(AplicacionRequestDtoSingle request)
         {
             var response = new BaseResponseGeneric<int>();
             try
@@ -37,6 +37,37 @@ namespace Goreu.Tramite.Services.Iplementation
             catch (Exception ex)
             {
                 response.ErrorMessage = "Ocurrio un error al guardar los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponseGeneric<int>> AddAsync(AplicacionRequestDto request)
+        {
+            var response = new BaseResponseGeneric<int>();
+
+            try
+            {
+                var sedes = new List<SedeAplicacion>();
+
+                var appDb = new Aplicacion
+                {
+                    Descripcion = request.Descripcion,
+                };
+                response.Data = await repository.AddAsync(appDb);
+
+                foreach (var item in request.idSedes) {
+
+                    sedes.Add(new SedeAplicacion { IdAplicacion = appDb.Id, IdSede= item });
+                }
+                appDb.SedeAplicaciones = sedes;
+                await repository.UpdateAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocurrió un error al añadir la información";
                 logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
             }
             return response;
@@ -127,6 +158,25 @@ namespace Goreu.Tramite.Services.Iplementation
             return response;
         }
 
+        public async Task<BaseResponseGeneric<ICollection<AplicacionInfoSede>>> GetAsyncWithSede(string? descripcion)
+        {
+            var response = new BaseResponseGeneric<ICollection<AplicacionInfoSede>>();
+
+            try
+            {
+                response.Data = await repository.GetAsyncWithSede(descripcion);
+                response.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}",response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
         public async Task<BaseResponse> InitializedAsync(int id)
         {
             var response = new BaseResponse();
@@ -151,7 +201,7 @@ namespace Goreu.Tramite.Services.Iplementation
                 var data = await repository.GetAsync(id);
                 if (data is null)
                 {
-                    response.ErrorMessage = $"la persona con id {id} no fue encontrado";
+                    response.ErrorMessage = $"la aplicacion con id {id} no fue encontrado";
                 }
 
                 mapper.Map(request, data);
