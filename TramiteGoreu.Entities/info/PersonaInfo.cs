@@ -14,10 +14,7 @@ namespace TramiteGoreu.Entities.info
         public string apellidoMat { get; set; } = default!;
 
         public DateTime fechaNac { get; set; } = default!;
-        public string direccion { get; set; } = default!;
-        public string referencia { get; set; } = default!;
-        public string celular { get; set; } = default!;
-        public string edad { get; set; } = default!;
+        public int edad { get; set; }
         public string email { get; set; } = default!;
         public int idTipoDoc { get; set; }
         public string nroDoc { get; set; } = default!;

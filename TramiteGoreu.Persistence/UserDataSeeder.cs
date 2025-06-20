@@ -153,7 +153,6 @@ namespace Goreu.Tramite.Persistence
                 ApellidoPat = apePat,
                 ApellidoMat = apeMat,
                 FechaNac = new DateTime(1990, 1, 1),
-                Edad = "",
                 Email = email,
                 IdTipoDoc = tipoDoc.Id,
                 NroDoc = nroDoc

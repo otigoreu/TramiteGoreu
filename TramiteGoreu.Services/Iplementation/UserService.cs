@@ -191,7 +191,6 @@ namespace Goreu.Tramite.Services.Iplementation
                 ApellidoPat = persona.ApellidoPat,
                 ApellidoMat = persona.ApellidoMat,
                 FechaNac = persona.FechaNac,
-                Edad = persona.Edad,
                 Email = persona.Email,
                 IdTipoDoc = persona.IdTipoDoc,
                 NroDoc = persona.NroDoc

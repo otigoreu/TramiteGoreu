@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Goreu.Tramite.Dto.Request;
 using Goreu.Tramite.Dto.Response;
 using Goreu.Tramite.Repositories.Interfaces;
@@ -21,6 +22,7 @@ namespace Goreu.Tramite.Services.Iplementation
             this.logger = logger;
             this.mapper = mapper;
         }
+        
         public async Task<BaseResponseGeneric<ICollection<PersonaInfo>>> GetAsync(string? nombres, PaginationDto pagination)
         {
             var response = new BaseResponseGeneric<ICollection<PersonaInfo>>();
@@ -37,6 +39,7 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
+        
         public async Task<BaseResponseGeneric<ICollection<PersonaInfo>>> GetAsyncfilter(string? nombres, PaginationDto pagination)
         {
             var response = new BaseResponseGeneric<ICollection<PersonaInfo>>();
@@ -53,12 +56,39 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
+        
         public async Task<BaseResponseGeneric<PersonaResponseDto>> GetAsync(int id)
         {
             var response = new BaseResponseGeneric<PersonaResponseDto>();
             try
             {
                 var data = await repository.GetAsync(id);
+                response.Data = mapper.Map<PersonaResponseDto>(data);
+
+                var today = DateTime.Today;
+                var birthDate = response.Data.FechaNac;
+                var age = today.Year - birthDate.Year;
+
+                if (birthDate.Date > today.AddYears(-age)) age--;
+
+                response.Data.Edad = age;
+
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Ocurrio un error al obtener los datos";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponseGeneric<PersonaResponseDto>> GetAsyncNumdoc(string numdoc)
+        {
+            var response = new BaseResponseGeneric<PersonaResponseDto>();
+            try
+            {
+                var data = await repository.GetAsyncNumdoc(numdoc);
                 response.Data = mapper.Map<PersonaResponseDto>(data);
                 response.Success = true;
             }
@@ -69,6 +99,7 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
+
         public async Task<BaseResponseGeneric<int>> AddAsync(PersonaRequestDto request)
         {
             var response = new BaseResponseGeneric<int>();
@@ -84,6 +115,7 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
+        
         public async Task<BaseResponse> UpdateAsync(int id, PersonaRequestDto request)
         {
             var response = new BaseResponse();
@@ -174,7 +206,5 @@ namespace Goreu.Tramite.Services.Iplementation
             }
             return response;
         }
-
-       
     }
 }

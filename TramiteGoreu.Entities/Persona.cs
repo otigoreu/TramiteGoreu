@@ -1,4 +1,5 @@
 ﻿using Goreu.Tramite.Entities;
+using Goreu.Tramite.Entities.Pide;
 using System.ComponentModel.DataAnnotations;
 
 namespace TramiteGoreu.Entities
@@ -9,7 +10,6 @@ namespace TramiteGoreu.Entities
         public string ApellidoPat { get; set; } = default!;
         public string ApellidoMat { get; set; } = default!;
         public DateTime FechaNac { get; set; }
-        public string Edad { get; set; } = default!;
         public string Email { get; set; } = default!;
         public int IdTipoDoc { get; set; }
         public  string NroDoc { get; set; } = default!;
@@ -17,5 +17,8 @@ namespace TramiteGoreu.Entities
         
         // Relación uno a muchos
         public ICollection<Usuario> Usuarios { get; set; }
+
+        public CredencialReniec CredencialesReniec { get; set; }
+
     }
 }

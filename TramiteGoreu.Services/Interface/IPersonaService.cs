@@ -10,6 +10,7 @@ namespace Goreu.Tramite.Services.Interface
         Task<BaseResponseGeneric<ICollection<PersonaInfo>>> GetAsyncfilter(string? nombres, PaginationDto pagination);
         Task<BaseResponseGeneric<PersonaInfo>> GetAsyncBYEmail(string email);
         Task<BaseResponseGeneric<PersonaResponseDto>> GetAsync(int id);
+        Task<BaseResponseGeneric<PersonaResponseDto>> GetAsyncNumdoc(string numdoc);
         Task<BaseResponseGeneric<int>> AddAsync(PersonaRequestDto resquest);
         Task<BaseResponse> UpdateAsync(int id, PersonaRequestDto resquest);
         Task<BaseResponse> DeleteAsync(int id);
