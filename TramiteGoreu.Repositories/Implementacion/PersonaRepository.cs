@@ -17,6 +17,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
         {
             this.httpContext = httpContext;
         }
+
         public async Task<ICollection<PersonaInfo>> GetAsync(string? nombres, PaginationDto pagination)
         {
             //eager loading optimizado
@@ -30,12 +31,8 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     apellidoPat = x.ApellidoPat,
                     apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
-                    direccion = x.Direccion,
-                    referencia = x.Referencia,
-                    celular = x.Celular,
-                    edad = x.Edad,
                     email = x.Email,
-                    tipoDoc = x.TipoDoc,
+                    idTipoDoc = x.IdTipoDoc,
                     nroDoc = x.NroDoc,
                     status = x.Status
 
@@ -45,6 +42,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
             return await queryable.OrderBy(x => x.Id).Paginate(pagination).ToListAsync();
 
         }
+
         public async Task<ICollection<PersonaInfo>> GetAsyncfilter(string? nombres, PaginationDto pagination)
         {
             //eager loading optimizado
@@ -59,12 +57,8 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     apellidoPat = x.ApellidoPat,
                     apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
-                    direccion = x.Direccion,
-                    referencia = x.Referencia,
-                    celular = x.Celular,
-                    edad = x.Edad,
                     email = x.Email,
-                    tipoDoc = x.TipoDoc,
+                    idTipoDoc = x.IdTipoDoc,
                     nroDoc = x.NroDoc,
                     status = x.Status
 
@@ -73,6 +67,7 @@ namespace Goreu.Tramite.Repositories.Implementacion
             await httpContext.HttpContext.InsertarPaginacionHeader(queryable);
             return await queryable.OrderBy(x => x.Id).Paginate(pagination).ToListAsync();
         }
+
         public async Task<ICollection<PersonaInfo>> GetAsyncEmail(string? email, PaginationDto pagination)
         {
             //eager loading optimizado
@@ -86,12 +81,8 @@ namespace Goreu.Tramite.Repositories.Implementacion
                     apellidoPat = x.ApellidoPat,
                     apellidoMat = x.ApellidoMat,
                     fechaNac = x.FechaNac,
-                    direccion = x.Direccion,
-                    referencia = x.Referencia,
-                    celular = x.Celular,
-                    edad = x.Edad,
                     email = x.Email,
-                    tipoDoc = x.TipoDoc,
+                    idTipoDoc = x.IdTipoDoc,
                     nroDoc = x.NroDoc,
                     status = x.Status 
 
@@ -101,6 +92,20 @@ namespace Goreu.Tramite.Repositories.Implementacion
             return await queryable.OrderBy(x => x.Id).Paginate(pagination).ToListAsync();
 
         }
+        
+        public async Task<Persona> GetAsyncNumdoc(string numdoc)
+        {
+            var persona = await context.Set<Persona>()
+               .AsNoTracking()
+               .Where(x => x.NroDoc == numdoc)
+               .FirstOrDefaultAsync();
+
+            if (persona == null) return persona;
+
+            context.Set<Persona>().Entry(persona).State = EntityState.Detached;
+            return persona;
+        }
+
         public async Task FinalizedAsync(int id)
         {
             var person = await GetAsync(id);
@@ -123,7 +128,5 @@ namespace Goreu.Tramite.Repositories.Implementacion
 
             }
         }
-
-        
     }
 }

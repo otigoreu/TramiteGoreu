@@ -13,12 +13,9 @@ namespace Goreu.Tramite.Dto.Response
         public string ApellidoPat { get; set; } = default!;
         public string ApellidoMat { get; set; } = default!;
         public DateTime FechaNac { get; set; }
-        public string Direccion { get; set; } = default!;
-        public string Referencia { get; set; } = default!;
-        public string Celular { get; set; } = default!;
-        public string Edad { get; set; } = default!;
+        public int Edad { get; set; }
         public string Email { get; set; } = default!;
-        public string TipoDoc { get; set; } = default!;
+        public int IdTipoDoc { get; set; }
         public string NroDoc { get; set; } = default!;
 
     }

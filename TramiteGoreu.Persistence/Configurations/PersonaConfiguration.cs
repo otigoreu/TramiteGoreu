@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Goreu.Tramite.Entities.Pide;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TramiteGoreu.Entities;
 
@@ -12,19 +13,25 @@ namespace Goreu.Tramite.Persistence.Configurations
             builder.Property(x => x.Nombres).HasMaxLength(50);
             builder.Property(x => x.ApellidoPat).HasMaxLength(50);
             builder.Property(x => x.ApellidoMat).HasMaxLength(50);
+
             builder.Property(x => x.FechaNac)
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("GETDATE()");
-            builder.Property(x => x.Direccion).HasMaxLength(100);
-            builder.Property(x => x.Referencia).HasMaxLength(200);
-            builder.Property(x => x.Celular).HasMaxLength(20);
-            builder.Property(x => x.Edad).HasMaxLength(3);
             builder.Property(x => x.Email).HasMaxLength(50).IsUnicode(false);
-            builder.Property(x => x.TipoDoc).HasMaxLength(3);
+
+            builder
+               .HasOne(e => e.TipoDocumento)
+               .WithMany(c => c.Personas)
+               .HasForeignKey(x => x.IdTipoDoc);
+
             builder.Property(x => x.NroDoc).HasMaxLength(9).IsUnicode(false);
             builder.ToTable(nameof(Persona), "General");
             builder.HasQueryFilter(x => x.Status);
 
+            builder
+               .HasOne(c => c.CredencialesReniec)
+               .WithOne(t => t.Persona)
+               .HasForeignKey<CredencialReniec>(t => t.PersonaID);
         }
     }
 }

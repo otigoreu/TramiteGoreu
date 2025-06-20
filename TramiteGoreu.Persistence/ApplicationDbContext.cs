@@ -32,7 +32,7 @@ namespace Goreu.Tramite.Persistence
             //modelBuilder.Entity<Person>().Property(x => x.apellidos).HasMaxLength(50);
 
             //modelBuilder.Entity<ApplicationUser>(x => x.ToTable("User","General"));
-            // modelBuilder.Entity<IdentityRole>(x => x.ToTable("Role","General"));
+            //modelBuilder.Entity<IdentityRole>(x => x.ToTable("Role","General"));
             modelBuilder.Entity<IdentityUserRole<string>>(x => x.ToTable("UsuarioRol"));
         }
 

@@ -191,12 +191,8 @@ namespace Goreu.Tramite.Services.Iplementation
                 ApellidoPat = persona.ApellidoPat,
                 ApellidoMat = persona.ApellidoMat,
                 FechaNac = persona.FechaNac,
-                Direccion = persona.Direccion,
-                Referencia = persona.Referencia,
-                Celular = persona.Celular,
-                Edad = persona.Edad,
                 Email = persona.Email,
-                TipoDoc = persona.TipoDoc,
+                IdTipoDoc = persona.IdTipoDoc,
                 NroDoc = persona.NroDoc
             };
 

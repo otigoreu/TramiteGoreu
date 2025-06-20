@@ -26,6 +26,7 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.GetAsync(nombres, pagination);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+        
         [HttpGet("nombrefilter")]
         [Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme, Roles = $"PLANILLA,{Constantes.RoleAdmin}")]
         public async Task<IActionResult> Getfilter(string? nombres, [FromQuery] PaginationDto pagination)
@@ -33,6 +34,7 @@ namespace Goreu.Tramite.Api.Controllers
             var response = await service.GetAsyncfilter(nombres, pagination);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+        
         [HttpGet("email")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"PLANILLA,{Constantes.RoleAdmin}")]
         public async Task<IActionResult> Get(string? email)
@@ -53,6 +55,17 @@ namespace Goreu.Tramite.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"PLANILLA,{Constantes.RoleAdmin}")]
         public async Task<IActionResult> Post(PersonaRequestDto personRequestDto)
         {
+            var duplicado = await service.GetAsyncNumdoc(personRequestDto.nroDoc);
+
+            if (duplicado.Data != null)
+            {
+                return BadRequest(new
+                {
+                    Success = false,
+                    ErrorMessage = $"Ya existe una persona registrada con el número de documento {personRequestDto.nroDoc}."
+                });
+            }
+
             var response = await service.AddAsync(personRequestDto);
             return response.Success ? Ok(response) : BadRequest(response);
         }

@@ -23,29 +23,35 @@ namespace Goreu.Tramite.Repositories.Implementacion
         {
             return await context.Set<TEntity>().AsNoTracking().ToListAsync();
         }
+
         public async Task<TEntity?> GetAsync(int id)
         {
             return await context.Set<TEntity>().FindAsync(id);
         }
-        public async Task<ICollection<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate)
+
+        public virtual async Task<ICollection<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await context.Set<TEntity>().Where(predicate).AsNoTracking().ToListAsync();
         }
+        
         public async Task<ICollection<TEntity>> GetAsync<Tkey>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, Tkey>> orderBy)
         {
             return await context.Set<TEntity>().Where(predicate).OrderBy(orderBy).AsNoTracking().ToListAsync();
         }
-        public async Task<int> AddAsync(TEntity entity)
+        
+        public virtual async Task<int> AddAsync(TEntity entity)
         {
             await context.Set<TEntity>().AddAsync(entity);
             await context.SaveChangesAsync();
             return entity.Id;
         }
-        public async Task UpdateAsync()
+        
+        public virtual async Task UpdateAsync()
         {
             await context.SaveChangesAsync();
         }
-        public async Task DeleteAsync(int id)
+        
+        public virtual async Task DeleteAsync(int id)
         {
             var item = await context.Set<TEntity>()
                 .AsNoTracking()
@@ -58,7 +64,5 @@ namespace Goreu.Tramite.Repositories.Implementacion
             else
                 throw new InvalidOperationException($"No se encontro el registro con id {id}");
         }
-
-
     }
 }

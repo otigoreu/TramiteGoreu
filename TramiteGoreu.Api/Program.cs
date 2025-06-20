@@ -20,7 +20,17 @@ var builder = WebApplication.CreateBuilder(args);
 //1.register or configure my context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("defaultConnection")
+        //, b => b.MigrationsAssembly("Goreu.Tramite.Persistence")
+        //, sqlOptions =>
+        //{
+        //    sqlOptions.EnableRetryOnFailure(
+        //        maxRetryCount: 5,
+        //        maxRetryDelay: TimeSpan.FromSeconds(10),
+        //        errorNumbersToAdd: null);
+        //}
+    );
 });
 //5.Settings context
 builder.Services.AddHttpContextAccessor();
@@ -80,6 +90,7 @@ builder.Services.AddTransient<ISedeRepository, SedeRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITipoDocumentoRepository, TipoDocumentoRepository>();
 builder.Services.AddTransient<IRolRepository, RolRepository>();
+builder.Services.AddTransient<ICredencialReniecRepository, CredencialReniecRepository>();
 
 
 builder.Services.AddTransient<IPersonaService, PersonaService>();
@@ -90,6 +101,7 @@ builder.Services.AddTransient<ISedeService, SedeService>();
 builder.Services.AddTransient<IAplicacionService, AplicacionService>();
 builder.Services.AddTransient<ITipoDocumentoService, TipoDocumentoService>();
 builder.Services.AddTransient<IRolService, RolService>();
+builder.Services.AddTransient<ICredencialReniecService, CredencialReniecService>();
 
 //3.register mapper
 builder.Services.AddAutoMapper(config =>
@@ -101,8 +113,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<SedeProfile>();
     config.AddProfile<TipoDocumentoProfile>();
     config.AddProfile<RolProfile>();
-
-
+    config.AddProfile<CredencialReniecProfile>();
 });
 
 builder.Services.AddTransient<UserDataSeeder>();
@@ -143,7 +154,7 @@ builder.Services.AddCors(options =>
     
     );
 });
-
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
