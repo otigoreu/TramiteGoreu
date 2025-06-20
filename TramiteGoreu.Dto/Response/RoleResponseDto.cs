@@ -11,5 +11,6 @@ namespace Goreu.Tramite.Dto.Response
         public string Id { get; set; } = default!;
         public string Name { get; set; } = default!;
         public string NormalizedName { get; set; } = default!;
+        public string Status { get; set; } = default!;
     }
 }

@@ -4,6 +4,7 @@ using Goreu.Tramite.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TramiteGoreu.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250605212925_sedeaplicacion")]
+    partial class sedeaplicacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,28 +64,6 @@ namespace TramiteGoreu.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.ToTable("AplicacionInfo");
-                });
-
-            modelBuilder.Entity("Goreu.Tramite.Entities.info.AplicacionInfoSede", b =>
-                {
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdSede")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Sede")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("status")
-                        .HasColumnType("bit");
-
-                    b.ToTable("AplicacionInfoSede");
                 });
 
             modelBuilder.Entity("Goreu.Tramite.Entities.info.MenuInfo", b =>
@@ -691,9 +672,6 @@ namespace TramiteGoreu.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("CanUpdate")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Status")
                         .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Role");

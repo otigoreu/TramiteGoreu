@@ -263,17 +263,30 @@ namespace Goreu.Tramite.Persistence
 
             #region sedeApp
 
-                var sedeApp = new SedeAplicacion {
+                var sedeApp1 = new SedeAplicacion {
                 
                     IdSede=sede.Id,
-                    IdAplicacion=app1.Id,
-                    status=true
+                    IdAplicacion=app1.Id
                 
+                };
+                var sedeApp2 = new SedeAplicacion
+                {
+
+                    IdSede = sede.Id,
+                    IdAplicacion = app2.Id
+
+                };
+                var sedeApp3 = new SedeAplicacion
+                {
+
+                    IdSede = sede.Id,
+                    IdAplicacion = app3.Id
+
                 };
 
                 #endregion
 
-            #region menuRol
+                #region menuRol
 
                 //var rol1 = await roleManager.FindByNameAsync(Constantes.RoleAdmin);
                 //var rol2 = await roleManager.FindByNameAsync(Constantes.RolCliente);
@@ -327,7 +340,9 @@ namespace Goreu.Tramite.Persistence
 
 
 
-                context.Set<SedeAplicacion>().Add(sedeApp);
+                context.Set<SedeAplicacion>().Add(sedeApp1);
+                context.Set<SedeAplicacion>().Add(sedeApp2);
+                context.Set<SedeAplicacion>().Add(sedeApp3);
 
                 await context.SaveChangesAsync();
 

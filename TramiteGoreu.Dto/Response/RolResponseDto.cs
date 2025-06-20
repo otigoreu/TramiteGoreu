@@ -15,5 +15,8 @@ namespace Goreu.Tramite.Dto.Response
 
         public bool CanSearch { get; set; } = true;
         public bool CanUpdate { get; set; } = true;
+        public string NormalizedName { get; set; } = default!;
+        public bool Status { get; set; } = default!;
+
     }
 }

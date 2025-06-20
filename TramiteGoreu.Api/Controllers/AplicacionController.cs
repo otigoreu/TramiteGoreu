@@ -14,19 +14,19 @@ namespace Goreu.Tramite.Api.Controllers
         {
             this.service = service;
         }
-        [HttpGet("descripcion")]
-        public async Task<IActionResult> Get(string? descripcion)
+        [HttpGet("descripcionWithSede")]
+        public async Task<IActionResult> GetWithSede(string? descripcion)
         {
 
-            var response = await service.GetAsync(descripcion);
+            var response = await service.GetAsyncWithSede(descripcion);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        [HttpGet]
+        [HttpGet("descripcion")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string? descripcion)
         {
-            var response = await service.GetAsync();
+            var response = await service.GetAsync(descripcion);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
@@ -41,6 +41,12 @@ namespace Goreu.Tramite.Api.Controllers
         public async Task<IActionResult> Post(AplicacionRequestDto aplicacionRequestDto)
         {
             var response = await service.AddAsync(aplicacionRequestDto);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        [HttpPost("single")]
+        public async Task<IActionResult> Post(AplicacionRequestDtoSingle aplicacionRequestDto)
+        {
+            var response = await service.AddAsyncSingle(aplicacionRequestDto);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
