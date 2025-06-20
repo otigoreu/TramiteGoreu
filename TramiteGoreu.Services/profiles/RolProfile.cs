@@ -10,8 +10,8 @@ namespace Goreu.Tramite.Services.profiles
 
         public RolProfile()
         {
-            CreateMap<RolRequestDto, Role>();
-            CreateMap<Role, RolResponseDto>();
+            CreateMap<RolRequestDto, Rol>();
+            CreateMap<Rol, RolResponseDto>();
         
         }
     }

@@ -8,53 +8,53 @@ using TramiteGoreu.Entities;
 
 namespace Goreu.Tramite.Repositories.Implementacion
 {
-    public class SedeRepository : RepositoryBase<Sede>, ISedeRepository
-    {
-        private readonly IHttpContextAccessor httpContext;
-        public SedeRepository(ApplicationDbContext context, IHttpContextAccessor httpContext) : base(context)
-        {
-            this.httpContext = httpContext;
-        }
+    //public class SedeRepository : RepositoryBase<UnidadOrganica>, ISedeRepository
+    //{
+    //    private readonly IHttpContextAccessor httpContext;
+    //    public SedeRepository(ApplicationDbContext context, IHttpContextAccessor httpContext) : base(context)
+    //    {
+    //        this.httpContext = httpContext;
+    //    }
 
-        public async Task FinalizedAsync(int id)
-        {
-            var sede = await GetAsync(id);
-            if (sede is not null)
-            {
-                sede.Status = false;
-                await UpdateAsync();
-            }
-        }
+    //    public async Task FinalizedAsync(int id)
+    //    {
+    //        var sede = await GetAsync(id);
+    //        if (sede is not null)
+    //        {
+    //            sede.Status = false;
+    //            await UpdateAsync();
+    //        }
+    //    }
 
-        public async Task<ICollection<SedeInfo>> GetAsync(string? descripcion)
-        {
-            //eager loading optimizado
-            var queryable = context.Set<Sede>()
-                .Where(x => x.Descripcion.Contains(descripcion ?? string.Empty))
-                .IgnoreQueryFilters()
-                .AsNoTracking()
-                .Select(x => new SedeInfo
-                {
-                    Id = x.Id,
-                    Descripcion = x.Descripcion,
-                    status = x.Status
-                }).AsQueryable();
+    //    public async Task<ICollection<SedeInfo>> GetAsync(string? descripcion)
+    //    {
+    //        //eager loading optimizado
+    //        var queryable = context.Set<UnidadOrganica>()
+    //            .Where(x => x.Descripcion.Contains(descripcion ?? string.Empty))
+    //            .IgnoreQueryFilters()
+    //            .AsNoTracking()
+    //            .Select(x => new SedeInfo
+    //            {
+    //                Id = x.Id,
+    //                Descripcion = x.Descripcion,
+    //                status = x.Status
+    //            }).AsQueryable();
 
-            await httpContext.HttpContext.InsertarPaginacionHeader(queryable);
-            return await queryable.ToListAsync();
-        }
+    //        await httpContext.HttpContext.InsertarPaginacionHeader(queryable);
+    //        return await queryable.ToListAsync();
+    //    }
 
-        public async Task InitializedAsync(int id)
-        {
-            var sede = await context.Set<Sede>().IgnoreQueryFilters().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+    //    public async Task InitializedAsync(int id)
+    //    {
+    //        var sede = await context.Set<UnidadOrganica>().IgnoreQueryFilters().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
-            if (sede is not null)
-            {
-                sede.Status = true;
-                context.Set<Sede>().Update(sede);
-                await context.SaveChangesAsync();
+    //        if (sede is not null)
+    //        {
+    //            sede.Status = true;
+    //            context.Set<UnidadOrganica>().Update(sede);
+    //            await context.SaveChangesAsync();
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 }

@@ -16,9 +16,6 @@ namespace Goreu.Tramite.Persistence.Configurations
                    .WithMany(u => u.Usuarios)
                    .HasForeignKey(ua => ua.IdPersona);
 
-            builder.HasOne(ua => ua.Sede)
-                   .WithMany(a => a.Users)
-                   .HasForeignKey(ua => ua.IdSede);
         }
     }
 }

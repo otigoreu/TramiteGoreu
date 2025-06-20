@@ -7,7 +7,7 @@ namespace Goreu.Tramite.Repositories.Interfaces
     {
         Task<ICollection<AplicacionInfo>> GetAsync(string? descripcion);
         Task<ICollection<AplicacionInfoSede>> GetAsyncWithSede(string? descripcion);
-        Task FinalizedAsync(int id);
-        Task InitializedAsync(int id);
+        Task FinalizedAsync(string id);
+        Task InitializedAsync(string id);
     }
 }

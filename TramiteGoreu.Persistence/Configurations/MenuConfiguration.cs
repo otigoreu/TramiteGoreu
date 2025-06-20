@@ -16,16 +16,16 @@ namespace Goreu.Tramite.Persistence.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.DisplayName).HasMaxLength(50);
-            builder.Property(x => x.IconName).HasMaxLength(50);
-            builder.Property(x => x.Route).HasMaxLength(200);
+            builder.Property(x => x.Descripcion).HasMaxLength(50);
+            builder.Property(x => x.Icono).HasMaxLength(50);
+            builder.Property(x => x.Ruta).HasMaxLength(200);
             builder.ToTable(nameof(Menu), "Administrador");
-            builder.HasQueryFilter(x => x.Status);
+            builder.HasQueryFilter(x => x.Estado);
 
-            // Configurar la relación autorreferente
+            //// Configurar la relación autorreferente
             builder.HasOne(m => m.ParentMenu)          // Un menú tiene un menú padre
-                   .WithMany(m => m.Children)          // Un menú puede tener muchos menús hijos
-                   .HasForeignKey(m => m.ParentMenuId) // Clave foránea en ParentMenuId
+                   .WithMany(m => m.MenuHijos)          // Un menú puede tener muchos menús hijos
+                   .HasForeignKey(m => m.IdMenu) // Clave foránea en ParentMenuId
                    .OnDelete(DeleteBehavior.Restrict); // Opcional: Evitar eliminación en cascada
                                                        // Configurar la relación con AspNetUsers
             builder.HasOne(ua => ua.Aplicacion)

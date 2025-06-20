@@ -4,17 +4,22 @@ using TramiteGoreu.Entities;
 
 namespace Goreu.Tramite.Persistence.Configurations
 {
-    public class AplicacionConfiguration : IEntityTypeConfiguration<Aplicacion>
+    public class UnidadOrganicaConfiguration : IEntityTypeConfiguration<UnidadOrganica>
     {
-        public void Configure(EntityTypeBuilder<Aplicacion> builder)
+        public void Configure(EntityTypeBuilder<UnidadOrganica> builder)
         {
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Descripcion).HasMaxLength(50);
-            builder.ToTable(nameof(Aplicacion), "Administrador");
+            builder.ToTable(nameof(UnidadOrganica), "General");
             builder.HasQueryFilter(x => x.Estado);
+
+            builder.HasOne(ua => ua.Entidad)
+                .WithMany(u => u.UnidadOrganicas)
+                .HasForeignKey(ua => ua.IdEntidad);
 
             
         }
+
     }
 }

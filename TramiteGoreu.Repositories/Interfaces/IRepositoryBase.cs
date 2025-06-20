@@ -8,9 +8,9 @@ namespace Goreu.Tramite.Repositories.Interfaces
         Task<ICollection<TEntity>> GetAsync();
         Task<ICollection<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate);
         Task<ICollection<TEntity>> GetAsync<Tkey>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, Tkey>> orderBy);
-        Task<TEntity?> GetAsync(int id);
-        Task<int> AddAsync(TEntity entity);
+        Task<TEntity?> GetAsync(string id);
+        Task<String> AddAsync(TEntity entity);
         Task UpdateAsync();
-        Task DeleteAsync(int id);
+        Task DeleteAsync(string id);
     }
 }

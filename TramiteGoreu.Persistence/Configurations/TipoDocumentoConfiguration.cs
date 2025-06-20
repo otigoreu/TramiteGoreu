@@ -12,7 +12,7 @@ namespace Goreu.Tramite.Persistence.Configurations
             builder.Property(x => x.Descripcion).HasMaxLength(200);
             builder.Property(x => x.Abrev).HasMaxLength(50);
             builder.ToTable(nameof(TipoDocumento), "Administrador");
-            builder.HasQueryFilter(x => x.Status);
+            builder.HasQueryFilter(x => x.Estado);
         }
     }
 }

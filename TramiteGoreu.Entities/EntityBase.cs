@@ -2,7 +2,7 @@
 {
     public class EntityBase
     {
-        public int Id { get; set; }
-        public bool Status { get; set; } = true;
+        public Guid Id { get; set; }
+        public bool Estado { get; set; } = true;
     }
 }

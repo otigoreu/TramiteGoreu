@@ -16,7 +16,7 @@ namespace Goreu.Tramite.Entities.Pide
         public DateTime fechaRegistro { get; set; }
         public Guid UsuarioID { get; set; }
 
-        public int PersonaID { get; set; }
+        public Guid PersonaID { get; set; }
         public Persona Persona { get; set; }
     }
 }

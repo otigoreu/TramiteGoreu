@@ -21,13 +21,13 @@ namespace Goreu.Tramite.Persistence
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            modelBuilder.Entity<MenuInfoRol>().HasNoKey();
-            modelBuilder.Entity<AplicacionInfo>().HasNoKey();
-            modelBuilder.Entity<MenuInfo>().HasNoKey();
-            modelBuilder.Entity<PersonaInfo>().HasNoKey();
-            modelBuilder.Entity<SedeInfo>().HasNoKey();
-            modelBuilder.Entity<TipoDocumentoInfo>().HasNoKey();
-            modelBuilder.Entity<AplicacionInfoSede>().HasNoKey();
+            //modelBuilder.Entity<MenuInfoRol>().HasNoKey();
+            //modelBuilder.Entity<AplicacionInfo>().HasNoKey();
+            //modelBuilder.Entity<MenuInfo>().HasNoKey();
+            //modelBuilder.Entity<PersonaInfo>().HasNoKey();
+            //modelBuilder.Entity<SedeInfo>().HasNoKey();
+            //modelBuilder.Entity<TipoDocumentoInfo>().HasNoKey();
+            //modelBuilder.Entity<AplicacionInfoSede>().HasNoKey();
             //modelBuilder.Entity<Person>().Property(x => x.nombres).HasMaxLength(50);
             //modelBuilder.Entity<Person>().Property(x => x.apellidos).HasMaxLength(50);
 
