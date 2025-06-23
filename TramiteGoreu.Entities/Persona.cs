@@ -11,7 +11,7 @@ namespace TramiteGoreu.Entities
         public string ApellidoMat { get; set; } = default!;
         public DateTime FechaNac { get; set; }
         public string Email { get; set; } = default!;
-        public Guid IdTipoDoc { get; set; }
+        public int IdTipoDoc { get; set; }
         public  string NroDoc { get; set; } = default!;
         public TipoDocumento TipoDocumento { get; set; }
         

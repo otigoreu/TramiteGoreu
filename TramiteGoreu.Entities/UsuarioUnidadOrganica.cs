@@ -10,7 +10,7 @@ namespace Goreu.Tramite.Entities
     public class UsuarioUnidadOrganica :EntityBase
     {
         public string IdUsuario { get; set; }
-        public Guid IdUnidadOrganica { get; set; }
+        public int IdUnidadOrganica { get; set; }
         public Usuario Usuario{ get; set; }
         public UnidadOrganica UnidadOrganica { get; set; }
     }

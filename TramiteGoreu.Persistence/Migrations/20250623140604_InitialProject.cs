@@ -25,7 +25,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                 schema: "Administrador",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -39,7 +40,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                 schema: "Administrador",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Ruc = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
@@ -54,7 +56,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                 schema: "Administrador",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Abrev = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
@@ -69,12 +72,13 @@ namespace Goreu.Tramite.Persistence.Migrations
                 schema: "Administrador",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Icono = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Ruta = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    IdAplicacion = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdMenu = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IdAplicacion = table.Column<int>(type: "int", nullable: false),
+                    IdMenu = table.Column<int>(type: "int", nullable: true),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -100,11 +104,12 @@ namespace Goreu.Tramite.Persistence.Migrations
                 name: "EntidadAplicacion",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdEntidad = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdAplicacion = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EntidadId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AplicacionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdEntidad = table.Column<int>(type: "int", nullable: false),
+                    IdAplicacion = table.Column<int>(type: "int", nullable: false),
+                    EntidadId = table.Column<int>(type: "int", nullable: false),
+                    AplicacionId = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -131,9 +136,10 @@ namespace Goreu.Tramite.Persistence.Migrations
                 schema: "General",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IdEntidad = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdEntidad = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -153,13 +159,14 @@ namespace Goreu.Tramite.Persistence.Migrations
                 schema: "General",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Nombres = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ApellidoPat = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ApellidoMat = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     FechaNac = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
                     Email = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    IdTipoDoc = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdTipoDoc = table.Column<int>(type: "int", nullable: false),
                     NroDoc = table.Column<string>(type: "varchar(9)", unicode: false, maxLength: 9, nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -182,8 +189,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: true),
-                    IdEntidadAplicacion = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    EntidadAplicacionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IdEntidadAplicacion = table.Column<int>(type: "int", nullable: true),
+                    EntidadAplicacionId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -204,13 +211,14 @@ namespace Goreu.Tramite.Persistence.Migrations
                 schema: "Pide",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     nuDniUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     nuRucUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     fechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PersonaID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PersonaID = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -230,7 +238,7 @@ namespace Goreu.Tramite.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdPersona = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdPersona = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "varchar(256)", unicode: false, maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "varchar(256)", unicode: false, maxLength: 256, nullable: true),
@@ -283,10 +291,11 @@ namespace Goreu.Tramite.Persistence.Migrations
                 name: "MenuRol",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Operacion = table.Column<bool>(type: "bit", nullable: false),
                     Consulta = table.Column<bool>(type: "bit", nullable: false),
-                    IdMenu = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdMenu = table.Column<int>(type: "int", nullable: false),
                     IdRole = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -397,11 +406,12 @@ namespace Goreu.Tramite.Persistence.Migrations
                 name: "UsuarioUnidadOrganica",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IdUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdUnidadOrganica = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdUnidadOrganica = table.Column<int>(type: "int", nullable: false),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UnidadOrganicaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UnidadOrganicaId = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

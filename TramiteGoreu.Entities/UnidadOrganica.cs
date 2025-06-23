@@ -10,7 +10,7 @@ namespace TramiteGoreu.Entities
     public class UnidadOrganica :EntityBase
     {
         public string Descripcion { get; set; } = default!;
-        public Guid IdEntidad{ get; set; }
+        public int IdEntidad{ get; set; }
         public Entidad Entidad{ get; set; }
         public ICollection<UsuarioUnidadOrganica> UsuarioUnidadOrganicas { get; set; }
 

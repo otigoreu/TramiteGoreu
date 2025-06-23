@@ -11,7 +11,7 @@ namespace TramiteGoreu.Entities
         public bool Operacion { get; set; } = true;
         public bool Consulta { get; set; } = true;
 
-        public Guid IdMenu { get; set; }
+        public int IdMenu { get; set; }
         public Menu Menu { get; set; }
 
         public string IdRole { get; set; }

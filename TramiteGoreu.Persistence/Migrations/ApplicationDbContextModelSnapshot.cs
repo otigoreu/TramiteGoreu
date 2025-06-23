@@ -24,9 +24,11 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("Goreu.Tramite.Entities.Entidad", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
@@ -47,24 +49,26 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("Goreu.Tramite.Entities.EntidadAplicacion", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("AplicacionId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("EntidadId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("AplicacionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EntidadId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("IdAplicacion")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdAplicacion")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("IdEntidad")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdEntidad")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -77,15 +81,17 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("Goreu.Tramite.Entities.Pide.CredencialReniec", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("PersonaID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PersonaID")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UsuarioID")
                         .HasColumnType("uniqueidentifier");
@@ -115,9 +121,11 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("Goreu.Tramite.Entities.TipoDocumento", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Abrev")
                         .IsRequired()
@@ -139,22 +147,24 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("Goreu.Tramite.Entities.UsuarioUnidadOrganica", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("IdUnidadOrganica")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdUnidadOrganica")
+                        .HasColumnType("int");
 
                     b.Property<string>("IdUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UnidadOrganicaId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UnidadOrganicaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UsuarioId")
                         .IsRequired()
@@ -313,9 +323,11 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("TramiteGoreu.Entities.Aplicacion", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
@@ -332,9 +344,11 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("TramiteGoreu.Entities.Menu", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
@@ -349,11 +363,11 @@ namespace Goreu.Tramite.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("IdAplicacion")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdAplicacion")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("IdMenu")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("IdMenu")
+                        .HasColumnType("int");
 
                     b.Property<string>("Ruta")
                         .IsRequired()
@@ -371,9 +385,11 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("TramiteGoreu.Entities.MenuRol", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Consulta")
                         .HasColumnType("bit");
@@ -381,8 +397,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("IdMenu")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdMenu")
+                        .HasColumnType("int");
 
                     b.Property<string>("IdRole")
                         .IsRequired()
@@ -402,9 +418,11 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("TramiteGoreu.Entities.Persona", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApellidoMat")
                         .IsRequired()
@@ -430,8 +448,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<Guid>("IdTipoDoc")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdTipoDoc")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nombres")
                         .IsRequired()
@@ -453,9 +471,11 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("TramiteGoreu.Entities.UnidadOrganica", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
@@ -465,8 +485,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("IdEntidad")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdEntidad")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -495,8 +515,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("IdPersona")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdPersona")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -551,14 +571,14 @@ namespace Goreu.Tramite.Persistence.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
-                    b.Property<Guid>("EntidadAplicacionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EntidadAplicacionId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("IdEntidadAplicacion")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("IdEntidadAplicacion")
+                        .HasColumnType("int");
 
                     b.HasIndex("EntidadAplicacionId");
 

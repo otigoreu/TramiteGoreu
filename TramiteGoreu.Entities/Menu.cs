@@ -14,13 +14,13 @@ namespace TramiteGoreu.Entities
         public string Icono { get; set; } = default!;
         public string Ruta { get; set; } = default!;
         
-        public Guid IdAplicacion { get; set; }
+        public int IdAplicacion { get; set; }
         public Aplicacion Aplicacion { get; set; }
 
         public ICollection<MenuRol> MenuRoles { get; set; }
 
         //auto referencia
-        public Guid? IdMenu { get; set; }
+        public int? IdMenu { get; set; }
         public Menu ParentMenu { get; set; }
 
         // Colección de menús hijos
