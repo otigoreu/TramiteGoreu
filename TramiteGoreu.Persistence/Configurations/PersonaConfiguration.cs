@@ -26,7 +26,7 @@ namespace Goreu.Tramite.Persistence.Configurations
 
             builder.Property(x => x.NroDoc).HasMaxLength(9).IsUnicode(false);
             builder.ToTable(nameof(Persona), "General");
-            builder.HasQueryFilter(x => x.Status);
+            builder.HasQueryFilter(x => x.Estado);
 
             builder
                .HasOne(c => c.CredencialesReniec)

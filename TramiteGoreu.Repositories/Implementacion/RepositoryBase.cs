@@ -33,29 +33,29 @@ namespace Goreu.Tramite.Repositories.Implementacion
         {
             return await context.Set<TEntity>().Where(predicate).AsNoTracking().ToListAsync();
         }
-        
+
         public async Task<ICollection<TEntity>> GetAsync<Tkey>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, Tkey>> orderBy)
         {
             return await context.Set<TEntity>().Where(predicate).OrderBy(orderBy).AsNoTracking().ToListAsync();
         }
-        
+
         public virtual async Task<int> AddAsync(TEntity entity)
         {
             await context.Set<TEntity>().AddAsync(entity);
             await context.SaveChangesAsync();
             return entity.Id;
         }
-        
+
         public virtual async Task UpdateAsync()
         {
             await context.SaveChangesAsync();
         }
-        
+
         public virtual async Task DeleteAsync(int id)
         {
             var item = await context.Set<TEntity>()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x=>x.Id==id);       
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (item is not null)
             {
                 context.Set<TEntity>().Remove(item);

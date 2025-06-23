@@ -9,7 +9,9 @@ namespace Goreu.Tramite.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
         {
-            builder.ToTable(nameof(Role));
+            builder.HasKey(x => x.Id);
+
+            builder.ToTable(nameof(Rol));
         }
     }
 }

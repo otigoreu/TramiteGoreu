@@ -10,7 +10,7 @@ namespace Goreu.Tramite.Repositories.Interfaces
         Task<ICollection<PersonaInfo>> GetAsyncfilter(string? nombres, PaginationDto pagination);
         Task<ICollection<PersonaInfo>> GetAsyncEmail(string? email, PaginationDto pagination);
         Task<Persona> GetAsyncNumdoc(string numdoc);
-        Task FinalizedAsync(int id);
-        Task InitializedAsync(int id);
+        Task FinalizedAsync(string id);
+        Task InitializedAsync(string id);
     }
 }

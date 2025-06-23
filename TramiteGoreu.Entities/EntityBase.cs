@@ -3,6 +3,6 @@
     public class EntityBase
     {
         public int Id { get; set; }
-        public bool Status { get; set; } = true;
+        public bool Estado { get; set; } = true;
     }
 }

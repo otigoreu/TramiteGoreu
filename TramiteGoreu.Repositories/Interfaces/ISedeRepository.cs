@@ -3,7 +3,7 @@ using TramiteGoreu.Entities;
 
 namespace Goreu.Tramite.Repositories.Interfaces
 {
-    public interface ISedeRepository : IRepositoryBase<Sede>
+    public interface ISedeRepository : IRepositoryBase<UnidadOrganica>
     {
         Task<ICollection<SedeInfo>> GetAsync(string? descripcion);
         Task FinalizedAsync(int id);

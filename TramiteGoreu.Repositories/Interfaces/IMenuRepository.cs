@@ -9,7 +9,7 @@ namespace Goreu.Tramite.Repositories.Interfaces
         Task<List<Menu>> GetMenusByApplicationAndRolesAsync(int applicationId, List<string> roleIds);
         Task<ICollection<MenuInfo>> GetAsync(string? displayName);
         Task<ICollection<MenuInfoRol>> GetAsyncWithRole(string? displayName);
-        Task FinalizedAsync(int id);
-        Task InitializedAsync(int id);
+        Task FinalizedAsync(string id);
+        Task InitializedAsync(string id);
     }
 }
