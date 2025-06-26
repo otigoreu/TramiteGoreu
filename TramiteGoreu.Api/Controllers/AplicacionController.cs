@@ -1,62 +1,29 @@
-﻿using Goreu.Tramite.Dto.Request;
-using Goreu.Tramite.Services.Interface;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Goreu.Tramite.Api.Controllers
+﻿namespace Goreu.Tramite.Api.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("api/aplicaciones")]
     public class AplicacionController : ControllerBase
     {
         private readonly IAplicacionService service;
 
-        public AplicacionController(IAplicacionService service)
+        public AplicacionController(IAplicacionService _service)
         {
-            this.service = service;
-        }
-        [HttpGet("descripcionWithSede")]
-        public async Task<IActionResult> GetWithSede(string? descripcion)
-        {
-
-            var response = await service.GetAsyncWithSede(descripcion);
-            return response.Success ? Ok(response) : BadRequest(response);
-        }
-
-        [HttpGet("descripcion")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> Get(string? descripcion)
-        {
-            var response = await service.GetAsync(descripcion);
-            return response.Success ? Ok(response) : BadRequest(response);
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            var response = await service.GetAsync(id);
-            return response.Success ? Ok(response) : BadRequest(response);
+            this.service = _service;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(AplicacionRequestDto aplicacionRequestDto)
+        public async Task<IActionResult> Post([FromBody] AplicacionRequestDto dto)
         {
-            var response = await service.AddAsync(aplicacionRequestDto);
-            return response.Success ? Ok(response) : BadRequest(response);
-        }
-        [HttpPost("single")]
-        public async Task<IActionResult> Post(AplicacionRequestDtoSingle aplicacionRequestDto)
-        {
-            var response = await service.AddAsyncSingle(aplicacionRequestDto);
+            var response = await service.AddAsync(dto);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(int id, AplicacionRequestDto aplicacionRequestDto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put(int id, [FromBody] AplicacionRequestDto dto)
         {
-            var response = await service.UpdateAsync(id, aplicacionRequestDto);
-            return response.Success ? Ok(response) : BadRequest(response);
+            var result = await service.UpdateAsync(id, dto);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
-
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
@@ -65,19 +32,46 @@ namespace Goreu.Tramite.Api.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        [HttpDelete("finalized/{id:int}")]
-        public async Task<IActionResult> PatchFinit(int id)
+        [HttpPatch("{id:int}/finalize")]
+        public async Task<IActionResult> Finalize(int id)
         {
+            var response = await service.FinalizeAsync(id);
 
-            var response = await service.FinalizedAsync(id);
-            return response.Success ? Ok(response) : BadRequest(response);
+            if (!response.Success)
+                return NotFound(response); // o BadRequest según el motivo
+
+            return Ok(response);
         }
-        [HttpGet("initialized/{id:int}")]
-        public async Task<IActionResult> PatchInit(int id)
-        {
 
-            var response = await service.InitializedAsync(id);
-            return response.Success ? Ok(response) : BadRequest(response);
+        [HttpPatch("{id:int}/initialize")]
+        public async Task<IActionResult> Initialize(int id)
+        {
+            var response = await service.InitializeAsync(id);
+
+            if (!response.Success)
+                return NotFound(response); // o BadRequest según el motivo
+
+            return Ok(response);
+        }
+
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var response = await service.GetAsync(id);
+
+            if (!response.Success)
+                return NotFound(response); // Usar NotFound mejora semánticamente el mensaje
+
+            return Ok(response);
+        }
+
+        [HttpGet("descripcion")]
+        public async Task<IActionResult> Get([FromQuery] string? search, [FromQuery] PaginationDto pagination)
+        {
+            var result = await service.GetAsync(search ?? string.Empty, pagination);
+
+            return result.Success ? Ok(result) : StatusCode(500, result.ErrorMessage);
         }
     }
 }

@@ -74,8 +74,9 @@ internal class Program
         //builder.Services.AddSingleton<PersonRepository>();
         builder.Services.AddTransient<IUnidadOrganicaRepository, UnidadOrganicaRepository>();
         builder.Services.AddTransient<IEntidadRepository, EntidadRepository>();
+        builder.Services.AddTransient<IAplicacionRepository, AplicacionRepository>();
+
         //builder.Services.AddTransient<IPersonaRepository, PersonaRepository>();
-        //builder.Services.AddTransient<IAplicacionRepository, AplicacionRepository>();
         //builder.Services.AddTransient<IMenuRepository, MenuRepository>();
         //builder.Services.AddTransient<ISedeRepository, SedeRepository>();
         //builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -87,12 +88,14 @@ internal class Program
 
         builder.Services.AddTransient<IUnidadOrganicaService, UnidadOrganicaService>();
         builder.Services.AddTransient<IEntidadService, EntidadService>();
+        builder.Services.AddTransient<IAplicacionService, AplicacionService>();
+
         //builder.Services.AddTransient<IPersonaService, PersonaService>();
         //builder.Services.AddTransient<IUserService, UserService>();
         //builder.Services.AddTransient<IEmailService, EmailService>();
         //builder.Services.AddTransient<IMenuService, MenuService>();
         //builder.Services.AddTransient<ISedeService, SedeService>();
-        //builder.Services.AddTransient<IAplicacionService, AplicacionService>();
+
         //builder.Services.AddTransient<ITipoDocumentoService, TipoDocumentoService>();
         //builder.Services.AddTransient<IRolService, RolService>();
         //builder.Services.AddTransient<ICredencialReniecService, CredencialReniecService>();
@@ -102,14 +105,15 @@ internal class Program
         {
             //configuring the mapping perfiles
             //config.AddProfile<PersonaProfile>();
-            //config.AddProfile<AplicacionProfile>();
             //config.AddProfile<MenuProfile>();
             //config.AddProfile<SedeProfile>();
             //config.AddProfile<TipoDocumentoProfile>();
             //config.AddProfile<RolProfile>();
             //config.AddProfile<CredencialReniecProfile>();
+
             config.AddProfile<UnidadOrganicaProfile>();
             config.AddProfile<EntidadProfile>();
+            config.AddProfile<AplicacionProfile>();
         });
 
         //builder.Services.AddTransient<UserDataSeeder>();

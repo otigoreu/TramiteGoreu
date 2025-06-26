@@ -8,9 +8,6 @@
 
             builder.Property(x => x.Descripcion).HasMaxLength(50);
             builder.ToTable(nameof(Aplicacion), "Administrador");
-            builder.HasQueryFilter(x => x.Estado);
-
-            
         }
     }
 }
