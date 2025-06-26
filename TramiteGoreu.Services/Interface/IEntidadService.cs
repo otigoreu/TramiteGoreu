@@ -9,16 +9,13 @@ using System.Threading.Tasks;
 
 namespace Goreu.Tramite.Services.Interface
 {
-    public interface IGenericService<T> where T : class
+    public interface IEntidadService
     {
         //Task<BaseResponseGeneric<int>> AddAsync(EntidadRequestDto request);
-        //Task<BaseResponseGeneric<int>> AddAsyncSingle(EntidadRequestDtoSingle request);
-        //Task<BaseResponse> DeleteAsync(int id); 
+        //Task<BaseResponse> DeleteAsync(int id);
         //Task<BaseResponse> UpdateAsync(int id, EntidadRequestDto request);
-        //Task<BaseResponseGeneric<ICollection<EntidadResponseDto>>> GetAsync();
         //Task<BaseResponseGeneric<EntidadResponseDto>> GetAsync(int id);
-        //Task<BaseResponseGeneric<ICollection<EntidadInfo>>> GetAsync(string? descripcion);
-        //Task<BaseResponseGeneric<ICollection<EntidadInfoSede>>> GetAsyncWithSede(string? descripcion);
+        Task<BaseResponseGeneric<ICollection<EntidadResponseDto>>> GetAsync(string? descripcion, PaginationDto pagination);
         //Task<BaseResponse> FinalizedAsync(int id);
         //Task<BaseResponse> InitializedAsync(int id);
     }

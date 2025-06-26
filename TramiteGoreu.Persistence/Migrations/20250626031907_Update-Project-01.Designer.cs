@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Goreu.Tramite.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250623140604_InitialProject")]
-    partial class InitialProject
+    [Migration("20250626031907_Update-Project-01")]
+    partial class UpdateProject01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -488,10 +488,15 @@ namespace Goreu.Tramite.Persistence.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("IdDependencia")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdEntidad")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdDependencia");
 
                     b.HasIndex("IdEntidad");
 
@@ -738,11 +743,18 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("TramiteGoreu.Entities.UnidadOrganica", b =>
                 {
+                    b.HasOne("TramiteGoreu.Entities.UnidadOrganica", "Dependencia")
+                        .WithMany("Hijos")
+                        .HasForeignKey("IdDependencia")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Goreu.Tramite.Entities.Entidad", "Entidad")
                         .WithMany("UnidadOrganicas")
                         .HasForeignKey("IdEntidad")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Dependencia");
 
                     b.Navigation("Entidad");
                 });
@@ -810,6 +822,8 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("TramiteGoreu.Entities.UnidadOrganica", b =>
                 {
+                    b.Navigation("Hijos");
+
                     b.Navigation("UsuarioUnidadOrganicas");
                 });
 

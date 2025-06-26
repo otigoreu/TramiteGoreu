@@ -56,9 +56,10 @@ namespace Goreu.Tramite.Services.Iplementation
     //            };
     //            response.Data = await repository.AddAsync(appDb);
 
-    //            foreach (var item in request.idSedes) {
+    //            foreach (var item in request.idSedes)
+    //            {
 
-    //                sedes.Add(new SedeAplicacion { IdAplicacion = appDb.Id, IdSede= item });
+    //                sedes.Add(new SedeAplicacion { IdAplicacion = appDb.Id, IdSede = item });
     //            }
     //            appDb.SedeAplicaciones = sedes;
     //            await repository.UpdateAsync();
@@ -172,7 +173,7 @@ namespace Goreu.Tramite.Services.Iplementation
     //        {
 
     //            response.ErrorMessage = "Ocurrio un error al obtener los datos";
-    //            logger.LogError(ex, "{ErrorMessage} {Message}",response.ErrorMessage, ex.Message);
+    //            logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
     //        }
     //        return response;
     //    }

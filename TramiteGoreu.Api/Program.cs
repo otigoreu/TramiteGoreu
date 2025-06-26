@@ -1,4 +1,6 @@
 using Goreu.Tramite.Persistence;
+using Goreu.Tramite.Repositories.Implementacion;
+using Goreu.Tramite.Repositories.Interfaces;
 using Goreu.Tramite.Services.Interface;
 using Goreu.Tramite.Services.Iplementation;
 using Goreu.Tramite.Services.profiles;
@@ -85,7 +87,7 @@ internal class Program
 
         //2. registering y services
         //builder.Services.AddSingleton<PersonRepository>();
-
+        builder.Services.AddTransient<IUnidadOrganicaRepository, UnidadOrganicaRepository>();
         //builder.Services.AddTransient<IPersonaRepository, PersonaRepository>();
         //builder.Services.AddTransient<IAplicacionRepository, AplicacionRepository>();
         //builder.Services.AddTransient<IMenuRepository, MenuRepository>();
@@ -96,6 +98,8 @@ internal class Program
         //builder.Services.AddTransient<ICredencialReniecRepository, CredencialReniecRepository>();
 
 
+        
+        builder.Services.AddTransient<IUnidadOrganicaService, UnidadOrganicaService>();
         //builder.Services.AddTransient<IPersonaService, PersonaService>();
         //builder.Services.AddTransient<IUserService, UserService>();
         //builder.Services.AddTransient<IEmailService, EmailService>();
@@ -103,23 +107,24 @@ internal class Program
         //builder.Services.AddTransient<ISedeService, SedeService>();
         //builder.Services.AddTransient<IAplicacionService, AplicacionService>();
         //builder.Services.AddTransient<ITipoDocumentoService, TipoDocumentoService>();
-        ////builder.Services.AddTransient<IRolService, RolService>();
+        //builder.Services.AddTransient<IRolService, RolService>();
         //builder.Services.AddTransient<ICredencialReniecService, CredencialReniecService>();
 
         //3.register mapper
         builder.Services.AddAutoMapper(config =>
         {
             //configuring the mapping perfiles
-            config.AddProfile<PersonaProfile>();
-            config.AddProfile<AplicacionProfile>();
-            config.AddProfile<MenuProfile>();
-            config.AddProfile<SedeProfile>();
-            config.AddProfile<TipoDocumentoProfile>();
-            config.AddProfile<RolProfile>();
-            config.AddProfile<CredencialReniecProfile>();
+            //config.AddProfile<PersonaProfile>();
+            //config.AddProfile<AplicacionProfile>();
+            //config.AddProfile<MenuProfile>();
+            //config.AddProfile<SedeProfile>();
+            //config.AddProfile<TipoDocumentoProfile>();
+            //config.AddProfile<RolProfile>();
+            //config.AddProfile<CredencialReniecProfile>();
+            config.AddProfile<UnidadOrganicaProfile>();
         });
 
-        builder.Services.AddTransient<UserDataSeeder>();
+        //builder.Services.AddTransient<UserDataSeeder>();
 
         //4. CORS
         //var corsConfiguration = "tramitegoreucors";
@@ -215,7 +220,7 @@ internal class Program
                 await dbContext.Database.MigrateAsync();
             }
 
-            var userDataSeeder = scope.ServiceProvider.GetRequiredService<UserDataSeeder>();
+            //var userDataSeeder = scope.ServiceProvider.GetRequiredService<UserDataSeeder>();
             //await userDataSeeder.SeedAsync();
         }
     }

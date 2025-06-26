@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Goreu.Tramite.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialProject : Migration
+    public partial class UpdateProject01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -140,6 +140,7 @@ namespace Goreu.Tramite.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IdEntidad = table.Column<int>(type: "int", nullable: false),
+                    IdDependencia = table.Column<int>(type: "int", nullable: true),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -152,6 +153,13 @@ namespace Goreu.Tramite.Persistence.Migrations
                         principalTable: "Entidad",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UnidadOrganica_UnidadOrganica_IdDependencia",
+                        column: x => x.IdDependencia,
+                        principalSchema: "General",
+                        principalTable: "UnidadOrganica",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -409,8 +417,8 @@ namespace Goreu.Tramite.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdUnidadOrganica = table.Column<int>(type: "int", nullable: false),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdUnidadOrganica = table.Column<int>(type: "int", nullable: false),
                     UnidadOrganicaId = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -503,6 +511,12 @@ namespace Goreu.Tramite.Persistence.Migrations
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UnidadOrganica_IdDependencia",
+                schema: "General",
+                table: "UnidadOrganica",
+                column: "IdDependencia");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UnidadOrganica_IdEntidad",
