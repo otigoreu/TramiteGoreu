@@ -6,4 +6,4 @@ global using Goreu.Tramite.Repositories.Utils;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.EntityFrameworkCore;
 global using System.Linq.Expressions;
-global using TramiteGoreu.Entities;
+//global using TramiteGoreu.Entities;

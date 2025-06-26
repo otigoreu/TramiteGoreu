@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TramiteGoreu.Entities
+﻿namespace Goreu.Tramite.Entities
 {
     public class MenuRol : EntityBase
     {
@@ -16,8 +10,5 @@ namespace TramiteGoreu.Entities
 
         public string IdRole { get; set; }
         public Rol Rol { get; set; }
-
-        
-
     }
 }

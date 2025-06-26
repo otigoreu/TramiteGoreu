@@ -17,7 +17,7 @@ namespace Goreu.Tramite.Persistence.Configurations
             builder
                 .HasOne(x => x.Usuario)
                 .WithMany(x => x.UsuarioUnidadOrganicas)
-                //.HasForeignKey(x => x.IdUsuario)
+                .HasForeignKey(x => x.IdUsuario)
                 //.HasPrincipalKey(x => x.Id) // Asegura que se mapea con la PK de Usuario
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -25,7 +25,7 @@ namespace Goreu.Tramite.Persistence.Configurations
             builder
                 .HasOne(x => x.UnidadOrganica)
                 .WithMany(x => x.UsuarioUnidadOrganicas)
-                //.HasForeignKey(x => x.IdUnidadOrganica)
+                .HasForeignKey(x => x.IdUnidadOrganica)
                 //.HasPrincipalKey(x => x.Id) // Igual aquí
                 .OnDelete(DeleteBehavior.Cascade);
 

@@ -1,23 +1,12 @@
-﻿using AutoMapper;
-using Goreu.Tramite.Dto.Request;
-using Goreu.Tramite.Dto.Response;
-using Goreu.Tramite.Repositories.Interfaces;
-using Goreu.Tramite.Services.Interface;
-using Microsoft.Extensions.Logging;
-
-namespace Goreu.Tramite.Services.Iplementation
+﻿namespace Goreu.Tramite.Services.Iplementation
 {
-    public class EntidadService : IEntidadService
+    public class EntidadService : BaseService<Entidad, EntidadRequestDto, EntidadResponseDto>, IEntidadService 
     {
         private readonly IEntidadRepository repository;
-        private readonly ILogger<EntidadService> logger;
-        private readonly IMapper mapper;
 
-        public EntidadService(IEntidadRepository repository, ILogger<EntidadService> logger, IMapper mapper)
+        public EntidadService(IEntidadRepository repository, ILogger<EntidadService> logger, IMapper mapper) : base(repository, logger, mapper)
         {
-            this.repository = repository;
-            this.logger = logger;
-            this.mapper = mapper;
+            this.repository = repository; // ✅ Asignación correcta
         }
 
         public async Task<BaseResponseGeneric<ICollection<EntidadResponseDto>>> GetAsync(string descripcion, PaginationDto pagination)

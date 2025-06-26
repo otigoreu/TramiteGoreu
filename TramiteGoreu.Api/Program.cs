@@ -1,18 +1,3 @@
-using Goreu.Tramite.Persistence;
-using Goreu.Tramite.Repositories.Implementacion;
-using Goreu.Tramite.Repositories.Interfaces;
-using Goreu.Tramite.Services.Interface;
-using Goreu.Tramite.Services.Iplementation;
-using Goreu.Tramite.Services.profiles;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
-using System.Text;
-
-using TramiteGoreu.Entities;
-
 internal class Program
 {
     private static async Task Main(string[] args)
@@ -88,6 +73,7 @@ internal class Program
         //2. registering y services
         //builder.Services.AddSingleton<PersonRepository>();
         builder.Services.AddTransient<IUnidadOrganicaRepository, UnidadOrganicaRepository>();
+        builder.Services.AddTransient<IEntidadRepository, EntidadRepository>();
         //builder.Services.AddTransient<IPersonaRepository, PersonaRepository>();
         //builder.Services.AddTransient<IAplicacionRepository, AplicacionRepository>();
         //builder.Services.AddTransient<IMenuRepository, MenuRepository>();
@@ -98,8 +84,9 @@ internal class Program
         //builder.Services.AddTransient<ICredencialReniecRepository, CredencialReniecRepository>();
 
 
-        
+
         builder.Services.AddTransient<IUnidadOrganicaService, UnidadOrganicaService>();
+        builder.Services.AddTransient<IEntidadService, EntidadService>();
         //builder.Services.AddTransient<IPersonaService, PersonaService>();
         //builder.Services.AddTransient<IUserService, UserService>();
         //builder.Services.AddTransient<IEmailService, EmailService>();
@@ -122,6 +109,7 @@ internal class Program
             //config.AddProfile<RolProfile>();
             //config.AddProfile<CredencialReniecProfile>();
             config.AddProfile<UnidadOrganicaProfile>();
+            config.AddProfile<EntidadProfile>();
         });
 
         //builder.Services.AddTransient<UserDataSeeder>();

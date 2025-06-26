@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Goreu.Tramite.Dto.Request;
-using Goreu.Tramite.Dto.Response;
-using Goreu.Tramite.Repositories.Interfaces;
-using Goreu.Tramite.Services.Interface;
-using Microsoft.Extensions.Logging;
-
-namespace Goreu.Tramite.Services.Iplementation
+﻿namespace Goreu.Tramite.Services.Iplementation
 {
     public class UnidadOrganicaService : IUnidadOrganicaService
     {

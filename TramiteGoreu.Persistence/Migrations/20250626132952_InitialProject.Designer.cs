@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Goreu.Tramite.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250626031907_Update-Project-01")]
-    partial class UpdateProject01
+    [Migration("20250626132952_InitialProject")]
+    partial class InitialProject
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,20 +164,14 @@ namespace Goreu.Tramite.Persistence.Migrations
 
                     b.Property<string>("IdUsuario")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UnidadOrganicaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UsuarioId")
-                        .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UnidadOrganicaId");
+                    b.HasIndex("IdUnidadOrganica");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("IdUsuario");
 
                     b.ToTable("UsuarioUnidadOrganica");
                 });
@@ -627,13 +621,13 @@ namespace Goreu.Tramite.Persistence.Migrations
                 {
                     b.HasOne("TramiteGoreu.Entities.UnidadOrganica", "UnidadOrganica")
                         .WithMany("UsuarioUnidadOrganicas")
-                        .HasForeignKey("UnidadOrganicaId")
+                        .HasForeignKey("IdUnidadOrganica")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TramiteGoreu.Entities.Usuario", "Usuario")
                         .WithMany("UsuarioUnidadOrganicas")
-                        .HasForeignKey("UsuarioId")
+                        .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

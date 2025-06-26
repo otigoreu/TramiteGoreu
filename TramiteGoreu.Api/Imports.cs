@@ -1,0 +1,16 @@
+﻿global using Goreu.Tramite.Dto.Request;
+global using Goreu.Tramite.Entities;
+global using Goreu.Tramite.Persistence;
+global using Goreu.Tramite.Repositories.Implementacion;
+global using Goreu.Tramite.Repositories.Interfaces;
+global using Goreu.Tramite.Services.Interface;
+global using Goreu.Tramite.Services.Iplementation;
+global using Goreu.Tramite.Services.profiles;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using System.Reflection;
+global using System.Text;

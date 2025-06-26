@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Goreu.Tramite.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateProject01 : Migration
+    public partial class InitialProject : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -416,25 +416,23 @@ namespace Goreu.Tramite.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdUsuario = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     IdUnidadOrganica = table.Column<int>(type: "int", nullable: false),
-                    UnidadOrganicaId = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UsuarioUnidadOrganica", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UsuarioUnidadOrganica_UnidadOrganica_UnidadOrganicaId",
-                        column: x => x.UnidadOrganicaId,
+                        name: "FK_UsuarioUnidadOrganica_UnidadOrganica_IdUnidadOrganica",
+                        column: x => x.IdUnidadOrganica,
                         principalSchema: "General",
                         principalTable: "UnidadOrganica",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UsuarioUnidadOrganica_Usuario_UsuarioId",
-                        column: x => x.UsuarioId,
+                        name: "FK_UsuarioUnidadOrganica_Usuario_IdUsuario",
+                        column: x => x.IdUsuario,
                         principalTable: "Usuario",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -547,14 +545,14 @@ namespace Goreu.Tramite.Persistence.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsuarioUnidadOrganica_UnidadOrganicaId",
+                name: "IX_UsuarioUnidadOrganica_IdUnidadOrganica",
                 table: "UsuarioUnidadOrganica",
-                column: "UnidadOrganicaId");
+                column: "IdUnidadOrganica");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsuarioUnidadOrganica_UsuarioId",
+                name: "IX_UsuarioUnidadOrganica_IdUsuario",
                 table: "UsuarioUnidadOrganica",
-                column: "UsuarioId");
+                column: "IdUsuario");
         }
 
         /// <inheritdoc />

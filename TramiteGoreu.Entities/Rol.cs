@@ -1,7 +1,7 @@
 ﻿using Goreu.Tramite.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace TramiteGoreu.Entities
+namespace Goreu.Tramite.Entities
 {
     public class Rol : IdentityRole
     {

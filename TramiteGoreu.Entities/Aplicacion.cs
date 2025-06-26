@@ -1,6 +1,6 @@
 ﻿using Goreu.Tramite.Entities;
 
-namespace TramiteGoreu.Entities
+namespace Goreu.Tramite.Entities
 {
     public class Aplicacion: EntityBase
     {

@@ -1,8 +1,6 @@
-﻿using Goreu.Tramite.Entities;
-using Goreu.Tramite.Entities.Pide;
-using System.ComponentModel.DataAnnotations;
+﻿using Goreu.Tramite.Entities.Pide;
 
-namespace TramiteGoreu.Entities
+namespace Goreu.Tramite.Entities
 {
     public class Persona : EntityBase
     {

@@ -1,14 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TramiteGoreu.Entities;
-
-namespace Goreu.Tramite.Persistence.Configurations
+﻿namespace Goreu.Tramite.Persistence.Configurations
 {
     public class MenuConfiguration : IEntityTypeConfiguration<Menu>
     {

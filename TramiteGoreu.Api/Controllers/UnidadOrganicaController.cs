@@ -1,10 +1,4 @@
-﻿using Goreu.Tramite.Dto.Request;
-using Goreu.Tramite.Services.Interface;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Goreu.Tramite.Api.Controllers
+﻿namespace Goreu.Tramite.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

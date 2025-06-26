@@ -1,0 +1,9 @@
+﻿global using AutoMapper;
+global using Goreu.Tramite.Dto.Request;
+global using Goreu.Tramite.Dto.Response;
+global using Goreu.Tramite.Entities;
+global using Goreu.Tramite.Entities.info;
+global using Goreu.Tramite.Repositories.Interfaces;
+global using Goreu.Tramite.Services.Interface;
+global using Microsoft.Extensions.Logging;
+global using TramiteGoreu.Entities;

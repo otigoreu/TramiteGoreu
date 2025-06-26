@@ -1,12 +1,4 @@
-﻿using Goreu.Tramite.Entities.info;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using TramiteGoreu.Entities;
-using TramiteGoreu.Entities.info;
-
-namespace Goreu.Tramite.Persistence
+﻿namespace Goreu.Tramite.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<Usuario>
     {

@@ -1,14 +1,4 @@
-﻿using Goreu.Tramite.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using TramiteGoreu.Entities;
-
-namespace Goreu.Tramite.Repositories.Implementacion
+﻿namespace Goreu.Tramite.Repositories.Implementacion
 {
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : EntityBase
     {
@@ -63,6 +53,30 @@ namespace Goreu.Tramite.Repositories.Implementacion
             }
             else
                 throw new InvalidOperationException($"No se encontro el registro con id {id}");
+        }
+
+        public virtual async Task FinalizeAsync(int id)
+        {
+            var item = await context.Set<TEntity>()
+                .FirstOrDefaultAsync(x => x.Id == id); // sin AsNoTracking
+
+            if (item is null)
+                throw new InvalidOperationException($"No se encontró el registro con id {id}");
+
+            item.Estado = false;
+            await context.SaveChangesAsync();
+        }
+
+        public virtual async Task InitializeAsync(int id)
+        {
+            var item = await context.Set<TEntity>()
+                .FirstOrDefaultAsync(x => x.Id == id); // sin AsNoTracking
+
+            if (item is null)
+                throw new InvalidOperationException($"No se encontró el registro con id {id}");
+
+            item.Estado = true;
+            await context.SaveChangesAsync();
         }
     }
 }

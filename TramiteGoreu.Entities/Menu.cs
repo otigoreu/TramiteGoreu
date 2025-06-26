@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+﻿using Goreu.Tramite.Entities;
+using TramiteGoreu.Entities;
 
-namespace TramiteGoreu.Entities
+namespace Goreu.Tramite.Entities
 {
     public class Menu : EntityBase
     {

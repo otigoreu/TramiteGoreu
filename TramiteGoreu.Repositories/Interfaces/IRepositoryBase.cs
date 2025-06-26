@@ -1,7 +1,4 @@
-﻿using System.Linq.Expressions;
-using TramiteGoreu.Entities;
-
-namespace Goreu.Tramite.Repositories.Interfaces
+﻿namespace Goreu.Tramite.Repositories.Interfaces
 {
     public interface IRepositoryBase<TEntity> where TEntity : EntityBase
     {
@@ -12,5 +9,8 @@ namespace Goreu.Tramite.Repositories.Interfaces
         Task<int> AddAsync(TEntity entity);
         Task UpdateAsync();
         Task DeleteAsync(int id);
+        Task FinalizeAsync(int id);
+        Task InitializeAsync(int id);
+
     }
 }

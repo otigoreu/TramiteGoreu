@@ -1,9 +1,4 @@
-﻿using Goreu.Tramite.Entities.Pide;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TramiteGoreu.Entities;
-
-namespace Goreu.Tramite.Persistence.Configurations
+﻿namespace Goreu.Tramite.Persistence.Configurations
 {
     public class PersonaConfiguration : IEntityTypeConfiguration<Persona>
     {

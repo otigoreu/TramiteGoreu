@@ -1,8 +1,6 @@
-﻿using Goreu.Tramite.Entities;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace TramiteGoreu.Entities
+namespace Goreu.Tramite.Entities
 {
     public class Usuario : IdentityUser
     {

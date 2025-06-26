@@ -1,11 +1,4 @@
-﻿using Goreu.Tramite.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TramiteGoreu.Entities
+﻿namespace Goreu.Tramite.Entities
 {
     public class UnidadOrganica : EntityBase
     {
