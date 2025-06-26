@@ -4,6 +4,7 @@ using Goreu.Tramite.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Goreu.Tramite.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250626184432_Update-Project-01")]
+    partial class UpdateProject01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,64 +95,6 @@ namespace Goreu.Tramite.Persistence.Migrations
                     b.HasIndex("IdEntidad");
 
                     b.ToTable("EntidadAplicacion");
-                });
-
-            modelBuilder.Entity("Goreu.Tramite.Entities.Historial", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ID_pk")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idIndiceTabla")
-                        .HasColumnType("int");
-
-                    b.Property<string>("idUsuario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("operacion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("idIndiceTabla");
-
-                    b.HasIndex("idUsuario");
-
-                    b.ToTable("Historial", "Seguridad");
-                });
-
-            modelBuilder.Entity("Goreu.Tramite.Entities.IndiceTabla", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IndiceTabla", "Seguridad");
                 });
 
             modelBuilder.Entity("Goreu.Tramite.Entities.Menu", b =>
@@ -655,25 +600,6 @@ namespace Goreu.Tramite.Persistence.Migrations
                     b.Navigation("Entidad");
                 });
 
-            modelBuilder.Entity("Goreu.Tramite.Entities.Historial", b =>
-                {
-                    b.HasOne("Goreu.Tramite.Entities.IndiceTabla", "IndiceTabla")
-                        .WithMany("Historials")
-                        .HasForeignKey("idIndiceTabla")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Goreu.Tramite.Entities.Usuario", "Usuario")
-                        .WithMany("Historials")
-                        .HasForeignKey("idUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IndiceTabla");
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("Goreu.Tramite.Entities.Menu", b =>
                 {
                     b.HasOne("Goreu.Tramite.Entities.Aplicacion", "Aplicacion")
@@ -862,11 +788,6 @@ namespace Goreu.Tramite.Persistence.Migrations
                     b.Navigation("Roles");
                 });
 
-            modelBuilder.Entity("Goreu.Tramite.Entities.IndiceTabla", b =>
-                {
-                    b.Navigation("Historials");
-                });
-
             modelBuilder.Entity("Goreu.Tramite.Entities.Menu", b =>
                 {
                     b.Navigation("MenuHijos");
@@ -896,8 +817,6 @@ namespace Goreu.Tramite.Persistence.Migrations
 
             modelBuilder.Entity("Goreu.Tramite.Entities.Usuario", b =>
                 {
-                    b.Navigation("Historials");
-
                     b.Navigation("UsuarioUnidadOrganicas");
                 });
 

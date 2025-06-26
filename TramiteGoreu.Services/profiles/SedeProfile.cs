@@ -14,8 +14,8 @@ namespace Goreu.Tramite.Services.profiles
     {
         public SedeProfile()
         {
-            CreateMap<UnidadOrganica, SedeResponseDto>();
-            CreateMap<SedeRequestDto, UnidadOrganica>();
+            //CreateMap<UnidadOrganica, SedeResponseDto>();
+            //CreateMap<SedeRequestDto, UnidadOrganica>();
         }
     }
 }

@@ -75,6 +75,7 @@ internal class Program
         builder.Services.AddTransient<IUnidadOrganicaRepository, UnidadOrganicaRepository>();
         builder.Services.AddTransient<IEntidadRepository, EntidadRepository>();
         builder.Services.AddTransient<IAplicacionRepository, AplicacionRepository>();
+        builder.Services.AddTransient<IEntidadAplicacionRepository, EntidadAplicacionRepository>();
 
         //builder.Services.AddTransient<IPersonaRepository, PersonaRepository>();
         //builder.Services.AddTransient<IMenuRepository, MenuRepository>();
@@ -89,6 +90,7 @@ internal class Program
         builder.Services.AddTransient<IUnidadOrganicaService, UnidadOrganicaService>();
         builder.Services.AddTransient<IEntidadService, EntidadService>();
         builder.Services.AddTransient<IAplicacionService, AplicacionService>();
+        builder.Services.AddTransient<IEntidadAplicacionService, EntidadAplicacionService>();
 
         //builder.Services.AddTransient<IPersonaService, PersonaService>();
         //builder.Services.AddTransient<IUserService, UserService>();
@@ -114,6 +116,8 @@ internal class Program
             config.AddProfile<UnidadOrganicaProfile>();
             config.AddProfile<EntidadProfile>();
             config.AddProfile<AplicacionProfile>();
+            config.AddProfile<EntidadAplicacionProfile>();
+
         });
 
         //builder.Services.AddTransient<UserDataSeeder>();

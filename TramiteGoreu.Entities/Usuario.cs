@@ -8,5 +8,8 @@ namespace Goreu.Tramite.Entities
         public Persona Persona {get; set;}
 
         public ICollection<UsuarioUnidadOrganica> UsuarioUnidadOrganicas { get; set; } = new List<UsuarioUnidadOrganica>();
+
+        public ICollection<Historial> Historials { get; set; } = new List<Historial>();
+
     }
 }
