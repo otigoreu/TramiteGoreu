@@ -1,16 +1,23 @@
 ﻿namespace Goreu.Tramite.Services.Iplementation
 {
-    public class UnidadOrganicaService : IUnidadOrganicaService
+    public class UnidadOrganicaService : BaseService<UnidadOrganica, UnidadOrganicaRequestDto, UnidadOrganicaResponseDto>, IUnidadOrganicaService
     {
-        private readonly IUnidadOrganicaRepository repository;
-        private readonly ILogger<UnidadOrganicaService> logger;
-        private readonly IMapper mapper;
+        //private readonly IUnidadOrganicaRepository repository;
+        //private readonly ILogger<UnidadOrganicaService> logger;
+        //private readonly IMapper mapper;
 
-        public UnidadOrganicaService(IUnidadOrganicaRepository repository, ILogger<UnidadOrganicaService> logger, IMapper mapper)
+        //public UnidadOrganicaService(IUnidadOrganicaRepository repository, ILogger<UnidadOrganicaService> logger, IMapper mapper)
+        //{
+        //    this.repository = repository;
+        //    this.logger = logger;
+        //    this.mapper = mapper;
+        //}
+
+        private readonly IUnidadOrganicaRepository repository;
+
+        public UnidadOrganicaService(IUnidadOrganicaRepository repository, ILogger<UnidadOrganicaService> logger, IMapper mapper) : base(repository, logger, mapper)
         {
-            this.repository = repository;
-            this.logger = logger;
-            this.mapper = mapper;
+            this.repository = repository; // ✅ Asignación correcta
         }
 
         public async Task<BaseResponseGeneric<ICollection<UnidadOrganicaResponseDto>>> GetAsync(string descripcion, PaginationDto pagination)

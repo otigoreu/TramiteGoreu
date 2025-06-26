@@ -9,8 +9,6 @@
 
             builder.Property(x => x.Descripcion).HasMaxLength(50);
             
-            builder.HasQueryFilter(x => x.Estado);
-
             builder
                 .HasOne(ua => ua.Entidad)
                 .WithMany(u => u.UnidadOrganicas)
