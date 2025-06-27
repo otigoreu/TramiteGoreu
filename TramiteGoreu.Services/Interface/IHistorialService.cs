@@ -1,7 +1,7 @@
 ﻿namespace Goreu.Tramite.Services.Interface
 {
-    public interface IHistorialService
+    public interface IHistorialService : IServiceBase<HistorialRequestDto, HistorialResponseDto>
     {
-        Task<BaseResponseGeneric<int>> AddAsync(HistorialRequestDto request);
+
     }
 }

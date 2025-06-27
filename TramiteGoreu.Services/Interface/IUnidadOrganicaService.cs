@@ -6,14 +6,8 @@ using TramiteGoreu.Entities;
 
 namespace Goreu.Tramite.Services.Interface
 {
-    public interface IUnidadOrganicaService
+    public interface IUnidadOrganicaService : IServiceBase<UnidadOrganicaRequestDto, UnidadOrganicaResponseDto>
     {
-        Task<BaseResponseGeneric<int>> AddAsync(UnidadOrganicaRequestDto request);
-        Task<BaseResponse> UpdateAsync(int id, UnidadOrganicaRequestDto request);
-        Task<BaseResponse> DeleteAsync(int id);
-        Task<BaseResponse> FinalizeAsync(int id);
-        Task<BaseResponse> InitializeAsync(int id);
-        Task<BaseResponseGeneric<UnidadOrganicaResponseDto>> GetAsync(int id);
         Task<BaseResponseGeneric<ICollection<UnidadOrganicaResponseDto>>> GetAsync(string descripcion, PaginationDto pagination);
     }
 }
