@@ -1,6 +1,6 @@
 ﻿namespace Goreu.Tramite.Services.Iplementation
 {
-    public class AplicacionService : BaseService<Aplicacion, AplicacionRequestDto, AplicacionResponseDto>, IAplicacionService 
+    public class AplicacionService : ServiceBase<Aplicacion, AplicacionRequestDto, AplicacionResponseDto>, IAplicacionService 
     {
         private readonly IAplicacionRepository repository;
 

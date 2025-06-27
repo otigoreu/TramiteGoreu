@@ -1,12 +1,12 @@
 ﻿namespace Goreu.Tramite.Services.Iplementation
 {
-    public abstract class BaseService<TEntity, TRequest, TResponse> : IBaseService<TRequest, TResponse> where TEntity : EntityBase
+    public abstract class ServiceBase<TEntity, TRequest, TResponse> : IServiceBase<TRequest, TResponse> where TEntity : EntityBase
     {
         protected readonly IRepositoryBase<TEntity> repository;
         protected readonly ILogger logger;
         protected readonly IMapper mapper;
 
-        protected BaseService(IRepositoryBase<TEntity> repository, ILogger logger, IMapper mapper)
+        protected ServiceBase(IRepositoryBase<TEntity> repository, ILogger logger, IMapper mapper)
         {
             this.repository = repository;
             this.logger = logger;

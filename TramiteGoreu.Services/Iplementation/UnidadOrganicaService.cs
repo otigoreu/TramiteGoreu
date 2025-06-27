@@ -1,6 +1,6 @@
 ﻿namespace Goreu.Tramite.Services.Iplementation
 {
-    public class UnidadOrganicaService : BaseService<UnidadOrganica, UnidadOrganicaRequestDto, UnidadOrganicaResponseDto>, IUnidadOrganicaService
+    public class UnidadOrganicaService : ServiceBase<UnidadOrganica, UnidadOrganicaRequestDto, UnidadOrganicaResponseDto>, IUnidadOrganicaService
     {
         //private readonly IUnidadOrganicaRepository repository;
         //private readonly ILogger<UnidadOrganicaService> logger;

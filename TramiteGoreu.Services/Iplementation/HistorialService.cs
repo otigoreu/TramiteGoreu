@@ -1,6 +1,6 @@
 ﻿namespace Goreu.Tramite.Services.Iplementation
 {
-    public class HistorialService : BaseService<Historial, HistorialRequestDto, HistorialResponseDto>, IHistorialService 
+    public class HistorialService : ServiceBase<Historial, HistorialRequestDto, HistorialResponseDto>, IHistorialService 
     {
         private readonly IHistorialRepository repository;
 

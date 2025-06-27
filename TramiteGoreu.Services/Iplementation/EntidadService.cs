@@ -1,6 +1,6 @@
 ﻿namespace Goreu.Tramite.Services.Iplementation
 {
-    public class EntidadService : BaseService<Entidad, EntidadRequestDto, EntidadResponseDto>, IEntidadService 
+    public class EntidadService : ServiceBase<Entidad, EntidadRequestDto, EntidadResponseDto>, IEntidadService 
     {
         private readonly IEntidadRepository repository;
 
