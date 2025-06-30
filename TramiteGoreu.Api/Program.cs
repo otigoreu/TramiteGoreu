@@ -1,4 +1,4 @@
-internal class Program
+ï»¿internal class Program
 {
     private static async Task Main(string[] args)
     {
@@ -57,11 +57,11 @@ internal class Program
                 //ValidateIssuerSigningKey = true,
                 //IssuerSigningKey = new SymmetricSecurityKey(key)
 
-                ValidateIssuer = true, //Habilita la validación del emisor
+                ValidateIssuer = true, //Habilita la validaciÃ³n del emisor
                 ValidIssuer = builder.Configuration["JWT:Issuer"], //Define el emisor del token
-                ValidateAudience = true, //Habilita la validación de la audiencia
+                ValidateAudience = true, //Habilita la validaciÃ³n de la audiencia
                 ValidAudiences = builder.Configuration.GetSection("JWT:Audiences").Get<string[]>(), //Define la audiencia esperada
-                ValidateLifetime = true, //Asegúrate de que el token no esté expirado
+                ValidateLifetime = true, //AsegÃºrate de que el token no estÃ© expirado
                 ValidateIssuerSigningKey = true, //Valida la clave de firma
                 IssuerSigningKey = new SymmetricSecurityKey(key)
 
@@ -76,6 +76,7 @@ internal class Program
         builder.Services.AddTransient<IEntidadRepository, EntidadRepository>();
         builder.Services.AddTransient<IAplicacionRepository, AplicacionRepository>();
         builder.Services.AddTransient<IEntidadAplicacionRepository, EntidadAplicacionRepository>();
+        builder.Services.AddTransient<IUsuarioUnidadOrganicaRepository, UsuarioUnidadOrganicaRepository>();
         builder.Services.AddTransient<IHistorialRepository, HistorialRepository>();
 
         //builder.Services.AddTransient<IPersonaRepository, PersonaRepository>();
@@ -90,6 +91,7 @@ internal class Program
         builder.Services.AddTransient<IEntidadService, EntidadService>();
         builder.Services.AddTransient<IAplicacionService, AplicacionService>();
         builder.Services.AddTransient<IEntidadAplicacionService, EntidadAplicacionService>();
+        builder.Services.AddTransient<IUsuarioUnidadOrganicaService, UsuarioUnidadOrganicaService>();
         builder.Services.AddTransient<IHistorialService, HistorialService>();
 
         //builder.Services.AddTransient<IPersonaService, PersonaService>();
@@ -117,47 +119,34 @@ internal class Program
             config.AddProfile<EntidadProfile>();
             config.AddProfile<AplicacionProfile>();
             config.AddProfile<EntidadAplicacionProfile>();
+            config.AddProfile<UsuarioUnidadOrganicaProfile>();
             config.AddProfile<HistorialProfile>();
         });
 
         //builder.Services.AddTransient<UserDataSeeder>();
 
         //4. CORS
-        //var corsConfiguration = "tramitegoreucors";
-        //builder.Services.AddCors(setup =>
-        //{
-        //    setup.AddPolicy(corsConfiguration, policy =>
-        //    {
-        //        policy.AllowAnyOrigin();
-        //        policy.AllowAnyHeader().WithExposedHeaders(new string[] { "totalrecordsquantity" });
-        //        policy.AllowAnyMethod();
-        //    });
-        //});
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowConfiguredOrigins", policyBuilder =>
             {
-                //Obtenemos las URL de los clientes válidos desde appsettings
-                var allowedOrigins = builder.Configuration.GetSection("JWT:Audiences").Get<string[]>() ??
-                                     throw new InvalidOperationException("JWT Audiences not configured.");
+                var allowedOrigins = builder.Configuration.GetSection("JWT:Audiences").Get<string[]>();
 
                 if (allowedOrigins.Any())
                 {
-                    policyBuilder.WithOrigins(allowedOrigins) //Permite solo los orígenes configurados
-                        .AllowAnyMethod() //Puedes ajustar los métodos según tu necesidad
-                        .AllowAnyHeader() //Permitir solo los encabezados necesarios si aplica
-                        .AllowCredentials(); //Anotacion pra produccion
-
+                    policyBuilder.WithOrigins(allowedOrigins)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .WithExposedHeaders("totalrecordsquantity"); // âœ… AÃ±ade esto
                 }
                 else
                 {
-                    throw new InvalidOperationException("No se configuraron orígenes válidos en JWT:Audiences.");
+                    throw new InvalidOperationException("No se configuraron orÃ­genes vÃ¡lidos en JWT:Audiences.");
                 }
-            }
-
-
-            );
+            });
         });
+
         builder.Services.AddHttpClient();
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -201,7 +190,7 @@ internal class Program
         app.UseCors("AllowConfiguredOrigins");
 
         app.MapControllers();
-        // Aplicar migraciones y sembrar datos (asíncronamente)
+        // Aplicar migraciones y sembrar datos (asÃ­ncronamente)
         await ApplyMigrationsAndSeedDataAsync(app);
 
         app.Run();
