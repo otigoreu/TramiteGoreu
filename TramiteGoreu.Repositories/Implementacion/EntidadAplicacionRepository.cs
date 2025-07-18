@@ -12,7 +12,6 @@
         public async Task<ICollection<EntidadAplicacion>> GetAsync<TKey>(Expression<Func<EntidadAplicacion, bool>> predicate, Expression<Func<EntidadAplicacion, TKey>> orderBy, PaginationDto pagination)
         {
             var queryable = context.Set<EntidadAplicacion>()
-
                 .Where(predicate)
                 .OrderBy(orderBy)
                 .AsNoTracking()
@@ -22,6 +21,12 @@
             var response = await queryable.Paginate(pagination).ToListAsync();
 
             return response;
+        }
+
+        public async Task<EntidadAplicacion> GetAsync(int idEntidad, int idAplicacion)
+        {
+            return context.Set<EntidadAplicacion>()
+                .FirstOrDefault(z => z.IdEntidad == idEntidad && z.IdAplicacion == idAplicacion);
         }
     }
 }

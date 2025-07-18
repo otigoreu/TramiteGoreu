@@ -4,7 +4,9 @@
     {
         public EntidadProfile()
         {
-            CreateMap<Entidad, EntidadResponseDto>();
+            CreateMap<Entidad, EntidadResponseDto>()
+                .ForMember(dest => dest.CantidadAplicaciones, opt => opt.MapFrom(src => src.EntidadAplicaciones.Count));
+
             CreateMap<EntidadRequestDto, Entidad>();
         }
     }

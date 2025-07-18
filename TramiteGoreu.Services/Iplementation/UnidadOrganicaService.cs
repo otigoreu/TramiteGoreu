@@ -40,6 +40,27 @@
             }
             return response;
         }
+
+        public async Task<BaseResponseGeneric<ICollection<UnidadOrganicaResponseDto>>> GetAsync(int idEntidad, string descripcion, PaginationDto pagination)
+        {
+            var response = new BaseResponseGeneric<ICollection<UnidadOrganicaResponseDto>>();
+            try
+            {
+                var data = await repository.GetAsync(
+                    predicate: s => s.IdEntidad == idEntidad && s.Descripcion.Contains(descripcion ?? string.Empty),
+                    orderBy: x => x.Descripcion,
+                    pagination);
+
+                response.Data = mapper.Map<ICollection<UnidadOrganicaResponseDto>>(data);
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "Error al filtrar las unidades organicas por descripción.";
+                logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+            }
+            return response;
+        }
     }
 
 }

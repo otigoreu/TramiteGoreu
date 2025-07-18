@@ -17,9 +17,7 @@ namespace Goreu.Tramite.Services.profiles
             .ForMember(dest => dest.CantidadHijos,
                        opt => opt.MapFrom(src => src.Hijos != null ? src.Hijos.Count : 0));
 
-            CreateMap<UnidadOrganicaRequestDto, UnidadOrganica>()
-                .ForMember(dest => dest.IdDependencia,
-                       opt => opt.MapFrom(src => src.IdUnidadOrganicaPadre));
+            CreateMap<UnidadOrganicaRequestDto, UnidadOrganica>();
         }
     }
 }

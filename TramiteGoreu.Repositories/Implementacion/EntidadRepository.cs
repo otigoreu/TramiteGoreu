@@ -12,10 +12,9 @@
         public async Task<ICollection<Entidad>> GetAsync<TKey>(Expression<Func<Entidad, bool>> predicate, Expression<Func<Entidad, TKey>> orderBy, PaginationDto pagination)
         {
             var queryable = context.Set<Entidad>()
-
+                .Include(z => z.EntidadAplicaciones.Where(ea => ea.Estado))
                 .Where(predicate)
                 .OrderBy(orderBy)
-                .AsNoTracking()
                 .AsQueryable();
 
             await httpContextAccessor.HttpContext.InsertarPaginacionHeader(queryable);

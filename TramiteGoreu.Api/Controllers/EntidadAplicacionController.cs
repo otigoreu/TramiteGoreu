@@ -54,7 +54,6 @@
             return Ok(response);
         }
 
-
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -66,12 +65,27 @@
             return Ok(response);
         }
 
-        //[HttpGet("descripcion")]
-        //public async Task<IActionResult> Get([FromQuery] string? search, [FromQuery] PaginationDto pagination)
-        //{
-        //    var result = await service.GetAsync(search ?? string.Empty, pagination);
+        [HttpGet("entidad/{idEntidad}/aplicaciones")]
+        public async Task<IActionResult> GetAplicacionesPaginadas(
+            [FromRoute] int idEntidad,
+            [FromQuery] string? search,
+            [FromQuery] PaginationDto pagination)
+        {
+            var result = await service.GetAplicacionesConEstadoPorEntidadAsync(idEntidad, search ?? string.Empty, pagination);
 
-        //    return result.Success ? Ok(result) : StatusCode(500, result.ErrorMessage);
-        //}
+            return result.Success ? Ok(result) : StatusCode(500, result.ErrorMessage);
+        }
+
+        [HttpGet("entidad/{idEntidad}/aplicacion/{idAplicacion}")]
+        public async Task<IActionResult> Get(
+            [FromRoute] int idEntidad,
+            [FromRoute] int idAplicacion
+            )
+        {
+            var result = await service.GetAsync(idEntidad, idAplicacion);
+
+            return Ok(result);
+            //return result.Success ? Ok(result) : StatusCode(500, result.ErrorMessage);
+        }
     }
 }

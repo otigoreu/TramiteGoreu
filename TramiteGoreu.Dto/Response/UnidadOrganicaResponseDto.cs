@@ -13,5 +13,9 @@ namespace Goreu.Tramite.Dto.Response
         public string? NombreEntidad { get; set; }
         public string? NombreDependencia { get; set; }
         public int CantidadHijos { get; set; }
+        public bool Estado { get; set; }
+
+        public int idEntidad { get; set; }
+        public int? idDependencia { get; set; }
     }
 }

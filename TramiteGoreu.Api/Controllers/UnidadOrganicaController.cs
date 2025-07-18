@@ -67,9 +67,13 @@
         }
 
         [HttpGet("descripcion")]
-        public async Task<IActionResult> Get([FromQuery] string? search, [FromQuery] PaginationDto pagination)
+        public async Task<IActionResult> Get([FromQuery] int? idEntidad, [FromQuery] string? search, [FromQuery] PaginationDto pagination)
         {
-            var result = await service.GetAsync(search ?? string.Empty, pagination);
+            var result = idEntidad switch
+            {
+                null => await service.GetAsync(search ?? string.Empty, pagination),
+                int id => await service.GetAsync(id, search ?? string.Empty, pagination)
+            };
 
             return result.Success ? Ok(result) : StatusCode(500, result.ErrorMessage);
         }
